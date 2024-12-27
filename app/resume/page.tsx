@@ -219,13 +219,13 @@ function Page() {
 
 export const Socials = () => (
 	<>
-		<a className="h-12 w-12" href="https://github.com/michaelsnook">
+		<a className="h-12 w-12" href="https://github.com/mhsnook">
 			<IconGithub />
 		</a>
-		<a className="h-12 w-12" href="https://twitter.com/michaelsnook">
+		<a className="h-12 w-12" href="https://twitter.com/mhsnook">
 			<IconTwitter />
 		</a>
-		<a className="h-12 w-12" href="https://bsky.app/profile/michaelsnook.com">
+		<a className="h-12 w-12" href="https://bsky.app/profile/msnook.xyz">
 			<IconBluesky />
 		</a>
 	</>

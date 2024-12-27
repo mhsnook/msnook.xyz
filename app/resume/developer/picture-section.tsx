@@ -22,8 +22,8 @@ export default function PictureSection({ link }) {
 				<Link className="hover:link" href="mailto:me@msnook.xyz">
 					me@msnook.xyz
 				</Link>
-				<Link className={linkClasses} href="https://github.com/michaelsnook">
-					<OctocatIcon /> michaelsnook
+				<Link className={linkClasses} href="https://github.com/mhsnook">
+					<OctocatIcon /> mhsnook
 				</Link>
 				<Link className={linkClasses} href="https://wa.me/14348824164">
 					<WhatsappIcon /> +1 434 8824164

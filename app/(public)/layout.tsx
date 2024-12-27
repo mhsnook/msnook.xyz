@@ -18,13 +18,13 @@ export function Footer() {
 				</Link>
 				<a
 					className="text-cyan-content underline"
-					href="https://twitter.com/michaelsnook"
+					href="https://twitter.com/mhsnook"
 				>
 					twitter
 				</a>
 				<a
 					className="text-cyan-content underline"
-					href="https://github.com/michaelsnook"
+					href="https://github.com/mhsnook"
 				>
 					github
 				</a>
