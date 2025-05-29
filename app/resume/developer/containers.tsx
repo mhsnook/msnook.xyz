@@ -18,7 +18,7 @@ export function LeftContainer({ children }: HasChildren) {
 	return (
 		<div
 			style={{ WebkitPrintColorAdjust: 'exact' }}
-			className="md:col-span-1 md:w-[260px] bg-lilac-soft/50 print:bg-lilac-soft h-full pt-10 md:pt-16 pb-6 md:pb-10 px-6 flex flex-col gap-4 md:gap-10 font-display"
+			className="md:col-span-1 md:w-[260px] bg-lilac-soft/50 print:bg-lilac-soft h-full pt-10 md:pt-16 pb-6 md:pb-10 px-6 flex flex-col gap-4 md:gap-10 font-display lg:rounded"
 		>
 			{children}
 			<div className="flex-end flex flex-row justify-around text-lilac">

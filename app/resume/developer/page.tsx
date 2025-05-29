@@ -53,7 +53,7 @@ const projects = [
 
   I did the rest with NextJS, React Query and TailwindCSS, replacing most of the embed options with a handful
   of [independent routes/pages](https://map.350.org/).
-  The result is a simple app with a handful of re-useable components, hooks, API routes, 
+  The result is a simple app with a handful of re-useable components, hooks, API routes,
   assembled under different pages which we can extend, adjust, and theme as-needed
   without sacrificing code quality or exploding complexity.`,
 	},
@@ -77,7 +77,7 @@ const projects = [
     time: '2021',
 
     content: `This volunteer project began as a Google Doc with a crowdsourced list of ways that people could contribute to mutual aid funds,
-  during the first devastating wave of the COVID-19 pandemic in India. 
+  during the first devastating wave of the COVID-19 pandemic in India.
   Before long we had dozens of volunteers and
   loads of traffic, and we needed a site, a database, a CMS, and a vetting workflow for volunteers to vet and update listings, goals, etc.
   I built the MAI site with a Gatsby/Tailwind/Airtable starter kit, and built the contact- and content-management in Airtable.
@@ -88,7 +88,7 @@ const projects = [
 	{
 		title: 'VoteAmerica Data Pipeline',
 		time: '2020',
-		content: `VoteAmerica started as a Product Management job, 
+		content: `VoteAmerica started as a Product Management job,
   but we didn't have a dedicated data engineer
   who also had experience with voter outreach.
   I had a 10+ years with each, so 6 weeks before election-day we shifted my role to data engineering:
@@ -122,7 +122,7 @@ export default function Page() {
 					</h2>
 					<div className="space-y-4">
 						{projects.map((project, i) => (
-							<div key={i} className="prose w-100">
+							<div key={i} className="prose w-full">
 								<h3 className="text-lg text-lilac-content flex flex-row justify-between items-center">
 									<span>{project.title}</span>
 									<span className="text-sm">{project.time}</span>
