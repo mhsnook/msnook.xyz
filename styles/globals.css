@@ -12,8 +12,9 @@ layer(base);
 	--breakpoint-lg: 1024px;
 
 	--font-*: initial;
-	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-		Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+	--font-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
+		Cantarell, 'Helvetica Neue', sans-serif;
 	--font-display: 'Exo 2', ui-serif;
 
 	--color-cyan: #359fcc;
