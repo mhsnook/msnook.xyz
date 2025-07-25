@@ -7,8 +7,9 @@ import { fetchPostList, fetchOnePost } from '@/lib/posts'
 import faceImage from '@/public/images/my-face-288.png'
 import Banner from '@/components/banner'
 import { cn } from '@/lib/utils'
+import { Tables } from '@/types/supabase'
 
-const PostSidebar = ({ slug, published_at }) => {
+const PostSidebar = ({ post }: { post: Tables<'posts'> }) => {
 	return (
 		<aside className="col-span-1 flex flex-col gap-4 md:pt-10 lg:pt-14 md:text-center">
 			<Link href="/" className="text-cyan-content hover:underline">
@@ -25,13 +26,13 @@ const PostSidebar = ({ slug, published_at }) => {
 				<div className="space-y-2">
 					<p>By Em Snook</p>
 					<p>
-						Published <DateSpan dateText={published_at} />
+						Published <DateSpan dateText={post.published_at} />
 					</p>
 				</div>
 			</div>
 			<IffLoggedIn>
 				<Link
-					href={`/posts/${slug}/edit`}
+					href={`/posts/${post.slug}/edit`}
 					className={cn(
 						buttonStyles({ variant: 'outlines' }),
 						`mr-auto md:mx-auto`,
@@ -51,8 +52,8 @@ export default async function Page({ params: { slug } }) {
 		<>
 			<Banner title={post.title} description={post.excerpt} small />
 			<div className="container grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 py-10">
-				<PostSidebar {...post} />
-				<PostArticle {...post} />
+				<PostSidebar post={post} />
+				<PostArticle post={post} />
 			</div>
 		</>
 	)
