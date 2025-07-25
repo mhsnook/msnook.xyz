@@ -14,9 +14,15 @@ import {
 	InputDatestamp,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { postQueryOptions } from '../use-post'
+import { Tables, TablesUpdate } from '@/types/supabase'
 
-export default function Client({ initialData }) {
+export default function Client({
+	initialData,
+}: {
+	initialData: Tables<'posts'>
+}) {
 	const session = useSession()
 	const {
 		register,
@@ -25,17 +31,21 @@ export default function Client({ initialData }) {
 		setValue,
 		reset,
 		formState: { errors, isDirty, isSubmitting, isSubmitSuccessful },
-	} = useForm({ defaultValues: initialData })
+	} = useForm<TablesUpdate<'posts'>>({ defaultValues: initialData })
 	const thePost = watch()
 	const { back } = useRouter()
-	const { post, loadError, isLoading } = usePost(slug, reset)
 
-	const onSubmit = (data) => {
-		setFormError()
-		reset(data) // reset isDirty immediately, before fetch
-		data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-		updateOnePost(data).catch(setFormError)
-	}
+	const { data, error, isPending } = useQuery({
+		...postQueryOptions(initialData.slug),
+	})
+
+	const updatePostMutation = useMutation({
+		mutationFn: async (data: TablesUpdate<'posts'>) => {
+			data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+			return await updateOnePost(data)?.[0]
+		},
+		onSuccess: (data) => reset(data),
+	})
 
 	return (
 		<>
@@ -43,7 +53,7 @@ export default function Client({ initialData }) {
 				<h1 className="h3">Edit your post</h1>
 				<form
 					className="form flex flex-col gap-4"
-					onSubmit={handleSubmit(updatePostMutation.mutate)}
+					onSubmit={handleSubmit(void updatePostMutation.mutate)}
 				>
 					<input type="hidden" {...register('id')} />
 					<fieldset
@@ -55,7 +65,9 @@ export default function Client({ initialData }) {
 						<InputImage
 							register={register}
 							error={errors.image}
-							setImageValue={(v) => setValue('image', v, { shouldDirty: true })}
+							setImageValue={(v: string | null) =>
+								setValue('image', v, { shouldDirty: true })
+							}
 							startingValue={thePost.image}
 						/>
 						<InputPublish register={register} />
@@ -95,7 +107,10 @@ export default function Client({ initialData }) {
 							</span>
 						</div>
 					</fieldset>
-					<ErrorList summary="Error saving post" error={formError} />
+					<ErrorList
+						summary="Error saving post"
+						error={updatePostMutation.error?.message}
+					/>
 				</form>
 			</div>
 			<div className="col-span-2 lg:col-span-3 flex flex-col">
