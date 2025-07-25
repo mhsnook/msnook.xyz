@@ -135,7 +135,10 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					}}
 					className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg"
 				>
-					<PostArticle {...thePost} isPending={updatePostMutation.isPending} />
+					<PostArticle
+						post={thePost}
+						isPending={updatePostMutation.isPending}
+					/>
 				</div>
 			</div>
 		</>

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { PrintMarkdown } from './lib'
+import { Tables } from '@/types/supabase'
 
 const PostLoading = () => (
 	<>
@@ -18,28 +19,21 @@ const PostLoading = () => (
 )
 
 interface PostArticleProps {
-	title: string
-	image: string
-	content: string
+	post: Partial<Tables<'posts'>>
 	isPending?: boolean
 }
 
-export const PostArticle = ({
-	title,
-	image,
-	content,
-	isPending = false,
-}: PostArticleProps) => (
+export const PostArticle = ({ post, isPending = false }: PostArticleProps) => (
 	<article className="md:col-span-3 lg:col-span-4 flex flex-col gap-4 md:max-w-prose md:mx-auto">
 		{isPending ? (
 			<PostLoading />
 		) : (
 			<>
-				<h1 className="h1">{title}</h1>
-				{image && (
+				<h1 className="h1">{post.title}</h1>
+				{post.image && (
 					<div className="h-64 w-full relative">
 						<Image
-							src={image}
+							src={post.image}
 							alt=""
 							priority
 							fill
@@ -49,7 +43,7 @@ export const PostArticle = ({
 					</div>
 				)}
 				<div className="prose lg:prose-lg prose-cyan">
-					<PrintMarkdown markdown={content} />
+					<PrintMarkdown markdown={post.content} />
 				</div>
 			</>
 		)}
