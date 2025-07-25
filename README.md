@@ -34,11 +34,9 @@ are pushed to the edges of their respective containers.
 
 ## Code patterns
 
-The site uses NextJS's built-ins wherever possible, including the `useSWR`
-hook to manage data fetching. Forms are handled by `react-hook-forms`.
-Although `supabase-js` handles all the fetcher functions, client-side fetching
-is still routed through useSWR for its convenient cache management which so
-far has obviated the need for any central store or context providers.
+The site uses NextJS's built-ins wherever possible, and `react-query`
+to manage data fetching. Forms are handled by `react-hook-forms`, with
+`supabase-js` handling the fetchers and posts.
 
 Components that need to know whether the user is logged in can use the hook
 `useSession` to see if the session is present and the basic details of

@@ -50,7 +50,7 @@ export async function createOnePost(postData: TablesInsert<'posts'>) {
 }
 
 export async function updateOnePost(postData: TablesUpdate<'posts'>) {
-	const { data, error } = await supabase
+	const { data } = await supabase
 		.from('posts')
 		.upsert([postData])
 		.select()

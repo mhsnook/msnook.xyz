@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import usePost from '../use-post'
 import { updateOnePost } from '@/lib/posts'
 import { useSession } from '@/app/session-provider'
 import { Button, buttonStyles, ErrorList } from '@/components/lib'
@@ -16,9 +14,9 @@ import {
 	InputDatestamp,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
+import { useMutation } from '@tanstack/react-query'
 
-export default function Client({ slug, initialData }) {
-	const [formError, setFormError] = useState()
+export default function Client({ initialData }) {
 	const session = useSession()
 	const {
 		register,
@@ -45,10 +43,12 @@ export default function Client({ slug, initialData }) {
 				<h1 className="h3">Edit your post</h1>
 				<form
 					className="form flex flex-col gap-4"
-					onSubmit={handleSubmit(onSubmit)}
+					onSubmit={handleSubmit(updatePostMutation.mutate)}
 				>
 					<input type="hidden" {...register('id')} />
-					<fieldset disabled={!session || isSubmitting || isLoading}>
+					<fieldset
+						disabled={!session || isSubmitting || updatePostMutation.isPending}
+					>
 						<InputTitle register={register} error={errors.title} />
 						<InputExcerpt register={register} />
 						<InputContent register={register} />
@@ -108,7 +108,7 @@ export default function Client({ slug, initialData }) {
 					}}
 					className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg"
 				>
-					<PostArticle {...thePost} isLoading={isLoading} />
+					<PostArticle {...thePost} isPending={updatePostMutation.isPending} />
 				</div>
 			</div>
 		</>
