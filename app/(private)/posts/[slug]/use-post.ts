@@ -1,23 +1,11 @@
-import useSWR from 'swr'
 import { fetchOnePost } from '@/lib/posts'
-import type { Tables } from '@/types/supabase'
+import { queryOptions } from '@tanstack/react-query'
 
-export default function usePost(
-	slug: string,
-	reset: (post: Tables<'posts'>) => void,
-) {
-	const { data, error, isLoading } = useSWR(slug, fetchOnePost, {
-		onSuccess: (post: Tables<'posts'>) => reset(post),
-		revalidateOnFocus: false,
-		revalidateOnReconnect: false,
-		refreshWhenOffline: false,
-		refreshWhenHidden: false,
-		refreshInterval: 0,
+export const postQueryOptions = (slug: string) =>
+	queryOptions({
+		queryKey: ['posts', slug],
+		queryFn: async ({ queryKey }) => await fetchOnePost(queryKey[1]),
+		refetchOnWindowFocus: false,
+		refetchOnReconnect: false,
+		refetchOnMount: false,
 	})
-
-	return {
-		post: data,
-		loadError: error,
-		isLoading,
-	}
-}

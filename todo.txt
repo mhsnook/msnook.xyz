@@ -1,7 +1,6 @@
 FORMS
-1. use mutations instead of just async inside the onSubmit
 1. make InputImage a properly controlled component instead of calling setValue
-1. usePost should not have an onSuccess callback that includes a function passed from RHF! RHF needs to learn to set values correctly rather than abusing the reset function
+1. RHF needs to learn to set values correctly rather than abusing the reset function
 1. we shouldn't reset isDirty until after the edit form completes its successful post (better still to use RHF hook for this)
 
 FRAMEWORK / ROUTER

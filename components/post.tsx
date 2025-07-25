@@ -21,17 +21,17 @@ interface PostArticleProps {
 	title: string
 	image: string
 	content: string
-	isLoading?: boolean
+	isPending?: boolean
 }
 
 export const PostArticle = ({
 	title,
 	image,
 	content,
-	isLoading = false,
+	isPending = false,
 }: PostArticleProps) => (
 	<article className="md:col-span-3 lg:col-span-4 flex flex-col gap-4 md:max-w-prose md:mx-auto">
-		{isLoading ? (
+		{isPending ? (
 			<PostLoading />
 		) : (
 			<>
