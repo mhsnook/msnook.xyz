@@ -1,13 +1,15 @@
 'use client'
 
-import { Tables, TablesUpdate } from '@/types/supabase'
+import { Tables } from '@/types/supabase'
 import { useRouter } from 'next/navigation'
 import {
 	useMutation,
 	useQueryClient,
 	useSuspenseQuery,
 } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { updateOnePost } from '@/lib/posts'
 import { useSession } from '@/app/session-provider'
 import { Button, buttonStyles, ErrorList } from '@/components/lib'
@@ -34,6 +36,19 @@ export default function Page({ params: { slug } }) {
 	)
 }
 
+const PostEditSchema = z.object({
+	content: z.string().min(1, 'Content is required'),
+	excerpt: z.string().optional(),
+	id: z.string(),
+	image: z.string().nullable().optional(),
+	published: z.boolean(),
+	published_at: z.string().optional(),
+	slug: z.string().optional(),
+	title: z.string().min(1, 'Title is required'),
+})
+
+type PostUpdate = z.infer<typeof PostEditSchema>
+
 function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const session = useSession()
 
@@ -44,13 +59,16 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 		setValue,
 		reset,
 		formState: { errors, isDirty, isSubmitting, isSubmitSuccessful },
-	} = useForm<TablesUpdate<'posts'>>({ defaultValues: initialData })
+	} = useForm<PostUpdate>({
+		defaultValues: initialData,
+		resolver: zodResolver(PostEditSchema),
+	})
 	const thePost = watch()
 	const { back } = useRouter()
 
 	const queryClient = useQueryClient()
 	const updatePostMutation = useMutation({
-		mutationFn: async (data: TablesUpdate<'posts'>) => {
+		mutationFn: async (data: PostUpdate) => {
 			data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 			return await updateOnePost(data)?.[0]
 		},
@@ -65,8 +83,11 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 			<div className="col-span-2">
 				<h1 className="h3">Edit your post</h1>
 				<form
+					noValidate
 					className="form flex flex-col gap-4"
-					onSubmit={handleSubmit(void updatePostMutation.mutate)}
+					onSubmit={handleSubmit(
+						void updatePostMutation.mutate as SubmitHandler<PostUpdate>,
+					)}
 				>
 					<input type="hidden" {...register('id')} />
 					<fieldset
