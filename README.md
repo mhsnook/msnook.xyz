@@ -1,8 +1,6 @@
 # Website Readme
 
-This is my website! The react client, at least.
-It's built with NextJS and hosted on Vercel so the "client" actually does
-have some server-side action like pre-rendering most pages. The back end
+This is my website! The NextJS app, at least. The back end
 is Supabase so the client uses their supabase-js client library.
 
 I you have access to the project on vercel you should `vercel link` and
@@ -12,8 +10,8 @@ also work but this repo uses the pnpm lock file so YMMV.)
 ## Design patterns
 
 The visual design of the site is meant to be very simple, not loud,
-and without too many options. For instance, there are not 4 different
-types of buttons, there are 2 (`.button.outlines` and `.button.solid`).
+and without too many options. For instance, there are only two types of buttons
+"solid" and "outlines".
 
 The only theme colors so far are Tailwind's cyan, red, and coolGray. The
 entire theme operates on these; red is used only for error text and
@@ -51,8 +49,7 @@ Similarly, there is an `<ErrorList>` component that goes at the bottom of each
 form or each page that might require one. It accepts either a single message
 or an array, and hides itself when empty. So for both LoginChallenge and
 ErrorList, you can simply drop the component wherever you want it and not worry
-about conditions, as long as you instantiate useState hooks for `user` and
-`errors`, the components will figure out whether they're needed.
+about conditions; the components will figure out whether they're needed.
 
 For the sake of easy navigation, Component and Lib files are allowed to contain
 several functions or components, so e.g. we have `lib/auth.js` with all the
@@ -62,16 +59,4 @@ longest file is ~100 lines, and should probably stay that way.
 
 There is currently no global management of variables and metadata like the
 site's title and description or other metadata. Nor is there any global state
-or context management. Metadata stays DRY because its defaults are managed in
-the `<Layout>` component.
-
-## Details to cover
-
-- Some of the error handling isn't quite right – 500s being treated as 401s,
-  etc. – and may be clunky and overly redundant.
-- There are no tests.
-- Supabase's RLS means that unauthenticated/invalid requests often return []
-  instead of a 401 error, so I need to do some work to handle this better. Right
-  now it can result in loss of data if you log out in one tab and try to save
-  a post in another. There's no pre-flight check and the JS errors in a way that
-  will lose your progress.
+or context management.
