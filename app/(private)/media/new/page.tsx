@@ -11,7 +11,7 @@ export default function Page() {
 			<h1 className="h1">Upload something</h1>
 			<ImageForm
 				confirmedURL={imageURL}
-				onConfirm={(imageUrl: string) => {
+				onUpload={(imageUrl: string) => {
 					setImageURL(imageUrl)
 					console.log(imageUrl)
 				}}

@@ -2,9 +2,8 @@ import { cn } from '@/lib/utils'
 
 const buttonVariants = {
 	variant: {
-		default: '',
 		solid:
-			'text-white border-white bg-cyan-bright hover:border-cyan hover:bg-cyan [disabled]:opacity-50 [disabled]:cursor-not-allowed',
+			'text-white border-white bg-cyan-bright hover:border-cyan hover:bg-cyan disabled:opacity-70 disabled:cursor-not-allowed',
 		outlines: 'text-cyan-bright hover:border-cyan-bright hover:underline',
 	},
 	size: {
@@ -13,7 +12,7 @@ const buttonVariants = {
 	},
 }
 
-const buttonStyles = ({ variant = 'default', size = 'default' }) => {
+const buttonStyles = ({ variant = 'solid', size = 'default' }) => {
 	return cn(
 		'inline-block border rounded-md cursor-pointer',
 		buttonVariants.variant[variant],

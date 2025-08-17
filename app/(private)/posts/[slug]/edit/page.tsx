@@ -2,15 +2,10 @@
 
 import { Tables } from '@/types/supabase'
 import { useRouter } from 'next/navigation'
-import {
-	useMutation,
-	useQueryClient,
-	useSuspenseQuery,
-} from '@tanstack/react-query'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { updateOnePost } from '@/lib/posts'
 import { useSession } from '@/app/session-provider'
 import { Button, buttonStyles, ErrorList } from '@/components/lib'
 import {
@@ -23,28 +18,29 @@ import {
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
 import { postQueryOptions } from '../use-post'
+import supabase from '@/app/supabase-client'
 
 export default function Page({ params: { slug } }) {
-	const { data, error } = useSuspenseQuery({ ...postQueryOptions(slug) })
+	const { data, error, isPending } = useQuery({ ...postQueryOptions(slug) })
 
 	return error ? (
 		<ErrorList summary="Error loading post" error={error?.message} />
 	) : (
 		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
-			<Client initialData={data} />
+			{isPending ? <>loading...</> : <Client initialData={data} />}
 		</div>
 	)
 }
 
 const PostEditSchema = z.object({
 	content: z.string().min(1, 'Content is required'),
-	excerpt: z.string().optional(),
+	excerpt: z.string().optional().nullable(),
 	id: z.string(),
 	image: z.string().nullable().optional(),
 	published: z.boolean(),
-	published_at: z.string().optional(),
-	slug: z.string().optional(),
-	title: z.string().min(1, 'Title is required'),
+	published_at: z.string().optional().nullable(),
+	slug: z.string().min(3, 'Slug is required (min 3)'),
+	title: z.string().min(2, 'Title is required (min 2)'),
 })
 
 type PostUpdate = z.infer<typeof PostEditSchema>
@@ -58,7 +54,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 		handleSubmit,
 		setValue,
 		reset,
-		formState: { errors, isDirty, isSubmitting, isSubmitSuccessful },
+		formState: { errors, isDirty },
 	} = useForm<PostUpdate>({
 		defaultValues: initialData,
 		resolver: zodResolver(PostEditSchema),
@@ -70,7 +66,9 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const updatePostMutation = useMutation({
 		mutationFn: async (data: PostUpdate) => {
 			data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-			return await updateOnePost(data)?.[0]
+			return (
+				await supabase.from('posts').upsert([data]).select().throwOnError()
+			)?.data?.[0] as Tables<'posts'>
 		},
 		onSuccess: (data) => {
 			reset(data)
@@ -85,14 +83,10 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 				<form
 					noValidate
 					className="form flex flex-col gap-4"
-					onSubmit={handleSubmit(
-						void updatePostMutation.mutate as SubmitHandler<PostUpdate>,
-					)}
+					onSubmit={handleSubmit((data) => updatePostMutation.mutate(data))}
 				>
 					<input type="hidden" {...register('id')} />
-					<fieldset
-						disabled={!session || isSubmitting || updatePostMutation.isPending}
-					>
+					<fieldset disabled={!session || updatePostMutation.isPending}>
 						<InputTitle register={register} error={errors.title} />
 						<InputExcerpt register={register} />
 						<InputContent register={register} />
@@ -116,15 +110,8 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 							>
 								{isDirty ? 'Cancel' : 'Go back'}
 							</a>
-							<span className="flex">
-								<Button
-									type="submit"
-									variant="solid"
-									disabled={!isDirty || isSubmitting || !session}
-								>
-									{isSubmitting ? 'Saving...' : 'Save edits'}
-								</Button>
-								{isSubmitSuccessful && !isDirty && (
+							<span className="flex gap-2">
+								{updatePostMutation.isSuccess && !isDirty && (
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										className="ml-2 h-5 w-5 place-self-center text-green-600"
@@ -138,6 +125,14 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 										/>
 									</svg>
 								)}
+								<Button
+									type="submit"
+									disabled={
+										!isDirty || updatePostMutation.isPending || !session
+									}
+								>
+									{updatePostMutation.isPending ? 'Saving...' : 'Save edits'}
+								</Button>
 							</span>
 						</div>
 					</fieldset>
