@@ -5,7 +5,7 @@
 		"paths": {
 			"@/*": ["./*"]
 		},
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"lib": ["ES2021", "DOM", "DOM.Iterable"],
 		"target": "ES2020",
 		"incremental": true,
 		"allowJs": true,
