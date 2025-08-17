@@ -1,7 +1,109 @@
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { uploadImage, publicImageURL } from '@/lib/media'
-import { CopyInput, CloseButton, Label, Button } from '@/components/lib'
+import type { ChangeEvent } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import supabase from '@/app/supabase-client'
+import { imageUrlify } from '@/lib/utils'
+import Image from 'next/image'
+
+const filenameFromFile = (file: File) => {
+	// returns a string like pic-of-my-cat-1a4d06.jpg
+
+	// separate the file extension so we can re-append it at the end 'jpg'
+	let nameparts = file.name.split('.')
+	const ext = nameparts.pop()
+
+	// rejoin the remaining parts in case of 'pic.of.my.cat.jpg'
+	const slug = nameparts.join('.').replaceAll(' ', '-')
+
+	// a hash like '1a4d06' from the image timestamp to track uniqueness
+	const timeHash = Math.round(file.lastModified * 0.000001).toString(16)
+
+	const path = `${slug}-${timeHash}.${ext}`
+	return path
+}
+
+interface ImageInputProps {
+	confirmedURL: string
+	onUpload: (url: string) => void
+}
+
+export default function ImageForm({ confirmedURL, onUpload }: ImageInputProps) {
+	const sendImage = useMutation({
+		mutationFn: async (event: ChangeEvent<HTMLInputElement>) => {
+			event.preventDefault()
+			console.log(`sendImage.mutate`, event)
+			if (!event.target.files || event.target.files.length === 0)
+				throw new Error(`There's no file to submit`)
+			const file: File = event.target.files[0]
+			const filename = filenameFromFile(file)
+			const { data, error } = await supabase.storage
+				.from('images')
+				.upload(`${filename}`, file, {
+					cacheControl: '3600',
+					upsert: true,
+				})
+
+			if (error) throw error
+			onUpload(imageUrlify(data.path))
+			return data
+		},
+		onSuccess: (data) => {
+			console.log(`onSuccess for uploading image`, data)
+		},
+	})
+
+	return (
+		<div className="flex flex-col gap-2">
+			<label
+				htmlFor="imageUploadInput"
+				className="group relative isolate flex h-50 flex-col items-center rounded-2xl border text-center"
+			>
+				{!confirmedURL ? null : (
+					<div className="z-10 mx-auto my-2 grid aspect-square size-36">
+						<Image
+							src={confirmedURL}
+							alt=""
+							className="rounded-2xl"
+							priority
+							fill
+							sizes="400px, (min-width: 440px) 600px"
+							style={{ objectFit: 'cover' }}
+						/>
+					</div>
+				)}
+				<input
+					className="absolute z-50 h-full place-items-stretch justify-center opacity-0"
+					type="file"
+					id="imageUploadInput"
+					name="files[]"
+					accept="image/*"
+					onChange={sendImage.mutate}
+					disabled={sendImage.isPending}
+				/>
+				<div
+					className={`${!confirmedURL ? 'opacity-50' : 'opacity-0'} bg-gray-100/70 filter absolute inset-0 z-30 flex flex-col justify-center rounded-2xl group-hover:opacity-100 items-center cursor-pointer`}
+				>
+					{sendImage.isPending ? (
+						<>Uploading ...</>
+					) : (
+						<>
+							<UploadSVG />
+							<span>
+								drag & drop an image or click&nbsp;here to browse
+								your&nbsp;files
+							</span>
+						</>
+					)}
+				</div>
+			</label>
+
+			{sendImage.error && (
+				<div className="py-12 my-6">
+					<span role="alert">{sendImage.error.message}</span>
+				</div>
+			)}
+		</div>
+	)
+}
 
 const UploadSVG = () => (
 	<svg
@@ -19,154 +121,3 @@ const UploadSVG = () => (
 		/>
 	</svg>
 )
-
-const Buttons = ({
-	previewURL,
-	confirmedURL,
-	clearForm,
-	submitUpload,
-	isUploading,
-	confirmClear,
-}) => (
-	<nav className="flex flex-row gap-4">
-		{previewURL ? (
-			<Button variant="outlines" size="small" type="reset" onClick={clearForm}>
-				clear
-			</Button>
-		) : null}
-		{previewURL && previewURL !== confirmedURL ? (
-			<Button
-				variant="solid"
-				size="small"
-				type="button"
-				onClick={submitUpload}
-				disabled={isUploading}
-			>
-				{isUploading ? 'uploading...' : 'upload'}
-			</Button>
-		) : null}
-		{!previewURL && confirmedURL ? (
-			<Button variant="solid" size="small" type="button" onClick={confirmClear}>
-				confirm clear
-			</Button>
-		) : null}
-	</nav>
-)
-
-export default function ImageForm({ onConfirm, confirmedURL = '' }) {
-	const {
-		register,
-		handleSubmit,
-		setValue,
-		setError,
-		formState: { errors },
-	} = useForm({
-		defaultValues: {
-			image_upload: confirmedURL,
-		},
-	})
-	const [previewURL, setPreviewURL] = useState<string>('')
-	const [isUploading, setIsUploading] = useState<boolean>(false)
-
-	useEffect(() => {
-		setPreviewURL(confirmedURL)
-		setIsUploading(false)
-	}, [confirmedURL])
-
-	const clearForm = () => {
-		setValue('image_upload', '')
-		setPreviewURL('')
-	}
-
-	const onSubmit = (data) => {
-		setError('image_upload', null)
-		setIsUploading(true)
-		uploadImage(data.image_upload[0])
-			.then((filename) => {
-				const url = publicImageURL(filename)
-				console.log(
-					'uploaded the image and set a new preview URL for image: ',
-					url,
-				)
-				// confirming triggers a re-render
-				onConfirm(url)
-			})
-			.catch((error) => {
-				setIsUploading(false)
-				setError('image_upload', error)
-			})
-	}
-
-	// console.log('Confirmed image url', confirmedURL)
-	// console.log('Preview image url', previewURL)
-
-	return (
-		<form className="form" onSubmit={handleSubmit(onSubmit)}>
-			<div className="flex flex-col gap-1 items-center border rounded-sm p-4">
-				{previewURL ? <CopyInput val={previewURL} /> : null}
-				<Label
-					className={`relative flex flex-col w-full fit-content hover:bg-gray-100 ${
-						previewURL ? 'shadow-lg' : 'border border-dashed rounded-sm'
-					} ${errors.image_upload ? 'border-red-600' : 'border-gray-300'}`}
-				>
-					{previewURL ? (
-						<img className="w-full" src={previewURL} alt="" />
-					) : null}
-
-					<div
-						className={`${
-							previewURL ? 'opacity-0 hover:opacity-100 absolute' : ''
-						} bg-white/50 h-full top-0 left-0 right-0 py-8`}
-					>
-						<div className="flex flex-col items-center justify-center py-7 h-full">
-							<UploadSVG />
-							<p className="pt-1 text-sm tracking-wider text-gray-600">
-								Drag and drop an image or click to select one
-							</p>
-						</div>
-					</div>
-
-					<input
-						type="file"
-						className="absolute opacity-0 top-0 left-0 right-0 bottom-0"
-						aria-invalid={!!errors?.image_upload}
-						{...register('image_upload', {
-							required: true,
-						})}
-						onChange={(e) => {
-							const [file] = e.target.files
-							if (file) {
-								setPreviewURL(() => URL.createObjectURL(file))
-							}
-							console.log('logging onChange with file: ', file)
-						}}
-					/>
-					{previewURL ? <CloseButton close={clearForm} /> : null}
-				</Label>
-
-				{confirmedURL !== previewURL ? (
-					<Buttons
-						previewURL={previewURL}
-						confirmedURL={confirmedURL}
-						clearForm={() => {
-							clearForm()
-							onConfirm('')
-						}}
-						submitUpload={handleSubmit(onSubmit)}
-						isUploading={isUploading}
-						confirmClear={() => {
-							clearForm()
-							onConfirm('')
-						}}
-					/>
-				) : null}
-
-				{errors?.image_upload && (
-					<div className="py-12 my-6">
-						<span role="alert">{errors.image_upload.message}</span>
-					</div>
-				)}
-			</div>
-		</form>
-	)
-}

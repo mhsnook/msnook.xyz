@@ -1,3 +1,4 @@
+import supabase from '@/app/supabase-client'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -25,4 +26,10 @@ export function mapArray<T extends Record<string, any>, K extends keyof T>(
 		},
 		{} as Record<string, T>,
 	)
+}
+
+export function imageUrlify(path: string | null): string {
+	return !path
+		? ''
+		: supabase.storage.from('images').getPublicUrl(path).data?.publicUrl
 }

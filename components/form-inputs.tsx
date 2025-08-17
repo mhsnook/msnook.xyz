@@ -1,5 +1,5 @@
 import ImageForm from './image-form'
-import { Label } from '@/components/lib'
+import { Button, Label } from '@/components/lib'
 
 export function InputTitle({ register, error }) {
 	return (
@@ -75,12 +75,22 @@ export function InputImage({
 	startingValue = '',
 	setImageValue,
 }) {
-	const reg = register('image', { pattern: /(?<!\bblob\:)/i })
+	const reg = register('image', { pattern: /(?<!\bblob:)/i })
 	return (
 		<div>
 			<input type="hidden" {...reg} />
-			<Label>Upload image</Label>
-			<ImageForm onConfirm={setImageValue} confirmedURL={startingValue} />
+			<div className="flex flex-row justify-between place-items-center">
+				<Label>Upload image</Label>
+				{startingValue ? (
+					<a
+						className="text-cyan-bright underline text-sm cursor-pointer"
+						onClick={() => setImageValue(null)}
+					>
+						Remove
+					</a>
+				) : null}
+			</div>
+			<ImageForm onUpload={setImageValue} confirmedURL={startingValue} />
 			<span className={error ? '' : 'invisible'} role="alert">
 				This image URL isn&rsquo;t working
 			</span>
