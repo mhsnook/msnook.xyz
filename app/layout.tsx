@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import SessionProvider from './session-provider'
 import Menu from '../components/menu'
 import { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
 	metadataBase: new URL(`https://msnook.xyz`),
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
 				<SessionProvider>
 					<Menu />
 					{children}
+					<Toaster />
 				</SessionProvider>
 			</body>
 		</html>
