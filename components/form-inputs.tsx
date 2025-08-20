@@ -1,5 +1,5 @@
 import ImageForm from './image-form'
-import { Button, Label } from '@/components/lib'
+import { Label } from '@/components/lib'
 
 export function InputTitle({ register, error }) {
 	return (
