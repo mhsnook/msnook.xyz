@@ -12,8 +12,8 @@
 		"migrate": "supabase db diff -f new_migration",
 		"types": "supabase gen types typescript --local > ./types/supabase.ts",
 		"types:production": "supabase gen types typescript --project-id hmpueymmlhhphzvebjku > ./types/supabase.ts",
-		"seeds:data": "supabase db dump --data-only --local > supabase/seed.sql",
-		"seeds:schema": "supabase db dump --local > supabase/schemas/base.sql",
+		"seeds:auth": "supabase db dump --data-only --schema auth --local > ./supabase/seeds/auth.sql",
+		"seeds:public": "supabase db dump --data-only --schema public --local > ./supabase/seeds/public.sql",
 		"seeds:apply": "supabase db reset",
 		"prepare": "husky install"
 	},
