@@ -2,7 +2,7 @@ import supabase from '@/app/supabase-client'
 import { Tables } from '@/types/supabase'
 import Link from 'next/link'
 import { ErrorList } from '@/components/lib'
-import { UploadImageModal } from './new/upload-image-modal'
+import { UploadImageModal } from './upload-image-modal'
 
 export const revalidate = 0 // Revalidate this page on every request
 
