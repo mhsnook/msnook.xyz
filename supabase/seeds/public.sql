@@ -28,6 +28,12 @@ SET row_security = off;
 -- Data for Name: media_meta; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."media_meta" ("id", "path", "description", "tags", "center_box", "created_at", "updated_at") VALUES
+	('d8c0e7a9-d7a4-470e-86ad-48523c49af0a', 'hyrax-197033.jpeg', 'A cute hurax', '{cute,animal}', '{"x": 0.23789849865748966, "y": 0.08588340883836221, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:12.239745+00', NULL),
+	('cb6af364-8bd5-42f3-a92d-5c4ce2b0e31c', 'garlic-broccoli-friends-1a82b1.png', 'A yellow garlic and a green broccoli (friends)', '{sunlo,logo}', NULL, '2025-08-21 11:04:17.835577+00', NULL),
+	('d3cd5e80-e9b7-4e30-9dc8-1ec0d68ee181', 'GwpeSZ_XkAEA6IJ-1ac167.jpeg', 'a tumblr post: "grabs your hand. you''ve had enough plot and exposition and character development lately i''m taking you to the beach episode"', '{tumblr,motivation}', NULL, '2025-08-21 11:03:36.675869+00', '2025-08-21 11:05:25.895744+00'),
+	('28f86cd7-0e1b-493a-82d8-bf91e1a2afe6', 'girlboss-desktop-background-1abbac.jpeg', '', '{stock,motivation}', '{"x": 0.25, "y": 0.25, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:25.077981+00', '2025-08-21 11:05:46.911547+00'),
+	('8234d48d-ed5b-43bf-8dd7-47acddf46017', 'IMG_20240927_151942735_HDR-1ac0af.jpg', 'it''s a my face', '{face,serving}', '{"x": 0.2742030026850204, "y": 0.20404904961644568, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:54.781625+00', '2025-08-21 11:06:01.843362+00');
 
 
 --
