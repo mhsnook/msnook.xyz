@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { CenterBoxEditor } from './center-box-editor'
+import { CopySomething } from '@/components/copy-something'
 
 const MediaMetaSchema = z.object({
 	path: z.string(),
@@ -120,11 +121,6 @@ export default function Page({ params }: { params: { path: string[] } }) {
 		mutation.mutate(updatePayload)
 	}
 
-	const handleCopy = (url: string) => {
-		navigator.clipboard.writeText(url)
-		toast.success('URL copied to clipboard!')
-	}
-
 	if (isPending) {
 		return <div className="single-col text-center p-8">Loading...</div>
 	}
@@ -222,13 +218,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 												value={url}
 												className="input w-full p-2 text-sm border rounded-md"
 											/>
-											<Button
-												variant="outline"
-												size="small"
-												onClick={() => handleCopy(url)}
-											>
-												Copy
-											</Button>
+											<CopySomething text="copy" content={url} />
 										</div>
 									</div>
 								)

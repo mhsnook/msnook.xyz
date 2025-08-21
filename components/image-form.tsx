@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import supabase from '@/app/supabase-client'
 import { imageUrlify } from '@/lib/utils'
 import Image from 'next/image'
+import { ErrorList } from './lib'
 
 const filenameFromFile = (file: File) => {
 	// returns a string like pic-of-my-cat-1a4d06.jpg
@@ -24,9 +25,14 @@ const filenameFromFile = (file: File) => {
 interface ImageInputProps {
 	confirmedURL: string
 	onUpload: (url: string) => void
+	setPath?: (path: string) => void
 }
 
-export default function ImageForm({ confirmedURL, onUpload }: ImageInputProps) {
+export default function ImageForm({
+	confirmedURL,
+	onUpload,
+	setPath = () => {},
+}: ImageInputProps) {
 	const sendImage = useMutation({
 		mutationFn: async (event: ChangeEvent<HTMLInputElement>) => {
 			event.preventDefault()
@@ -44,6 +50,7 @@ export default function ImageForm({ confirmedURL, onUpload }: ImageInputProps) {
 
 			if (error) throw error
 			onUpload(imageUrlify(data.path))
+			setPath(data.path)
 			return data
 		},
 		onSuccess: (data) => {
@@ -97,9 +104,10 @@ export default function ImageForm({ confirmedURL, onUpload }: ImageInputProps) {
 			</label>
 
 			{sendImage.error && (
-				<div className="py-12 my-6">
-					<span role="alert">{sendImage.error.message}</span>
-				</div>
+				<ErrorList
+					summary="Error uploading image"
+					error={sendImage.error.message}
+				/>
 			)}
 		</div>
 	)
