@@ -190,7 +190,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 							<input
 								id="tags"
 								{...register('tags')}
-								className="input w-full p-1"
+								className="input w-full border rounded p-2"
 							/>
 							{errors.tags && (
 								<p className="form-error mt-1">{errors.tags.message}</p>
