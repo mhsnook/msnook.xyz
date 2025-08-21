@@ -2,6 +2,7 @@ import supabase from '@/app/supabase-client'
 import { Tables } from '@/types/supabase'
 import Link from 'next/link'
 import { ErrorList } from '@/components/lib'
+import { UploadImageModal } from './new/upload-image-modal'
 
 export const revalidate = 0 // Revalidate this page on every request
 
@@ -51,9 +52,12 @@ export default async function MediaPage() {
 
 	return (
 		<main className="single-col">
-			<h1 className="h1">Media Library</h1>
+			<div className="flex flex-row justify-between items-center">
+				<h1 className="h1">Media Library</h1>
+				<UploadImageModal />
+			</div>
 			<div className="bg-amber-300 rounded"></div>
-			<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 				{media?.map((item) => (
 					<Link
 						key={item.id}

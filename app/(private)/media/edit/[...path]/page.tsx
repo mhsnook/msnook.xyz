@@ -1,6 +1,6 @@
 'use client'
 
-import { Tables, TablesUpdate } from '@/types/supabase'
+import { TablesUpdate } from '@/types/supabase'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
 import * as z from 'zod'
@@ -13,6 +13,8 @@ import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { CenterBoxEditor } from './center-box-editor'
 import { CopySomething } from '@/components/copy-something'
+
+type MediaMetaUpdate = TablesUpdate<'media_meta'> & { path: string }
 
 const MediaMetaSchema = z.object({
 	path: z.string(),
@@ -68,9 +70,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 	})
 
 	const mutation = useMutation({
-		mutationFn: async (
-			values: TablesUpdate<'media_meta'> & { path: string },
-		) => {
+		mutationFn: async (values: MediaMetaUpdate) => {
 			// 'upsert' will create a new row if one doesn't exist for the path,
 			// or update the existing one. This is ideal for our use case.
 			await supabase
@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 
 	const onSubmit = (formData: FormFields) => {
 		// Prepare the data for the database.
-		const updatePayload: Tables<'media_meta', 'Update'> = {
+		const updatePayload: MediaMetaUpdate = {
 			...formData,
 			path: path, // Ensure path is always set
 			// Convert the comma-separated string from the form back into an array of strings.
@@ -128,13 +128,8 @@ export default function Page({ params }: { params: { path: string[] } }) {
 	if (error) {
 		return <ErrorList summary="Error loading media details" error={error} />
 	}
+	const url = getPublicUrl(path)
 
-	const resolutions = [
-		{ name: 'Original', options: undefined },
-		{ name: '1920px', options: { transform: { width: 1920 } } },
-		{ name: '1280px', options: { transform: { width: 1280 } } },
-		{ name: '640px', options: { transform: { width: 640 } } },
-	]
 	return (
 		<main className="single-col">
 			<div className="flex items-center justify-between">
@@ -181,7 +176,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 							<textarea
 								id="description"
 								{...register('description')}
-								className="input w-full border p-1"
+								className="input w-full border p-1 rounded"
 								rows={4}
 							/>
 							{errors.description && (
@@ -204,25 +199,19 @@ export default function Page({ params }: { params: { path: string[] } }) {
 					</form>
 
 					<div>
-						<h3 className="label-text">Copy URLs</h3>
+						<h3 className="label-text">Copy URL</h3>
 						<div className="space-y-2 ">
-							{resolutions.map((res) => {
-								const url = getPublicUrl(path, res.options)
-								return (
-									<div key={res.name}>
-										<Label>{res.name}</Label>
-										<div className="flex flex-row justify-between items-center gap-1">
-											<input
-												type="text"
-												readOnly
-												value={url}
-												className="input w-full p-2 text-sm border rounded-md"
-											/>
-											<CopySomething text="copy" content={url} />
-										</div>
-									</div>
-								)
-							})}
+							<div>
+								<div className="flex flex-row justify-between items-center gap-1">
+									<input
+										type="text"
+										readOnly
+										value={url}
+										className="input w-full p-2 text-sm border rounded-md"
+									/>
+									<CopySomething text="copy" content={url} />
+								</div>
+							</div>
 						</div>
 					</div>
 
