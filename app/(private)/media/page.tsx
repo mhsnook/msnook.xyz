@@ -73,7 +73,7 @@ export default async function MediaPage() {
 						<div className="p-2 text-sm">
 							<p className="truncate font-semibold">{item.name}</p>
 							<p className="text-gray-500 truncate">
-								{item.meta?.description ?? 'No description'}
+								{item.meta?.description || 'No description'}
 							</p>
 						</div>
 					</Link>
