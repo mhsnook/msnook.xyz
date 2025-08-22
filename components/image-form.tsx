@@ -36,7 +36,6 @@ export default function ImageForm({
 	const sendImage = useMutation({
 		mutationFn: async (event: ChangeEvent<HTMLInputElement>) => {
 			event.preventDefault()
-			console.log(`sendImage.mutate`, event)
 			if (!event.target.files || event.target.files.length === 0)
 				throw new Error(`There's no file to submit`)
 			const file: File = event.target.files[0]

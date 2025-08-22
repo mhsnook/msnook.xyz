@@ -11,7 +11,7 @@ export default function Page() {
 		supabase.auth
 			.signOut()
 			.catch(({ error }) => {
-				console.log(error)
+				console.error(error)
 				throw error
 			})
 			.then(() => setIsFinished(true))

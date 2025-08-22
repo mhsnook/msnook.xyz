@@ -36,7 +36,6 @@ async function getMedia() {
 			}
 		})
 
-	console.log(`media ===== `, media)
 	return media
 }
 

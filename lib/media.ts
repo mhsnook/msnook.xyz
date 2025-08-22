@@ -34,7 +34,7 @@ export async function uploadImage(file: File) {
 		})
 
 	if (error) {
-		console.log('errors in upload:', error)
+		console.error('errors in upload:', error)
 		throw error
 	}
 
