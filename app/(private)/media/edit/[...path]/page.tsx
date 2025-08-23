@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, ErrorList, Label } from '@/components/lib'
 import supabase from '@/app/supabase-client'
 
-import { useEffect } from 'react'
+import { use, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 import { CenterBoxEditor } from './center-box-editor'
@@ -42,8 +42,13 @@ function getPublicUrl(path: string, options?: any) {
 		.publicUrl
 }
 
-export default function Page({ params }: { params: { path: string[] } }) {
-	const path = params.path.join('/')
+export default function Page({
+	params,
+}: {
+	params: Promise<{ path: string[] }>
+}) {
+	const args = use(params)
+	const path = args?.path?.join('/')
 	const queryClient = useQueryClient()
 
 	const { data, error, isPending } = useQuery({
@@ -57,6 +62,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 				.throwOnError()
 			return data
 		},
+		enabled: !!path,
 	})
 
 	const {
@@ -121,7 +127,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 		mutation.mutate(updatePayload)
 	}
 
-	if (isPending) {
+	if (isPending || !path) {
 		return <div className="single-col text-center p-8">Loading...</div>
 	}
 

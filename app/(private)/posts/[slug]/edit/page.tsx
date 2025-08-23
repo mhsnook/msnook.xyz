@@ -1,5 +1,6 @@
 'use client'
 
+import { use } from 'react'
 import { Tables } from '@/types/supabase'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
@@ -20,14 +21,24 @@ import { PostArticle } from '@/components/post'
 import { postQueryOptions } from '../use-post'
 import supabase from '@/app/supabase-client'
 
-export default function Page({ params: { slug } }) {
-	const { data, error, isPending } = useQuery({ ...postQueryOptions(slug) })
+type Params = Promise<{ slug: string }>
+
+export default function Page({ params }: { params: Params }) {
+	const { slug } = use(params)
+	const { data, error, isPending } = useQuery({
+		...postQueryOptions(slug),
+		enabled: !!slug,
+	})
 
 	return error ? (
 		<ErrorList summary="Error loading post" error={error?.message} />
 	) : (
 		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
-			{isPending ? <>loading...</> : <Client initialData={data} />}
+			{!slug ? null : isPending ? (
+				<>loading...</>
+			) : (
+				<Client initialData={data} />
+			)}
 		</div>
 	)
 }
