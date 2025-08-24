@@ -16,6 +16,8 @@ export const viewport = {
 	themeColor: '#0e7490',
 }
 
+export const fetchCache = 'default-cache'
+
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
