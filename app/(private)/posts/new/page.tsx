@@ -20,6 +20,7 @@ export default function Page() {
 		register,
 		handleSubmit,
 		setValue,
+		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm()
 	const [formError, setFormError] = useState<PostgrestError | null>(null)
@@ -50,7 +51,11 @@ export default function Page() {
 						error={errors.image}
 						setImageValue={(v: string) => setValue('image', v)}
 					/>
-					<InputContent register={register} />
+					<InputContent
+						register={register}
+						setValue={setValue}
+						getValues={getValues}
+					/>
 
 					<div className="flex justify-between">
 						<Link href="/" className={buttonStyles({ variant: 'outlines' })}>

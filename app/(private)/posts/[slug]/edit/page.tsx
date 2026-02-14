@@ -53,6 +53,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 		watch,
 		handleSubmit,
 		setValue,
+		getValues,
 		reset,
 		formState: { errors, isDirty },
 	} = useForm<PostUpdate>({
@@ -89,7 +90,11 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					<fieldset disabled={!session || updatePostMutation.isPending}>
 						<InputTitle register={register} error={errors.title} />
 						<InputExcerpt register={register} />
-						<InputContent register={register} />
+						<InputContent
+							register={register}
+							setValue={setValue}
+							getValues={getValues}
+						/>
 						<InputImage
 							register={register}
 							error={errors.image}

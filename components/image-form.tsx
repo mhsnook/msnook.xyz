@@ -1,26 +1,9 @@
 import type { ChangeEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import supabase from '@/app/supabase-client'
-import { imageUrlify } from '@/lib/utils'
+import { imageUrlify, filenameFromFile } from '@/lib/utils'
 import Image from 'next/image'
 import { ErrorList } from './lib'
-
-const filenameFromFile = (file: File) => {
-	// returns a string like pic-of-my-cat-1a4d06.jpg
-
-	// separate the file extension so we can re-append it at the end 'jpg'
-	let nameparts = file.name.split('.')
-	const ext = nameparts.pop()
-
-	// rejoin the remaining parts in case of 'pic.of.my.cat.jpg'
-	const slug = nameparts.join('.').replaceAll(' ', '-')
-
-	// a hash like '1a4d06' from the image timestamp to track uniqueness
-	const timeHash = Math.round(file.lastModified * 0.000001).toString(16)
-
-	const path = `${slug}-${timeHash}.${ext}`
-	return path
-}
 
 interface ImageInputProps {
 	confirmedURL: string
