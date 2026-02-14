@@ -6,6 +6,8 @@ import IffLoggedIn from '../iff-logged-in'
 import { fetchPostList } from '@/lib/posts'
 import { buttonStyles } from '@/components/lib'
 
+export const revalidate = 60
+
 export const metadata: Metadata = {
 	title: 'em snook web site',
 	description: 'My personal space to jot things down',
