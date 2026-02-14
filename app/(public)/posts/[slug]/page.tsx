@@ -9,6 +9,8 @@ import Banner from '@/components/banner'
 import { cn } from '@/lib/utils'
 import { Tables } from '@/types/supabase'
 
+export const revalidate = 60
+
 const PostSidebar = ({ post }: { post: Tables<'posts'> }) => {
 	return (
 		<aside className="col-span-1 flex flex-col gap-4 md:pt-10 lg:pt-14 md:text-center">

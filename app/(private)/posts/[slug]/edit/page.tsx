@@ -19,6 +19,7 @@ import {
 import { PostArticle } from '@/components/post'
 import { postQueryOptions } from '../use-post'
 import supabase from '@/app/supabase-client'
+import { revalidatePost } from '@/app/actions/revalidate'
 
 export default function Page({ params: { slug } }) {
 	const { data, error, isPending } = useQuery({ ...postQueryOptions(slug) })
@@ -74,6 +75,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 		onSuccess: (data) => {
 			reset(data)
 			queryClient.setQueryData(['post', initialData.slug], data)
+			revalidatePost(data.slug)
 		},
 	})
 
