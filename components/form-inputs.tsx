@@ -1,5 +1,9 @@
+import { useRef } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import supabase from '@/app/supabase-client'
+import { imageUrlify, filenameFromFile } from '@/lib/utils'
 import ImageForm from './image-form'
-import { Label } from '@/components/lib'
+import { Label, ErrorList } from '@/components/lib'
 
 export function InputTitle({ register, error }) {
 	return (
@@ -59,12 +63,118 @@ export function InputSlug({ register, error }) {
 	)
 }
 
-export function InputContent({ register }) {
+export function InputContent({ register, setValue, getValues }) {
+	const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+	const { ref: rhfRef, ...registerRest } = register('content')
+
+	const uploadImage = useMutation({
+		mutationFn: async (file: File) => {
+			const filename = filenameFromFile(file)
+			const { data, error } = await supabase.storage
+				.from('images')
+				.upload(filename, file, { cacheControl: '3600', upsert: true })
+			if (error) throw error
+			return { path: data.path, name: file.name }
+		},
+	})
+
+	const insertImageAtCursor = (url: string, altText: string) => {
+		const textarea = textareaRef.current
+		const currentValue = getValues('content') || ''
+		const cursorPos = textarea?.selectionStart ?? currentValue.length
+		const markdownImage = `![${altText}](${url})`
+		const before = currentValue.slice(0, cursorPos)
+		const after = currentValue.slice(cursorPos)
+		const needNewlineBefore = before.length > 0 && !before.endsWith('\n')
+		const needNewlineAfter = after.length > 0 && !after.startsWith('\n')
+		const newValue =
+			before +
+			(needNewlineBefore ? '\n' : '') +
+			markdownImage +
+			(needNewlineAfter ? '\n' : '') +
+			after
+		setValue('content', newValue, { shouldDirty: true })
+
+		const newCursorPos =
+			cursorPos +
+			(needNewlineBefore ? 1 : 0) +
+			markdownImage.length +
+			(needNewlineAfter ? 1 : 0)
+		setTimeout(() => {
+			if (textarea) {
+				textarea.selectionStart = newCursorPos
+				textarea.selectionEnd = newCursorPos
+				textarea.focus()
+			}
+		}, 0)
+	}
+
+	const handleFiles = async (files: FileList) => {
+		for (const file of Array.from(files)) {
+			try {
+				const result = await uploadImage.mutateAsync(file)
+				const url = imageUrlify(result.path)
+				const alt = result.name
+					.replace(/\.[^.]+$/, '')
+					.replaceAll('-', ' ')
+					.replaceAll('_', ' ')
+				insertImageAtCursor(url, alt)
+			} catch {
+				// error is tracked by the mutation
+			}
+		}
+	}
+
 	return (
 		<div>
 			<Label htmlFor="content">Post content</Label>
-			<textarea id="content" rows="10" {...register('content')} />
-			<span className="invisible">&nbsp;</span>
+			<textarea
+				id="content"
+				rows={10}
+				ref={(el) => {
+					rhfRef(el)
+					textareaRef.current = el
+				}}
+				{...registerRest}
+			/>
+			<div className="flex items-center gap-2 mt-1">
+				<label className="cursor-pointer text-sm text-cyan-600 hover:text-cyan-800 flex items-center gap-1">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="w-4 h-4"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+						/>
+					</svg>
+					<span>Upload image</span>
+					<input
+						type="file"
+						className="hidden"
+						accept="image/*"
+						multiple
+						onChange={(e) => {
+							if (e.target.files?.length) handleFiles(e.target.files)
+							e.target.value = ''
+						}}
+					/>
+				</label>
+				{uploadImage.isPending && (
+					<span className="text-sm text-gray-500">Uploading...</span>
+				)}
+			</div>
+			{uploadImage.error && (
+				<ErrorList
+					summary="Error uploading image"
+					error={uploadImage.error.message}
+				/>
+			)}
 		</div>
 	)
 }
