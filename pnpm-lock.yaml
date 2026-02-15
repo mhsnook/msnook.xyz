@@ -47,6 +47,9 @@ importers:
       zod:
         specifier: ^4.0.10
         version: 4.0.10
+      zustand:
+        specifier: ^5.0.11
+        version: 5.0.11(@types/react@18.3.8)(react@18.3.1)
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.1.8
@@ -3021,6 +3024,24 @@ packages:
 
   zod@4.0.10:
     resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
+
+  zustand@5.0.11:
+    resolution: {integrity: sha512-fdZY+dk7zn/vbWNCYmzZULHRrss0jx5pPFiOuMZ/5HJN6Yv3u+1Wswy/4MpZEkEGhtNH+pwxZB8OKgUBPzYAGg==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
 
@@ -6220,3 +6241,8 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zod@4.0.10: {}
+
+  zustand@5.0.11(@types/react@18.3.8)(react@18.3.1):
+    optionalDependencies:
+      '@types/react': 18.3.8
+      react: 18.3.1

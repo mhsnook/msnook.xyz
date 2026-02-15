@@ -30,7 +30,8 @@
 		"remark-react": "^8.0.0",
 		"timeago.js": "^4.0.2",
 		"unified": "^9.2.2",
-		"zod": "^4.0.10"
+		"zod": "^4.0.10",
+		"zustand": "^5.0.11"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "^4.1.8",
