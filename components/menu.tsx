@@ -12,6 +12,7 @@ export default function Menu() {
 		session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'
 	const loggedInLinks = session
 		? [
+				['Flow', '/flow'],
 				['Drafts', '/posts/drafts'],
 				['Compose', '/posts/new'],
 			]

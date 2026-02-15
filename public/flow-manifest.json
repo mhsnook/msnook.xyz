@@ -1,0 +1,28 @@
+{
+	"name": "Flow",
+	"short_name": "Flow",
+	"description": "Personal activity & wellbeing tracker",
+	"start_url": "/flow",
+	"scope": "/flow",
+	"display": "standalone",
+	"background_color": "#f9fafb",
+	"theme_color": "#0087c1",
+	"icons": [
+		{
+			"src": "/images/flow-icon-192.svg",
+			"sizes": "192x192",
+			"type": "image/svg+xml"
+		},
+		{
+			"src": "/images/flow-icon-512.svg",
+			"sizes": "512x512",
+			"type": "image/svg+xml"
+		},
+		{
+			"src": "/images/flow-icon-512.svg",
+			"sizes": "512x512",
+			"type": "image/svg+xml",
+			"purpose": "maskable"
+		}
+	]
+}
