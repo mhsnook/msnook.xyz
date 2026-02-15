@@ -17,14 +17,20 @@ export default async function MortalityPage() {
 	try {
 		data = await fetchMortalityData(2019)
 	} catch (e) {
-		error = e instanceof Error ? e.message : 'Failed to load mortality data'
+		const msg =
+			e instanceof Error
+				? e.message
+				: typeof e === 'object' && e !== null && 'message' in e
+					? String((e as { message: unknown }).message)
+					: 'Unknown error'
+		error = msg
 	}
 
 	return (
-		<main className="container py-6">
-			<div className="mb-6">
+		<main className="py-6">
+			<div className="mb-6 max-w-prose mx-auto px-4">
 				<h1 className="h2">Global Excess Mortality Explorer</h1>
-				<p className="text-gray-600 mt-2 max-w-prose">
+				<p className="text-gray-600 mt-2">
 					Approximate age-standardized death rates per 100,000 by GBD region and
 					cause (2019). Rates are compared against a &ldquo;baseline&rdquo; —
 					the best-performing region for each cause — to show excess preventable
@@ -37,19 +43,21 @@ export default async function MortalityPage() {
 			</div>
 
 			{error ? (
-				<div className="rounded border border-red-300 bg-red-50 p-4 text-red-800">
-					<p className="font-bold">Error loading data</p>
-					<p className="text-sm mt-1">{error}</p>
-					<p className="text-sm mt-2 text-gray-600">
-						The mortality schema may not be set up yet. Run the Supabase
-						migration first:
-					</p>
-					<code className="block mt-1 text-xs bg-gray-100 p-2 rounded">
-						supabase db push
-					</code>
+				<div className="max-w-prose mx-auto px-4">
+					<div className="rounded border border-red-300 bg-red-50 p-4 text-red-800">
+						<p className="font-bold">Error loading data</p>
+						<p className="text-sm mt-1">{error}</p>
+						<p className="text-sm mt-2 text-gray-600">
+							Make sure the <code>mortality</code> schema is added to the
+							exposed schemas in your Supabase project&rsquo;s API settings
+							(Project Settings &rarr; API &rarr; Exposed schemas).
+						</p>
+					</div>
 				</div>
 			) : data ? (
-				<MortalityExplorer data={data} />
+				<div className="px-4">
+					<MortalityExplorer data={data} />
+				</div>
 			) : null}
 		</main>
 	)

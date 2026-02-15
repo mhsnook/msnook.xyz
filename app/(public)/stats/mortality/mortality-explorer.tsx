@@ -288,6 +288,10 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 		return visibleCauses.filter((c) => c.parent_id === parentId).length
 	}
 
+	// Shared styles for the sticky left column label cells
+	const labelCellBase =
+		'sticky left-0 z-10 border-b border-r px-2 py-1 w-[140px] min-w-[140px] max-w-[140px]'
+
 	return (
 		<div>
 			{/* Controls */}
@@ -350,10 +354,7 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 					<thead>
 						{/* Level 1 grouping row */}
 						<tr className="bg-gray-50">
-							<th
-								className="sticky left-0 z-10 bg-gray-50 border-b border-r px-2 py-1"
-								rowSpan={2}
-							>
+							<th className={`${labelCellBase} bg-gray-50`} rowSpan={2}>
 								<button
 									onClick={() => handleSort('region')}
 									className="font-bold hover:text-cyan-bright"
@@ -414,7 +415,9 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 						</tr>
 						{/* Baseline row */}
 						<tr className="bg-emerald-50">
-							<td className="sticky left-0 z-10 bg-emerald-50 border-b border-r px-2 py-1 font-medium text-emerald-700 text-xs">
+							<td
+								className={`${labelCellBase} bg-emerald-50 font-medium text-emerald-700 text-xs`}
+							>
 								Baseline
 							</td>
 							{visibleCauses.map((cause) => {
@@ -453,11 +456,16 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 										className="bg-gray-100 cursor-pointer hover:bg-gray-200"
 										onClick={() => toggleSuperRegion(sr.id)}
 									>
-										<td className="sticky left-0 z-10 bg-gray-100 border-b border-r px-2 py-1.5 font-bold text-gray-700">
-											<span className="mr-1 text-gray-400 inline-block w-3">
+										<td
+											className={`${labelCellBase} bg-gray-100 py-1.5`}
+											title={sr.name}
+										>
+											<span className="mr-1 text-gray-400 inline-block w-3 flex-shrink-0">
 												{isCollapsed ? '▸' : '▾'}
 											</span>
-											{sr.name}
+											<span className="font-bold text-gray-700 line-clamp-2">
+												{sr.name}
+											</span>
 										</td>
 										{visibleCauses.map((cause) => {
 											// Super-region average (population-weighted would be better, but simple avg for now)
@@ -502,8 +510,13 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 												key={`r-${region.id}`}
 												className="hover:bg-blue-50/50"
 											>
-												<td className="sticky left-0 z-10 bg-white border-b border-r px-2 py-1 pl-6 text-gray-600">
-													{region.name}
+												<td
+													className={`${labelCellBase} bg-white pl-6`}
+													title={region.name}
+												>
+													<span className="text-gray-600 line-clamp-2">
+														{region.name}
+													</span>
 												</td>
 												{visibleCauses.map((cause) => {
 													const value = getCellValue(cause.id, region.id)
@@ -538,7 +551,7 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 					<tfoot>
 						{/* Total excess deaths by cause */}
 						<tr className="bg-gray-50 font-bold">
-							<td className="sticky left-0 z-10 bg-gray-50 border-t-2 border-r px-2 py-1.5">
+							<td className={`${labelCellBase} bg-gray-50 border-t-2`}>
 								Total Excess Deaths
 							</td>
 							{visibleCauses.map((cause) => (
@@ -561,12 +574,12 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 			</div>
 
 			{/* Legend and notes */}
-			<div className="mt-4 grid gap-4 md:grid-cols-2">
+			<div className="mt-4 grid gap-4 md:grid-cols-2 max-w-prose">
 				<div className="text-xs text-gray-500">
 					<p className="font-bold text-gray-700 mb-1">
 						Color scale (per column)
 					</p>
-					<div className="flex gap-2 items-center">
+					<div className="flex gap-2 items-center flex-wrap">
 						<span className="inline-block w-4 h-4 rounded bg-emerald-100 border" />
 						<span>At or below baseline</span>
 						<span className="inline-block w-4 h-4 rounded bg-yellow-100 border" />
@@ -589,7 +602,7 @@ export default function MortalityExplorer({ data }: { data: MortalityData }) {
 			</div>
 
 			{/* Top causes table */}
-			<div className="mt-6">
+			<div className="mt-6 max-w-prose">
 				<h2 className="h4 mb-2">
 					Largest causes of excess mortality (estimated)
 				</h2>
