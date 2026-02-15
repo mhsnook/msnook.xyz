@@ -14,37 +14,37 @@ export default function FlowShell({ children }: { children: React.ReactNode }) {
 
 	return (
 		<TimerProvider>
-			<div className="min-h-screen bg-gray-50/50">
-				<header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b px-4 py-2">
+			<div className="min-h-screen bg-flow-bg">
+				<header className="sticky top-0 z-20 bg-flow-surface/90 backdrop-blur-sm border-b border-flow-border shadow-sm px-4 py-2">
 					<div className="max-w-2xl mx-auto flex items-center justify-between">
 						<nav className="flex items-center gap-4 text-sm">
 							<Link
 								href="/flow"
-								className="font-display text-lg text-cyan-bright"
+								className="font-display text-lg font-bold text-cyan-bright"
 							>
 								Flow
 							</Link>
 							<Link
 								href="/flow/check-in"
-								className="text-gray-500 hover:text-gray-700"
+								className="text-flow-muted hover:text-gray-800"
 							>
 								Check-in
 							</Link>
 							<Link
 								href="/flow/domains"
-								className="text-gray-500 hover:text-gray-700"
+								className="text-flow-muted hover:text-gray-800"
 							>
 								Domains
 							</Link>
 							<Link
 								href="/flow/history"
-								className="text-gray-500 hover:text-gray-700"
+								className="text-flow-muted hover:text-gray-800"
 							>
 								History
 							</Link>
 							<Link
 								href="/flow/settings"
-								className="text-gray-500 hover:text-gray-700"
+								className="text-flow-muted hover:text-gray-800"
 							>
 								Settings
 							</Link>

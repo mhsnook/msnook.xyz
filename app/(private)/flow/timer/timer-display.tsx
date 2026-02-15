@@ -31,7 +31,7 @@ export default function TimerDisplay() {
 			</div>
 
 			{/* Progress bar */}
-			<div className="w-full max-w-xs h-2 bg-gray-200 rounded-full overflow-hidden">
+			<div className="w-full max-w-xs h-2 bg-flow-border rounded-full overflow-hidden">
 				<div
 					className={`h-full rounded-full transition-all duration-1000 ${
 						isBreak ? 'bg-green-400' : 'bg-cyan'
@@ -41,11 +41,11 @@ export default function TimerDisplay() {
 			</div>
 
 			{intention && (
-				<p className="text-gray-500 text-sm">{isBreak ? 'Break' : intention}</p>
+				<p className="text-flow-muted text-sm">{isBreak ? 'Break' : intention}</p>
 			)}
 
 			{status === 'paused' && (
-				<p className="text-gray-400 text-xs uppercase tracking-wide">Paused</p>
+				<p className="text-flow-muted text-xs uppercase tracking-wide">Paused</p>
 			)}
 		</div>
 	)

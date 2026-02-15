@@ -45,7 +45,7 @@ export default function IntentionForm() {
 				value={intention}
 				onChange={(e) => setIntention(e.target.value)}
 				placeholder="What are you working on?"
-				className="text-center text-lg border-b border-gray-300 focus:border-cyan focus:outline-none py-2 bg-transparent"
+				className="text-center text-lg border border-flow-border rounded-lg px-3 py-2.5 bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none"
 				onKeyDown={(e) => {
 					if (e.key === 'Enter') handleStart()
 				}}
@@ -58,8 +58,8 @@ export default function IntentionForm() {
 						onClick={() => setDuration(opt.seconds)}
 						className={`px-4 py-2 rounded-lg text-sm ${
 							duration === opt.seconds
-								? 'bg-cyan text-white'
-								: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+								? 'bg-cyan text-white shadow-sm'
+								: 'bg-flow-surface-alt border border-flow-border text-flow-muted hover:bg-flow-bg'
 						}`}
 					>
 						{opt.label}
@@ -70,7 +70,7 @@ export default function IntentionForm() {
 			<button
 				onClick={handleStart}
 				disabled={isStarting}
-				className="px-8 py-4 rounded-xl bg-cyan-bright text-white text-xl hover:bg-cyan disabled:opacity-50 mx-auto"
+				className="px-8 py-4 rounded-xl bg-cyan-bright text-white text-xl font-display font-bold hover:bg-cyan disabled:opacity-50 mx-auto shadow-sm"
 			>
 				{isStarting ? 'Starting...' : 'Start'}
 			</button>

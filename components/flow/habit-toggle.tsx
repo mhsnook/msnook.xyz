@@ -17,8 +17,8 @@ export default function HabitToggle({
 			onClick={() => onToggle(!done)}
 			className={`flex items-center gap-2 px-4 py-3 rounded-xl text-left transition-colors ${
 				done
-					? 'bg-gray-100 text-gray-700'
-					: 'bg-white text-gray-400 border border-gray-200'
+					? 'bg-cyan/10 text-gray-700 border border-cyan-soft'
+					: 'bg-flow-surface-alt text-flow-muted border border-flow-border'
 			}`}
 		>
 			<span className="text-xl">

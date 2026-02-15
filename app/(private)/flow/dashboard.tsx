@@ -31,12 +31,12 @@ function SessionItem({ session }: { session: PomodoroSession }) {
 		minute: '2-digit',
 	})
 	return (
-		<div className="flex items-center gap-3 py-2 text-sm">
-			<span className="text-gray-400 w-16">{startTime}</span>
+		<div className="flex items-center gap-3 py-2.5 text-sm">
+			<span className="text-flow-muted w-16">{startTime}</span>
 			<span className="flex-1 truncate">
 				{session.intention || 'Untitled session'}
 			</span>
-			<span className="text-gray-400">
+			<span className="text-flow-muted">
 				{formatTimeShort(session.duration_seconds)}
 			</span>
 			<span
@@ -44,7 +44,7 @@ function SessionItem({ session }: { session: PomodoroSession }) {
 					session.status === 'completed'
 						? 'bg-green-100 text-green-600'
 						: session.status === 'abandoned'
-							? 'bg-gray-100 text-gray-400'
+							? 'bg-flow-surface-alt text-flow-muted'
 							: 'bg-cyan/10 text-cyan-bright'
 				}`}
 			>
@@ -70,7 +70,7 @@ function SleepDebtBanner({
 	if (shortNights < 2) return null
 
 	return (
-		<div className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm">
+		<div className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm shadow-sm">
 			<p>
 				You&apos;ve had {shortNights} short nights recently. Tonight, sleep is
 				the priority.
@@ -90,7 +90,7 @@ function GentleReminder({ sessionCount }: { sessionCount: number }) {
 	if (dismissed || sessionCount < 3) return null
 
 	return (
-		<div className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-purple-50 border border-purple-200 text-purple-800 text-sm">
+		<div className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-purple-50 border border-purple-200 text-purple-800 text-sm shadow-sm">
 			<p>
 				{sessionCount} sessions today. Nice work. Maybe check in on something
 				non-work?
@@ -147,7 +147,7 @@ export default function Dashboard() {
 	).length
 
 	return (
-		<div className="flex flex-col gap-6">
+		<div className="flex flex-col gap-5">
 			{/* Sleep debt warning */}
 			<SleepDebtBanner recentSleep={recentSleep} />
 
@@ -158,7 +158,7 @@ export default function Dashboard() {
 			<SleepLog existing={todaySleepLog} />
 
 			{/* Timer section */}
-			<section className="flex flex-col items-center gap-4 py-6">
+			<section className="flow-card-interactive flex flex-col items-center gap-4 py-6">
 				{showComplete ? (
 					<SessionComplete
 						onDone={() => {
@@ -177,8 +177,8 @@ export default function Dashboard() {
 
 			{/* Habits */}
 			{habits.length > 0 && (
-				<section>
-					<h2 className="text-sm text-gray-500 mb-2">Today</h2>
+				<section className="flow-card">
+					<h2 className="flow-section-heading mb-3">Today&apos;s habits</h2>
 					<div className="flex flex-wrap gap-2">
 						{habits.map((habit) => {
 							const log = habitLogs.find(
@@ -201,8 +201,8 @@ export default function Dashboard() {
 
 			{/* Domain status */}
 			{domains.length > 0 && (
-				<section>
-					<h2 className="text-sm text-gray-500 mb-2">Domains</h2>
+				<section className="flow-card">
+					<h2 className="flow-section-heading mb-3">Domains</h2>
 					<div className="flex flex-wrap gap-2">
 						{domains.map((d) => (
 							<DomainBadge key={d.id} domain={d} />
@@ -213,9 +213,9 @@ export default function Dashboard() {
 
 			{/* Today's sessions */}
 			{todaySessions.length > 0 && (
-				<section>
-					<h2 className="text-sm text-gray-500 mb-2">Sessions today</h2>
-					<div className="divide-y">
+				<section className="flow-card">
+					<h2 className="flow-section-heading mb-3">Sessions today</h2>
+					<div className="divide-y divide-flow-border/50">
 						{todaySessions.map((session) => (
 							<SessionItem key={session.id} session={session} />
 						))}

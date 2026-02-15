@@ -45,7 +45,7 @@ export default function TimerControls({
 			<div className="flex gap-3 justify-center">
 				<button
 					onClick={handleBreakEnd}
-					className="px-6 py-3 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-lg"
+					className="px-6 py-3 rounded-lg bg-flow-surface-alt border border-flow-border text-gray-700 hover:bg-flow-bg text-lg"
 				>
 					End break
 				</button>
@@ -57,7 +57,7 @@ export default function TimerControls({
 		<div className="flex gap-3 justify-center">
 			<button
 				onClick={handlePause}
-				className="px-6 py-3 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 text-lg"
+				className="px-6 py-3 rounded-lg bg-flow-surface-alt border border-flow-border text-gray-700 hover:bg-flow-bg text-lg"
 			>
 				{status === 'paused' ? 'Resume' : 'Pause'}
 			</button>

@@ -42,7 +42,7 @@ export default function DomainsPage() {
 					{projects.map((project) => (
 						<div
 							key={project.id}
-							className="flex items-center justify-between p-3 rounded-lg bg-white border"
+							className="flex items-center justify-between p-3 rounded-lg bg-flow-surface border border-flow-border shadow-sm"
 						>
 							<div>
 								<span className="font-medium">{project.name}</span>
@@ -52,7 +52,7 @@ export default function DomainsPage() {
 									</span>
 								)}
 								{project.target_pct != null && (
-									<span className="ml-2 text-xs text-gray-400">
+									<span className="ml-2 text-xs text-flow-muted">
 										target: {project.target_pct}%
 									</span>
 								)}
@@ -60,7 +60,7 @@ export default function DomainsPage() {
 						</div>
 					))}
 					{projects.length === 0 && (
-						<p className="text-sm text-gray-400">No projects yet</p>
+						<p className="text-sm text-flow-muted">No projects yet</p>
 					)}
 				</div>
 			</div>
