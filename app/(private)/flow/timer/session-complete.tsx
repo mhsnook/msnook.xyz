@@ -50,16 +50,18 @@ export default function SessionComplete({ onDone }: { onDone: () => void }) {
 	}
 
 	return (
-		<div className="flex flex-col items-center gap-6 py-4">
-			<p className="text-2xl font-display">Session complete</p>
+		<div className="flex flex-col items-center gap-6 py-4 w-full">
+			<p className="text-2xl font-display font-bold text-flow-heading">
+				Session complete
+			</p>
 
 			<div className="flex flex-col gap-4 w-full max-w-xs">
 				<div>
-					<label className="text-sm text-gray-500 mb-1 block">Mood</label>
+					<label className="flow-section-heading mb-1 block">Mood</label>
 					<ScaleInput value={mood} onChange={setMood} />
 				</div>
 				<div>
-					<label className="text-sm text-gray-500 mb-1 block">Energy</label>
+					<label className="flow-section-heading mb-1 block">Energy</label>
 					<ScaleInput value={energy} onChange={setEnergy} />
 				</div>
 			</div>
@@ -68,20 +70,20 @@ export default function SessionComplete({ onDone }: { onDone: () => void }) {
 				<button
 					onClick={handleBreak}
 					disabled={saving}
-					className="px-5 py-3 rounded-lg bg-green-100 text-green-700 hover:bg-green-200"
+					className="px-5 py-3 rounded-lg bg-green-100 border border-green-200 text-green-700 hover:bg-green-200"
 				>
 					Take a break (5m)
 				</button>
 				<button
 					onClick={handleSave}
 					disabled={saving}
-					className="px-5 py-3 rounded-lg bg-cyan text-white hover:bg-cyan-bright"
+					className="px-5 py-3 rounded-lg bg-cyan text-white hover:bg-cyan-bright shadow-sm"
 				>
 					Done
 				</button>
 				<button
 					onClick={handleSkip}
-					className="px-5 py-3 rounded-lg text-gray-400 hover:text-gray-600"
+					className="px-5 py-3 rounded-lg text-flow-muted hover:text-gray-600"
 				>
 					Skip
 				</button>

@@ -14,12 +14,12 @@ export default function DomainCard({
 	)
 
 	return (
-		<div className="flex flex-col gap-2 p-4 rounded-xl bg-white border">
+		<div className="flow-card flex flex-col gap-2">
 			<div className="flex items-center gap-2">
 				{domain.icon && <span className="text-xl">{domain.icon}</span>}
 				<h3 className="font-display font-bold">{domain.name}</h3>
 			</div>
-			<p className="text-sm text-gray-500">
+			<p className="text-sm text-flow-muted">
 				{totalMinutes > 0
 					? `${totalMinutes} minutes this week`
 					: 'No sessions this week'}

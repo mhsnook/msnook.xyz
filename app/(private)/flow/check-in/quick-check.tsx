@@ -33,22 +33,22 @@ export default function QuickCheck() {
 
 	if (saved) {
 		return (
-			<div className="px-4 py-3 rounded-xl bg-white border text-center text-sm text-green-600">
+			<div className="flow-card text-center text-sm text-green-600">
 				Noted
 			</div>
 		)
 	}
 
 	return (
-		<div className="flex flex-col gap-3 px-4 py-3 rounded-xl bg-white border">
-			<p className="text-sm text-gray-500">Quick check</p>
+		<div className="flow-card-interactive flex flex-col gap-3">
+			<h2 className="flow-section-heading">Quick check</h2>
 			<div className="grid grid-cols-2 gap-3">
 				<div>
-					<label className="text-xs text-gray-400 mb-1 block">Energy</label>
+					<label className="text-xs text-flow-muted mb-1 block">Energy</label>
 					<ScaleInput value={energy} onChange={setEnergy} />
 				</div>
 				<div>
-					<label className="text-xs text-gray-400 mb-1 block">Mood</label>
+					<label className="text-xs text-flow-muted mb-1 block">Mood</label>
 					<ScaleInput value={mood} onChange={setMood} />
 				</div>
 			</div>

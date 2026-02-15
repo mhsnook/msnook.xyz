@@ -69,9 +69,9 @@ export default function SleepLog({
 	}
 
 	return (
-		<div className="flex flex-col gap-3 p-4 rounded-xl bg-white border">
+		<div className="flow-card-interactive flex flex-col gap-3">
 			<div className="flex items-center justify-between">
-				<p className="text-sm text-gray-500">How&apos;d you sleep?</p>
+				<h2 className="flow-section-heading">How&apos;d you sleep?</h2>
 				{saved && <span className="text-xs text-green-600">Saved</span>}
 			</div>
 
@@ -79,7 +79,7 @@ export default function SleepLog({
 			<div className="flex items-center gap-1">
 				<button
 					onClick={() => nudge(-0.5)}
-					className="px-2 py-2 rounded-lg text-gray-400 hover:bg-gray-100 text-lg"
+					className="px-2 py-2 rounded-lg text-flow-muted hover:bg-flow-surface-alt text-lg"
 				>
 					&minus;
 				</button>
@@ -90,8 +90,8 @@ export default function SleepLog({
 							onClick={() => selectHours(h)}
 							className={`px-2.5 py-2 rounded-lg text-sm tabular-nums transition-colors ${
 								hours === h
-									? 'bg-cyan text-white'
-									: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+									? 'bg-cyan text-white shadow-sm'
+									: 'bg-flow-surface-alt border border-flow-border text-flow-muted hover:bg-flow-bg'
 							}`}
 						>
 							{h % 1 === 0 ? h : h.toFixed(1)}
@@ -100,7 +100,7 @@ export default function SleepLog({
 				</div>
 				<button
 					onClick={() => nudge(0.5)}
-					className="px-2 py-2 rounded-lg text-gray-400 hover:bg-gray-100 text-lg"
+					className="px-2 py-2 rounded-lg text-flow-muted hover:bg-flow-surface-alt text-lg"
 				>
 					+
 				</button>
@@ -120,7 +120,7 @@ export default function SleepLog({
 						title={label}
 						className={`text-2xl p-1.5 rounded-lg transition-all ${
 							feeling === emoji
-								? 'bg-gray-100 scale-110'
+								? 'bg-flow-surface-alt border border-flow-border scale-110'
 								: 'opacity-50 hover:opacity-80'
 						}`}
 					>

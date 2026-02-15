@@ -67,10 +67,10 @@ export default function CheckInForm({ onDone }: { onDone?: () => void }) {
 	const hasAnyValue = Object.values(values).some((v) => v !== null)
 
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flow-card-interactive flex flex-col gap-5">
 			{SCALES.map((scale) => (
 				<div key={scale.key}>
-					<label className="text-sm text-gray-600 mb-1 block">
+					<label className="flow-section-heading mb-1 block">
 						{scale.label}
 					</label>
 					<ScaleInput
@@ -82,20 +82,20 @@ export default function CheckInForm({ onDone }: { onDone?: () => void }) {
 			))}
 
 			<div>
-				<label className="text-sm text-gray-600 mb-1 block">Notes</label>
+				<label className="flow-section-heading mb-1 block">Notes</label>
 				<textarea
 					value={notes}
 					onChange={(e) => setNotes(e.target.value)}
 					rows={3}
 					placeholder="Anything on your mind..."
-					className="w-full border rounded-lg px-3 py-2 text-sm focus:border-cyan focus:outline-none bg-transparent"
+					className="w-full border border-flow-border rounded-lg px-3 py-2 text-sm bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none"
 				/>
 			</div>
 
 			<button
 				onClick={() => save.mutate()}
 				disabled={save.isPending || !hasAnyValue}
-				className="px-6 py-3 rounded-xl bg-cyan-bright text-white text-lg hover:bg-cyan disabled:opacity-50 self-center"
+				className="px-6 py-3 rounded-xl bg-cyan-bright text-white text-lg font-display font-bold hover:bg-cyan disabled:opacity-50 self-center shadow-sm"
 			>
 				{save.isPending ? 'Saving...' : 'Save check-in'}
 			</button>

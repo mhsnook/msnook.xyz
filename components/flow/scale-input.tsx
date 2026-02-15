@@ -19,8 +19,8 @@ export default function ScaleInput({
 						onClick={() => onChange(value === n ? null : n)}
 						className={`flex-1 py-3 rounded-lg text-lg font-medium transition-colors min-w-[3rem] ${
 							value === n
-								? 'bg-cyan text-white'
-								: 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+								? 'bg-cyan text-white shadow-sm'
+								: 'bg-flow-surface-alt border border-flow-border text-flow-muted hover:bg-flow-bg hover:border-flow-muted/40'
 						}`}
 					>
 						{n}
@@ -28,7 +28,7 @@ export default function ScaleInput({
 				))}
 			</div>
 			{labels && (
-				<div className="flex justify-between text-xs text-gray-400 px-1">
+				<div className="flex justify-between text-xs text-flow-muted px-1">
 					<span>{labels[0]}</span>
 					<span>{labels[1]}</span>
 				</div>

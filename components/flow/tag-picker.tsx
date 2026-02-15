@@ -54,7 +54,7 @@ export default function TagPicker({
 				onChange={(e) => setFilter(e.target.value)}
 				onKeyDown={handleKeyDown}
 				placeholder="Search or create tag..."
-				className="border-b border-gray-300 focus:border-cyan focus:outline-none py-1 bg-transparent text-sm"
+				className="border border-flow-border rounded-lg px-2 py-1.5 bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none text-sm"
 			/>
 			<div className="flex flex-wrap gap-1">
 				{filtered.slice(0, 20).map((tag) => (
@@ -65,7 +65,7 @@ export default function TagPicker({
 						className={`px-2 py-1 rounded text-xs transition-colors ${
 							selected.includes(tag.id)
 								? 'bg-cyan text-white'
-								: 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+								: 'bg-flow-surface-alt border border-flow-border text-flow-muted hover:bg-flow-bg'
 						}`}
 					>
 						{tag.name}

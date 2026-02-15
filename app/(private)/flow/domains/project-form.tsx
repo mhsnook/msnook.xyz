@@ -42,20 +42,20 @@ export default function ProjectForm({
 	})
 
 	return (
-		<div className="flex flex-col gap-3 p-4 bg-white rounded-xl border">
+		<div className="flow-card-interactive flex flex-col gap-3">
 			<input
 				type="text"
 				value={name}
 				onChange={(e) => setName(e.target.value)}
 				placeholder="Project name"
-				className="border-b border-gray-300 focus:border-cyan focus:outline-none py-1 bg-transparent"
+				className="border border-flow-border rounded-lg px-2 py-1.5 bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none"
 			/>
 			<select
 				value={domainId ?? ''}
 				onChange={(e) =>
 					setDomainId(e.target.value ? Number(e.target.value) : null)
 				}
-				className="border-b border-gray-300 focus:border-cyan focus:outline-none py-1 bg-transparent text-sm"
+				className="border border-flow-border rounded-lg px-2 py-1.5 bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none text-sm"
 			>
 				<option value="">No domain</option>
 				{domains.map((d) => (
@@ -83,7 +83,7 @@ export default function ProjectForm({
 							placeholder="%"
 							min="0"
 							max="100"
-							className="w-16 text-center border-b border-gray-300 focus:border-cyan focus:outline-none bg-transparent"
+							className="w-16 text-center border border-flow-border rounded-lg px-1 py-1 bg-flow-surface-alt focus:border-cyan focus:outline-none"
 						/>
 						%
 					</label>
@@ -92,7 +92,7 @@ export default function ProjectForm({
 			<button
 				onClick={() => save.mutate()}
 				disabled={save.isPending || !name}
-				className="self-end px-4 py-2 rounded bg-cyan text-white hover:bg-cyan-bright disabled:opacity-50 text-sm"
+				className="self-end px-4 py-2 rounded-lg bg-cyan text-white hover:bg-cyan-bright disabled:opacity-50 text-sm shadow-sm"
 			>
 				{save.isPending ? 'Saving...' : existing ? 'Update' : 'Add project'}
 			</button>
