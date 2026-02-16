@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useSession } from '@/app/session-provider'
-import { Overlay } from './lib'
+import Overlay from './lib/overlay'
 
 export default function Menu() {
 	const [isOpen, setIsOpen] = useState<boolean>(false)

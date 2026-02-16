@@ -28,7 +28,6 @@ export default function Page() {
 
 	const onSubmit = (data: TablesInsert<'posts'>) => {
 		setFormError(null)
-		data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 		createOnePost(data)
 			.then(() => {
 				router.push(`/posts/${data.slug}/edit`)

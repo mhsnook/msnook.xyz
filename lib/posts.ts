@@ -34,7 +34,7 @@ export async function fetchOnePost(slug: string) {
 	return typeof data?.content === 'string'
 		? {
 				...data,
-				content: data.content.replace('&gt;', '>').replace('&lt;', '<'),
+				content: data.content.replace(/&gt;/g, '>').replace(/&lt;/g, '<'),
 			}
 		: data
 }

@@ -67,7 +67,6 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const queryClient = useQueryClient()
 	const updatePostMutation = useMutation({
 		mutationFn: async (data: PostUpdate) => {
-			data.content = data.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 			return (
 				await supabase.from('posts').upsert([data]).select().throwOnError()
 			)?.data?.[0] as Tables<'posts'>
