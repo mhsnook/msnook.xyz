@@ -14,6 +14,7 @@ const PrintMarkdown = ({ markdown }: { markdown: string }) => (
 		rehypePlugins={[rehypeRaw]}
 		components={{
 			img: (props) => <LazyImage {...props} />,
+			pre: ({ children }) => <>{children}</>,
 			code: ({ className, children, ...props }) => {
 				const match = /language-(\w+)/.exec(className || '')
 				const codeString = String(children).replace(/\n$/, '')
