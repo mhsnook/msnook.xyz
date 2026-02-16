@@ -23,7 +23,7 @@ const PostCard = ({
 					src={image}
 					alt=""
 					fill
-					sizes="582px, (min-width: 640px) 290px, (min-width: 768px) 316px"
+					sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
 					style={{ objectFit: 'cover' }}
 				/>
 			</div>

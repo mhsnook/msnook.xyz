@@ -54,7 +54,7 @@ export default function ImageForm({
 							className="rounded-2xl"
 							priority
 							fill
-							sizes="400px, (min-width: 440px) 600px"
+							sizes="(min-width: 768px) 720px, 100vw"
 							style={{ objectFit: 'cover' }}
 						/>
 					</div>
