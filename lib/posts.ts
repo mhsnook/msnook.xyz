@@ -31,12 +31,7 @@ export async function fetchOnePost(slug: string) {
 		.maybeSingle()
 		.throwOnError()
 
-	return typeof data?.content === 'string'
-		? {
-				...data,
-				content: data.content.replace(/&gt;/g, '>').replace(/&lt;/g, '<'),
-			}
-		: data
+	return data
 }
 
 export async function createOnePost(postData: TablesInsert<'posts'>) {
