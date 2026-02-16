@@ -57,6 +57,9 @@ layer(base);
 	.prose img {
 		@apply shadow-lg;
 	}
+	.prose pre code {
+		@apply p-0;
+	}
 	input.copy-input,
 	form.form input:not([type='checkbox']),
 	form.form textarea {
