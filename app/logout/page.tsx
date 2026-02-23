@@ -1,44 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import supabase from '@/app/supabase-client'
-import { AlertBox } from '@/components/lib'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function Page() {
-	const [isFinished, setIsFinished] = useState<boolean>(false)
+	const router = useRouter()
+
 	useEffect(() => {
-		supabase.auth
-			.signOut()
-			.catch(({ error }) => {
-				console.error(error)
-				throw error
+		createClient()
+			.auth.signOut()
+			.then(() => router.replace('/'))
+			.catch((err) => {
+				console.error('Logout failed', err)
+				router.replace('/')
 			})
-			.then(() => setIsFinished(true))
-	}, [])
+	}, [router])
 
 	return (
 		<main className="single-col">
-			<AlertBox variant={isFinished ? 'neato' : 'info'}>
-				{!isFinished ? (
-					<h1 className="h5">Logging out...</h1>
-				) : (
-					<>
-						<h1 className="h3">Logged out</h1>
-						<p className="my-4">
-							Congratulations, you may now{' '}
-							<Link href="/" className="link">
-								return to the home page
-							</Link>{' '}
-							or{' '}
-							<Link href="/login" className="link">
-								log in again
-							</Link>
-							.
-						</p>
-					</>
-				)}
-			</AlertBox>
+			<p className="text-gray-500">Logging out...</p>
 		</main>
 	)
 }

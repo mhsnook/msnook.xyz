@@ -1,4 +1,4 @@
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/server'
 import { Tables } from '@/types/supabase'
 import Link from 'next/link'
 import { ErrorList } from '@/components/lib'
@@ -7,6 +7,7 @@ import { UploadImageModal } from './upload-image-modal'
 export const revalidate = 0 // Revalidate this page on every request
 
 async function getMedia() {
+	const supabase = await createClient()
 	const [fileListRes, metaRes] = await Promise.all([
 		supabase.storage.from('images').list('', {
 			limit: 100,

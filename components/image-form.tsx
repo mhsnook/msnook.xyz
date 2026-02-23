@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 import { imageUrlify, filenameFromFile } from '@/lib/utils'
 import Image from 'next/image'
 import { ErrorList } from './lib'
@@ -23,8 +23,8 @@ export default function ImageForm({
 				throw new Error(`There's no file to submit`)
 			const file: File = event.target.files[0]
 			const filename = filenameFromFile(file)
-			const { data, error } = await supabase.storage
-				.from('images')
+			const { data, error } = await createClient()
+				.storage.from('images')
 				.upload(`${filename}`, file, {
 					cacheControl: '3600',
 					upsert: true,
