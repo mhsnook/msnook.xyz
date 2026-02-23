@@ -112,8 +112,7 @@ function ProcessCard({
 							Part of an existing goal
 						</p>
 						<p className="text-sm text-gray-500">
-							A new step or note for something I&rsquo;m already working
-							on
+							A new step or note for something I&rsquo;m already working on
 						</p>
 					</button>
 					<div className="text-center mt-2">
@@ -407,9 +406,7 @@ function AttachToGoalForm({
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							When?{' '}
-							<span className="font-normal text-gray-400">
-								(optional)
-							</span>
+							<span className="font-normal text-gray-400">(optional)</span>
 						</label>
 						<input
 							type="date"

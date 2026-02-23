@@ -4,13 +4,15 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/lib'
 import {
-	useGoals,
+	useAllGoals,
+	useProjects,
 	useSubtasks,
 	useAddSubtask,
 	useUpdateTask,
 	useCloseTask,
 	useDeleteTask,
 } from './use-todoist'
+import ProjectFilter from './project-filter'
 import type { Task } from '@doist/todoist-api-typescript'
 import toast from 'react-hot-toast'
 
@@ -25,15 +27,22 @@ function isStale(task: Task): boolean {
 	return daysSince(task.updatedAt || task.addedAt) >= 3
 }
 
-export default function ActiveTab({ projectId }: { projectId: string }) {
-	const { data: goals, isLoading } = useGoals(projectId)
+export default function ActiveTab() {
+	const { data: goals, isLoading } = useAllGoals()
+	const { data: projects } = useProjects()
 	const [expandedId, setExpandedId] = useState<string | null>(null)
+	const [selectedProject, setSelectedProject] = useState<string | null>(null)
 
 	if (isLoading) {
 		return <p className="text-center text-gray-500 py-8">Loading...</p>
 	}
 
 	const topLevelGoals = goals?.filter((t) => !t.parentId) ?? []
+	const projectIdsWithTasks = new Set(topLevelGoals.map((t) => t.projectId))
+
+	const filtered = selectedProject
+		? topLevelGoals.filter((t) => t.projectId === selectedProject)
+		: topLevelGoals
 
 	if (topLevelGoals.length === 0) {
 		return (
@@ -46,7 +55,7 @@ export default function ActiveTab({ projectId }: { projectId: string }) {
 		)
 	}
 
-	const sorted = [...topLevelGoals].sort((a, b) => {
+	const sorted = [...filtered].sort((a, b) => {
 		const aStale = isStale(a)
 		const bStale = isStale(b)
 		if (aStale && !bStale) return -1
@@ -55,17 +64,27 @@ export default function ActiveTab({ projectId }: { projectId: string }) {
 	})
 
 	return (
-		<div className="flex flex-col gap-3 max-w-md mx-auto">
-			{sorted.map((goal) => (
-				<GoalItem
-					key={goal.id}
-					goal={goal}
-					isExpanded={expandedId === goal.id}
-					onToggle={() =>
-						setExpandedId(expandedId === goal.id ? null : goal.id)
-					}
+		<div className="max-w-md mx-auto">
+			{projects && (
+				<ProjectFilter
+					projects={projects}
+					projectIdsWithTasks={projectIdsWithTasks}
+					selected={selectedProject}
+					onSelect={setSelectedProject}
 				/>
-			))}
+			)}
+			<div className="flex flex-col gap-3">
+				{sorted.map((goal) => (
+					<GoalItem
+						key={goal.id}
+						goal={goal}
+						isExpanded={expandedId === goal.id}
+						onToggle={() =>
+							setExpandedId(expandedId === goal.id ? null : goal.id)
+						}
+					/>
+				))}
+			</div>
 		</div>
 	)
 }
@@ -88,7 +107,10 @@ function GoalItem({
 				stale ? 'border-amber-300 bg-amber-50' : 'border-gray-200',
 			)}
 		>
-			<button onClick={onToggle} className="w-full text-left p-4 cursor-pointer">
+			<button
+				onClick={onToggle}
+				className="w-full text-left p-4 cursor-pointer"
+			>
 				<div className="flex items-start justify-between gap-2">
 					<div className="flex-1 min-w-0">
 						<p className="font-medium text-gray-800">{goal.content}</p>
@@ -100,9 +122,7 @@ function GoalItem({
 					</div>
 					<div className="flex items-center gap-2 shrink-0">
 						{goal.due && (
-							<span className="text-xs text-gray-400">
-								{goal.due.date}
-							</span>
+							<span className="text-xs text-gray-400">{goal.due.date}</span>
 						)}
 						{stale && (
 							<span className="text-xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded">
@@ -113,9 +133,7 @@ function GoalItem({
 				</div>
 			</button>
 
-			{isExpanded && (
-				<GoalExpanded goal={goal} stale={stale} />
-			)}
+			{isExpanded && <GoalExpanded goal={goal} stale={stale} />}
 		</div>
 	)
 }
@@ -165,9 +183,9 @@ function GoalExpanded({ goal, stale }: { goal: Task; stale: boolean }) {
 		<div className="px-4 pb-4 border-t pt-3">
 			{stale && (
 				<div className="mb-3 p-2 bg-amber-100 rounded text-sm text-amber-800">
-					This has been sitting for a few days. Still working on it?
-					Something holding you back? Maybe the next step needs updating,
-					or there&rsquo;s some uncertainty to address.
+					This has been sitting for a few days. Still working on it? Something
+					holding you back? Maybe the next step needs updating, or there&rsquo;s
+					some uncertainty to address.
 				</div>
 			)}
 
@@ -263,9 +281,7 @@ function SubtaskRow({ task }: { task: Task }) {
 				<span
 					className={cn(
 						'text-xs shrink-0',
-						daysSince(task.due.date) > 0
-							? 'text-red-500'
-							: 'text-gray-400',
+						daysSince(task.due.date) > 0 ? 'text-red-500' : 'text-gray-400',
 					)}
 				>
 					{task.due.date}

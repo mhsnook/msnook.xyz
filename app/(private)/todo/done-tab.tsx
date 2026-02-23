@@ -1,10 +1,14 @@
 'use client'
 
-import { useCompletedTasks } from './use-todoist'
+import { useState } from 'react'
+import { useCompletedTasks, useProjects } from './use-todoist'
+import ProjectFilter from './project-filter'
 import type { Task } from '@doist/todoist-api-typescript'
 
-export default function DoneTab({ projectId }: { projectId: string }) {
-	const { data: tasks, isLoading } = useCompletedTasks(projectId)
+export default function DoneTab() {
+	const { data: tasks, isLoading } = useCompletedTasks()
+	const { data: projects } = useProjects()
+	const [selectedProject, setSelectedProject] = useState<string | null>(null)
 
 	if (isLoading) {
 		return <p className="text-center text-gray-500 py-8">Loading...</p>
@@ -21,13 +25,27 @@ export default function DoneTab({ projectId }: { projectId: string }) {
 		)
 	}
 
+	const projectIdsWithTasks = new Set(tasks.map((t) => t.projectId))
+	const filtered = selectedProject
+		? tasks.filter((t) => t.projectId === selectedProject)
+		: tasks
+
 	return (
 		<div className="max-w-md mx-auto">
+			{projects && (
+				<ProjectFilter
+					projects={projects}
+					projectIdsWithTasks={projectIdsWithTasks}
+					selected={selectedProject}
+					onSelect={setSelectedProject}
+				/>
+			)}
 			<p className="text-sm text-gray-500 mb-3">
-				Last 30 days ({tasks.length} item{tasks.length !== 1 ? 's' : ''})
+				Last 30 days ({filtered.length} item
+				{filtered.length !== 1 ? 's' : ''})
 			</p>
 			<div className="flex flex-col gap-2">
-				{tasks.map((task) => (
+				{filtered.map((task) => (
 					<DoneItem key={task.id} task={task} />
 				))}
 			</div>
