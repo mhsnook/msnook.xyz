@@ -4,11 +4,11 @@ import { getApi } from '@/lib/todoist'
 export async function GET(req: NextRequest) {
 	try {
 		const api = getApi()
-		const sectionId = req.nextUrl.searchParams.get('sectionId')
 		const projectId = req.nextUrl.searchParams.get('projectId')
+		const parentId = req.nextUrl.searchParams.get('parentId')
 
-		const args: { projectId?: string; sectionId?: string } = {}
-		if (sectionId) args.sectionId = sectionId
+		const args: { projectId?: string; parentId?: string } = {}
+		if (parentId) args.parentId = parentId
 		else if (projectId) args.projectId = projectId
 
 		const { results } = await api.getTasks(args)
