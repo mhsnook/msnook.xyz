@@ -18,7 +18,7 @@ import {
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
 import { postQueryOptions } from '../use-post'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 import { revalidatePost } from '@/app/actions/revalidate'
 
 export default function Page({ params: { slug } }) {
@@ -68,7 +68,11 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const updatePostMutation = useMutation({
 		mutationFn: async (data: PostUpdate) => {
 			return (
-				await supabase.from('posts').upsert([data]).select().throwOnError()
+				await createClient()
+					.from('posts')
+					.upsert([data])
+					.select()
+					.throwOnError()
 			)?.data?.[0] as Tables<'posts'>
 		},
 		onSuccess: (data) => {

@@ -1,12 +1,8 @@
 'use client'
 
-import {
-	useQuery,
-	useMutation,
-	useQueryClient,
-} from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@doist/todoist-api-typescript'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 
 // ── Types ──
 
@@ -47,7 +43,7 @@ export function useInbox() {
 	return useQuery<InboxItem[]>({
 		queryKey: ['todo', 'inbox'],
 		queryFn: async () => {
-			const { data, error } = await supabase
+			const { data, error } = await createClient()
 				.from('todo_inbox')
 				.select('*')
 				.order('created_at', { ascending: true })
@@ -60,8 +56,11 @@ export function useInbox() {
 export function useAddInboxItem() {
 	const qc = useQueryClient()
 	return useMutation({
-		mutationFn: async (args: { raw_text: string; source: 'voice' | 'typed' }) => {
-			const { data, error } = await supabase
+		mutationFn: async (args: {
+			raw_text: string
+			source: 'voice' | 'typed'
+		}) => {
+			const { data, error } = await createClient()
 				.from('todo_inbox')
 				.insert(args)
 				.select()
@@ -77,7 +76,10 @@ export function useDeleteInboxItem() {
 	const qc = useQueryClient()
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const { error } = await supabase.from('todo_inbox').delete().eq('id', id)
+			const { error } = await createClient()
+				.from('todo_inbox')
+				.delete()
+				.eq('id', id)
 			if (error) throw error
 		},
 		onSuccess: () => qc.invalidateQueries({ queryKey: ['todo', 'inbox'] }),

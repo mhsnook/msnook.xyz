@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 import { imageUrlify, filenameFromFile } from '@/lib/utils'
 import ImageForm from './image-form'
 import { Label, ErrorList } from '@/components/lib'
@@ -70,8 +70,8 @@ export function InputContent({ register, setValue, getValues }) {
 	const uploadImage = useMutation({
 		mutationFn: async (file: File) => {
 			const filename = filenameFromFile(file)
-			const { data, error } = await supabase.storage
-				.from('images')
+			const { data, error } = await createClient()
+				.storage.from('images')
 				.upload(filename, file, { cacheControl: '3600', upsert: true })
 			if (error) throw error
 			return { path: data.path, name: file.name }
