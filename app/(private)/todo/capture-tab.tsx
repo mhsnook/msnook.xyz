@@ -2,10 +2,9 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Button } from '@/components/lib'
-import { useAddTask } from './use-todoist'
+import { useAddInboxItem } from './use-todoist'
 import toast from 'react-hot-toast'
 
-// Extend Window for SpeechRecognition
 type SpeechRecognitionEvent = Event & {
 	results: { [index: number]: { [index: number]: { transcript: string } } }
 	resultIndex: number
@@ -32,26 +31,23 @@ type SpeechRecognition = {
 	onend: (() => void) | null
 }
 
-export default function CaptureTab({
-	sectionId,
-	onCaptured,
-}: {
-	sectionId: string
-	onCaptured?: () => void
-}) {
+export default function CaptureTab() {
 	const [text, setText] = useState('')
 	const [isRecording, setIsRecording] = useState(false)
 	const [transcript, setTranscript] = useState('')
+	const [usedVoice, setUsedVoice] = useState(false)
 	const recognitionRef = useRef<SpeechRecognition | null>(null)
-	const addTask = useAddTask()
+	const addItem = useAddInboxItem()
 
-	const supportsVoice = typeof window !== 'undefined' && !!getSpeechRecognition()
+	const supportsVoice =
+		typeof window !== 'undefined' && !!getSpeechRecognition()
 
 	const startRecording = useCallback(() => {
 		const SpeechRecognitionClass = getSpeechRecognition()
 		if (!SpeechRecognitionClass) return
 
-		const recognition = new SpeechRecognitionClass() as unknown as SpeechRecognition
+		const recognition =
+			new SpeechRecognitionClass() as unknown as SpeechRecognition
 		recognition.continuous = true
 		recognition.interimResults = true
 		recognition.lang = 'en-US'
@@ -84,6 +80,7 @@ export default function CaptureTab({
 		recognitionRef.current = recognition
 		recognition.start()
 		setIsRecording(true)
+		setUsedVoice(true)
 		setTranscript('')
 	}, [])
 
@@ -94,7 +91,6 @@ export default function CaptureTab({
 		}
 	}, [])
 
-	// When recording stops and we have a transcript, put it in the text field
 	useEffect(() => {
 		if (!isRecording && transcript) {
 			setText((prev) => (prev ? `${prev} ${transcript}` : transcript))
@@ -106,21 +102,15 @@ export default function CaptureTab({
 		const content = text.trim()
 		if (!content) return
 
-		addTask.mutate(
-			{
-				content,
-				sectionId,
-				labels: ['inbox'],
-			},
+		addItem.mutate(
+			{ raw_text: content, source: usedVoice ? 'voice' : 'typed' },
 			{
 				onSuccess: () => {
 					setText('')
+					setUsedVoice(false)
 					toast.success('Captured!')
-					onCaptured?.()
 				},
-				onError: (err) => {
-					toast.error(err.message)
-				},
+				onError: (err) => toast.error(err.message),
 			},
 		)
 	}
@@ -131,7 +121,6 @@ export default function CaptureTab({
 				Capture what&rsquo;s on your mind. We&rsquo;ll sort it out later.
 			</p>
 
-			{/* Voice recording button */}
 			{supportsVoice && (
 				<button
 					onClick={isRecording ? stopRecording : startRecording}
@@ -165,14 +154,12 @@ export default function CaptureTab({
 				</button>
 			)}
 
-			{/* Live transcript preview */}
 			{isRecording && transcript && (
 				<p className="text-gray-600 italic text-center max-w-sm">
 					&ldquo;{transcript}&rdquo;
 				</p>
 			)}
 
-			{/* Text input */}
 			<div className="w-full max-w-md">
 				<textarea
 					value={text}
@@ -191,16 +178,17 @@ export default function CaptureTab({
 					<Button
 						variant="solid"
 						onClick={handleSubmit}
-						disabled={!text.trim() || addTask.isPending}
+						disabled={!text.trim() || addItem.isPending}
 					>
-						{addTask.isPending ? 'Saving...' : 'Capture'}
+						{addItem.isPending ? 'Saving...' : 'Capture'}
 					</Button>
 				</div>
 			</div>
 
 			{!supportsVoice && (
 				<p className="text-xs text-gray-400 text-center">
-					Voice capture is not supported in this browser. Try Chrome or Edge.
+					Voice capture is not supported in this browser. Try Chrome or
+					Edge.
 				</p>
 			)}
 		</div>

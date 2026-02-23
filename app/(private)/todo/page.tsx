@@ -2,12 +2,11 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { useSetup } from './use-todoist'
+import { useSetup, useInbox } from './use-todoist'
 import CaptureTab from './capture-tab'
 import ProcessTab from './process-tab'
 import ActiveTab from './active-tab'
 import DoneTab from './done-tab'
-import { useInboxTasks } from './use-todoist'
 
 const tabs = ['Capture', 'Process', 'Active', 'Done'] as const
 type Tab = (typeof tabs)[number]
@@ -15,8 +14,8 @@ type Tab = (typeof tabs)[number]
 export default function TodoPage() {
 	const [activeTab, setActiveTab] = useState<Tab>('Capture')
 	const { data: setup, isLoading: setupLoading, error: setupError } = useSetup()
-	const { data: inboxTasks } = useInboxTasks(setup?.inboxSectionId)
-	const inboxCount = inboxTasks?.length ?? 0
+	const { data: inbox } = useInbox()
+	const inboxCount = inbox?.length ?? 0
 
 	if (setupLoading) {
 		return (
@@ -50,7 +49,6 @@ export default function TodoPage() {
 		<main className="single-col">
 			<h1 className="h2 text-center mb-2">Todo</h1>
 
-			{/* Tab bar */}
 			<nav className="flex border-b mb-6">
 				{tabs.map((tab) => (
 					<button
@@ -73,23 +71,12 @@ export default function TodoPage() {
 				))}
 			</nav>
 
-			{/* Tab content */}
-			{activeTab === 'Capture' && (
-				<CaptureTab
-					sectionId={setup.inboxSectionId}
-					onCaptured={() => {
-						if (inboxCount === 0) setActiveTab('Process')
-					}}
-				/>
-			)}
+			{activeTab === 'Capture' && <CaptureTab />}
 			{activeTab === 'Process' && (
-				<ProcessTab
-					inboxSectionId={setup.inboxSectionId}
-					activeSectionId={setup.activeSectionId}
-				/>
+				<ProcessTab projectId={setup.projectId} />
 			)}
 			{activeTab === 'Active' && (
-				<ActiveTab activeSectionId={setup.activeSectionId} />
+				<ActiveTab projectId={setup.projectId} />
 			)}
 			{activeTab === 'Done' && <DoneTab projectId={setup.projectId} />}
 		</main>

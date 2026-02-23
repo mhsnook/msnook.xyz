@@ -1,31 +1,28 @@
 'use client'
 
 import { useState } from 'react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/lib'
 import {
-	useInboxTasks,
-	useUpdateTask,
-	useMoveTask,
-	useDeleteTask,
+	useInbox,
+	useGoals,
+	useDeleteInboxItem,
+	useAddGoal,
+	useAddSubtask,
+	type InboxItem,
 } from './use-todoist'
 import type { Task } from '@doist/todoist-api-typescript'
 import toast from 'react-hot-toast'
 
-export default function ProcessTab({
-	inboxSectionId,
-	activeSectionId,
-}: {
-	inboxSectionId: string
-	activeSectionId: string
-}) {
-	const { data: tasks, isLoading } = useInboxTasks(inboxSectionId)
+export default function ProcessTab({ projectId }: { projectId: string }) {
+	const { data: inbox, isLoading: inboxLoading } = useInbox()
 	const [currentIndex, setCurrentIndex] = useState(0)
 
-	if (isLoading) {
+	if (inboxLoading) {
 		return <p className="text-center text-gray-500 py-8">Loading inbox...</p>
 	}
 
-	if (!tasks || tasks.length === 0) {
+	if (!inbox || inbox.length === 0) {
 		return (
 			<div className="text-center py-12">
 				<p className="text-2xl mb-2">&#10024;</p>
@@ -37,21 +34,19 @@ export default function ProcessTab({
 		)
 	}
 
-	const task = tasks[Math.min(currentIndex, tasks.length - 1)]
-	if (!task) return null
+	const item = inbox[Math.min(currentIndex, inbox.length - 1)]
 
 	return (
 		<div>
 			<p className="text-sm text-gray-500 mb-4 text-center">
-				{tasks.length} item{tasks.length !== 1 ? 's' : ''} to process
+				{inbox.length} item{inbox.length !== 1 ? 's' : ''} to process
 			</p>
 			<ProcessCard
-				key={task.id}
-				task={task}
-				activeSectionId={activeSectionId}
+				key={item.id}
+				item={item}
+				projectId={projectId}
 				onProcessed={() => {
-					// Stay at same index (next item slides in) or go back one
-					if (currentIndex >= tasks.length - 1) {
+					if (currentIndex >= inbox.length - 1) {
 						setCurrentIndex(Math.max(0, currentIndex - 1))
 					}
 				}}
@@ -60,59 +55,22 @@ export default function ProcessTab({
 	)
 }
 
+type Mode = 'choose' | 'new-goal' | 'attach'
+
 function ProcessCard({
-	task,
-	activeSectionId,
+	item,
+	projectId,
 	onProcessed,
 }: {
-	task: Task
-	activeSectionId: string
+	item: InboxItem
+	projectId: string
 	onProcessed: () => void
 }) {
-	const [goal, setGoal] = useState(task.content)
-	const [nextAction, setNextAction] = useState('')
-	const [dueDate, setDueDate] = useState('')
-	const updateTask = useUpdateTask()
-	const moveTask = useMoveTask()
-	const deleteTask = useDeleteTask()
-
-	const handleActivate = () => {
-		const description = [
-			nextAction ? `Next action: ${nextAction}` : '',
-			task.content !== goal ? `Original: ${task.content}` : '',
-		]
-			.filter(Boolean)
-			.join('\n\n')
-
-		// First update the task content/description, then move it
-		updateTask.mutate(
-			{
-				id: task.id,
-				content: goal,
-				description: description || undefined,
-				labels: [],
-				...(dueDate ? { dueDate } : {}),
-			},
-			{
-				onSuccess: () => {
-					moveTask.mutate(
-						{ id: task.id, sectionId: activeSectionId },
-						{
-							onSuccess: () => {
-								toast.success('Activated!')
-								onProcessed()
-							},
-							onError: (err) => toast.error(err.message),
-						},
-					)
-				},
-				onError: (err) => toast.error(err.message),
-			},
-		)
-	}
+	const [mode, setMode] = useState<Mode>('choose')
+	const deleteInbox = useDeleteInboxItem()
 
 	const handleDrop = () => {
-		deleteTask.mutate(task.id, {
+		deleteInbox.mutate(item.id, {
 			onSuccess: () => {
 				toast.success('Dropped')
 				onProcessed()
@@ -121,77 +79,366 @@ function ProcessCard({
 		})
 	}
 
-	const isPending =
-		updateTask.isPending || moveTask.isPending || deleteTask.isPending
-
 	return (
-		<div className="border rounded-lg p-5 max-w-md mx-auto">
-			{/* Raw capture */}
-			<div className="mb-5 p-3 bg-gray-50 rounded text-sm text-gray-600 italic">
-				&ldquo;{task.content}&rdquo;
+		<div className="max-w-md mx-auto">
+			{/* The raw capture */}
+			<div className="mb-5 p-4 bg-gray-50 rounded-lg border">
+				<p className="text-xs text-gray-400 mb-1">
+					{item.source === 'voice' ? 'Voice capture' : 'Typed'} &middot;{' '}
+					{new Date(item.created_at).toLocaleString()}
+				</p>
+				<p className="text-gray-700">&ldquo;{item.raw_text}&rdquo;</p>
 			</div>
 
-			<fieldset disabled={isPending} className="flex flex-col gap-4">
-				{/* Goal */}
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
-						What&rsquo;s the real goal here?
-					</label>
-					<input
-						type="text"
-						value={goal}
-						onChange={(e) => setGoal(e.target.value)}
-						className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
-					/>
+			{mode === 'choose' && (
+				<div className="flex flex-col gap-3">
+					<p className="text-sm font-medium text-gray-700 text-center mb-1">
+						What is this?
+					</p>
+					<button
+						onClick={() => setMode('new-goal')}
+						className="w-full p-3 border rounded-lg text-left hover:border-cyan-bright hover:bg-cyan-bright/5 cursor-pointer transition-colors"
+					>
+						<p className="font-medium text-gray-800">New goal</p>
+						<p className="text-sm text-gray-500">
+							Something I haven&rsquo;t started tracking yet
+						</p>
+					</button>
+					<button
+						onClick={() => setMode('attach')}
+						className="w-full p-3 border rounded-lg text-left hover:border-cyan-bright hover:bg-cyan-bright/5 cursor-pointer transition-colors"
+					>
+						<p className="font-medium text-gray-800">
+							Part of an existing goal
+						</p>
+						<p className="text-sm text-gray-500">
+							A new step or note for something I&rsquo;m already working
+							on
+						</p>
+					</button>
+					<div className="text-center mt-2">
+						<button
+							onClick={handleDrop}
+							disabled={deleteInbox.isPending}
+							className="text-sm text-gray-400 hover:text-red-600 cursor-pointer"
+						>
+							{deleteInbox.isPending ? 'Dropping...' : 'Drop it'}
+						</button>
+					</div>
 				</div>
+			)}
 
-				{/* First step */}
+			{mode === 'new-goal' && (
+				<NewGoalForm
+					item={item}
+					projectId={projectId}
+					onDone={onProcessed}
+					onBack={() => setMode('choose')}
+				/>
+			)}
+
+			{mode === 'attach' && (
+				<AttachToGoalForm
+					item={item}
+					projectId={projectId}
+					onDone={onProcessed}
+					onBack={() => setMode('choose')}
+				/>
+			)}
+		</div>
+	)
+}
+
+function NewGoalForm({
+	item,
+	projectId,
+	onDone,
+	onBack,
+}: {
+	item: InboxItem
+	projectId: string
+	onDone: () => void
+	onBack: () => void
+}) {
+	const [goal, setGoal] = useState(item.raw_text)
+	const [firstStep, setFirstStep] = useState('')
+	const [dueDate, setDueDate] = useState('')
+	const [stepDueDate, setStepDueDate] = useState('')
+	const addGoal = useAddGoal()
+	const addSubtask = useAddSubtask()
+	const deleteInbox = useDeleteInboxItem()
+
+	const isPending =
+		addGoal.isPending || addSubtask.isPending || deleteInbox.isPending
+
+	const handleSubmit = () => {
+		addGoal.mutate(
+			{
+				content: goal,
+				description: `Captured: ${item.raw_text}`,
+				projectId,
+				...(dueDate ? { deadlineDate: dueDate } : {}),
+			},
+			{
+				onSuccess: (newGoal) => {
+					if (firstStep.trim()) {
+						addSubtask.mutate(
+							{
+								content: firstStep,
+								parentId: newGoal.id,
+								...(stepDueDate ? { dueDate: stepDueDate } : {}),
+							},
+							{
+								onSuccess: () => {
+									deleteInbox.mutate(item.id, {
+										onSuccess: () => {
+											toast.success('Goal created!')
+											onDone()
+										},
+									})
+								},
+								onError: (err) => toast.error(err.message),
+							},
+						)
+					} else {
+						deleteInbox.mutate(item.id, {
+							onSuccess: () => {
+								toast.success('Goal created!')
+								onDone()
+							},
+						})
+					}
+				},
+				onError: (err) => toast.error(err.message),
+			},
+		)
+	}
+
+	return (
+		<fieldset disabled={isPending} className="flex flex-col gap-4">
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-1">
+					What&rsquo;s the goal?
+				</label>
+				<input
+					type="text"
+					value={goal}
+					onChange={(e) => setGoal(e.target.value)}
+					className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
+				/>
+			</div>
+
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-1">
+					Deadline?{' '}
+					<span className="font-normal text-gray-400">(optional)</span>
+				</label>
+				<input
+					type="date"
+					value={dueDate}
+					onChange={(e) => setDueDate(e.target.value)}
+					className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
+				/>
+			</div>
+
+			<hr className="my-1" />
+
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-1">
+					What&rsquo;s the very first step?{' '}
+					<span className="font-normal text-gray-400">(optional)</span>
+				</label>
+				<input
+					type="text"
+					value={firstStep}
+					onChange={(e) => setFirstStep(e.target.value)}
+					placeholder="e.g. look up requirements online"
+					className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
+				/>
+			</div>
+
+			{firstStep && (
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1">
-						What&rsquo;s the very first step?
-					</label>
-					<input
-						type="text"
-						value={nextAction}
-						onChange={(e) => setNextAction(e.target.value)}
-						placeholder="e.g. look up requirements online"
-						className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
-					/>
-				</div>
-
-				{/* Due date */}
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1">
-						Any deadline?{' '}
+						When do you want to do that step?{' '}
 						<span className="font-normal text-gray-400">(optional)</span>
 					</label>
 					<input
 						type="date"
-						value={dueDate}
-						onChange={(e) => setDueDate(e.target.value)}
+						value={stepDueDate}
+						onChange={(e) => setStepDueDate(e.target.value)}
 						className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
 					/>
 				</div>
+			)}
 
-				{/* Actions */}
-				<div className="flex gap-3 mt-2">
-					<Button
-						variant="solid"
-						onClick={handleActivate}
-						disabled={!goal.trim() || isPending}
-						className="flex-1"
-					>
-						{isPending ? 'Saving...' : 'Activate'}
-					</Button>
-					<button
-						onClick={handleDrop}
-						disabled={isPending}
-						className="px-4 py-2 text-sm text-gray-500 hover:text-red-600 cursor-pointer"
-					>
-						Drop
-					</button>
+			<div className="flex gap-3 mt-2">
+				<Button
+					variant="solid"
+					onClick={handleSubmit}
+					disabled={!goal.trim() || isPending}
+					className="flex-1"
+				>
+					{isPending ? 'Creating...' : 'Create goal'}
+				</Button>
+				<button
+					type="button"
+					onClick={onBack}
+					disabled={isPending}
+					className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+				>
+					Back
+				</button>
+			</div>
+		</fieldset>
+	)
+}
+
+function AttachToGoalForm({
+	item,
+	projectId,
+	onDone,
+	onBack,
+}: {
+	item: InboxItem
+	projectId: string
+	onDone: () => void
+	onBack: () => void
+}) {
+	const { data: goals, isLoading } = useGoals(projectId)
+	const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null)
+	const [stepContent, setStepContent] = useState(item.raw_text)
+	const [stepDueDate, setStepDueDate] = useState('')
+	const addSubtask = useAddSubtask()
+	const deleteInbox = useDeleteInboxItem()
+
+	const isPending = addSubtask.isPending || deleteInbox.isPending
+
+	if (isLoading) {
+		return <p className="text-center text-gray-500 py-4">Loading goals...</p>
+	}
+
+	// Only show top-level tasks (goals), not subtasks
+	const topLevelGoals = goals?.filter((t) => !t.parentId) ?? []
+
+	if (topLevelGoals.length === 0) {
+		return (
+			<div className="text-center py-6">
+				<p className="text-gray-600 mb-3">No active goals yet</p>
+				<button
+					onClick={onBack}
+					className="text-sm text-cyan-bright hover:underline cursor-pointer"
+				>
+					Create a new goal instead
+				</button>
+			</div>
+		)
+	}
+
+	const handleSubmit = () => {
+		if (!selectedGoalId || !stepContent.trim()) return
+
+		addSubtask.mutate(
+			{
+				content: stepContent,
+				parentId: selectedGoalId,
+				...(stepDueDate ? { dueDate: stepDueDate } : {}),
+			},
+			{
+				onSuccess: () => {
+					deleteInbox.mutate(item.id, {
+						onSuccess: () => {
+							toast.success('Step added!')
+							onDone()
+						},
+					})
+				},
+				onError: (err) => toast.error(err.message),
+			},
+		)
+	}
+
+	return (
+		<fieldset disabled={isPending} className="flex flex-col gap-4">
+			<div>
+				<label className="block text-sm font-medium text-gray-700 mb-2">
+					Which goal does this belong to?
+				</label>
+				<div className="flex flex-col gap-2">
+					{topLevelGoals.map((goal) => (
+						<button
+							key={goal.id}
+							type="button"
+							onClick={() => setSelectedGoalId(goal.id)}
+							className={cn(
+								'w-full p-3 border rounded-lg text-left cursor-pointer transition-colors',
+								selectedGoalId === goal.id
+									? 'border-cyan-bright bg-cyan-bright/5'
+									: 'hover:border-gray-300',
+							)}
+						>
+							<p className="text-sm font-medium text-gray-800">
+								{goal.content}
+							</p>
+							{goal.due && (
+								<p className="text-xs text-gray-400 mt-0.5">
+									Due: {goal.due.date}
+								</p>
+							)}
+						</button>
+					))}
 				</div>
-			</fieldset>
-		</div>
+			</div>
+
+			{selectedGoalId && (
+				<>
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1">
+							What&rsquo;s the action step?
+						</label>
+						<input
+							type="text"
+							value={stepContent}
+							onChange={(e) => setStepContent(e.target.value)}
+							className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
+						/>
+					</div>
+
+					<div>
+						<label className="block text-sm font-medium text-gray-700 mb-1">
+							When?{' '}
+							<span className="font-normal text-gray-400">
+								(optional)
+							</span>
+						</label>
+						<input
+							type="date"
+							value={stepDueDate}
+							onChange={(e) => setStepDueDate(e.target.value)}
+							className="appearance-none border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden"
+						/>
+					</div>
+				</>
+			)}
+
+			<div className="flex gap-3 mt-2">
+				<Button
+					variant="solid"
+					onClick={handleSubmit}
+					disabled={!selectedGoalId || !stepContent.trim() || isPending}
+					className="flex-1"
+				>
+					{isPending ? 'Adding...' : 'Add step'}
+				</Button>
+				<button
+					type="button"
+					onClick={onBack}
+					disabled={isPending}
+					className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+				>
+					Back
+				</button>
+			</div>
+		</fieldset>
 	)
 }
