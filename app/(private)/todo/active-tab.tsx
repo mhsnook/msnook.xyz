@@ -32,11 +32,41 @@ function isStale(task: Task, allTasks: Task[]): boolean {
 	return Date.now() - latestActivity(task, allTasks) >= THREE_DAYS_MS
 }
 
+// Labels with lead-time filtering: tasks only appear N days before due date
+const LABEL_LEAD_DAYS: Record<string, number> = {
+	bills: 5,
+}
+
+function isRelevant(task: Task): boolean {
+	if (!task.due) return true
+	const dueDate = new Date(task.due.date)
+	const today = new Date()
+	today.setHours(0, 0, 0, 0)
+	const daysUntilDue = Math.floor(
+		(dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+	)
+	if (daysUntilDue < 0) return true // overdue always shows
+	const leadDays = task.labels.reduce(
+		(min, l) => Math.min(min, LABEL_LEAD_DAYS[l] ?? Infinity),
+		Infinity,
+	)
+	if (leadDays === Infinity) return true // no configured label
+	return daysUntilDue <= leadDays
+}
+
+function daysSince(dateStr: string | null | undefined): number {
+	if (!dateStr) return 999
+	return Math.floor(
+		(Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24),
+	)
+}
+
 export default function ActiveTab() {
 	const { data: goals, isLoading } = useAllGoals()
 	const { data: projects } = useProjects()
 	const [expandedId, setExpandedId] = useState<string | null>(null)
 	const [selectedProject, setSelectedProject] = useState<string | null>(null)
+	const [showUpcoming, setShowUpcoming] = useState(false)
 
 	if (isLoading) {
 		return <p className="text-center text-gray-500 py-8">Loading...</p>
@@ -61,13 +91,20 @@ export default function ActiveTab() {
 	}
 
 	const allTasks = goals ?? []
-	const sorted = [...filtered].sort((a, b) => {
-		const aStale = isStale(a, allTasks)
-		const bStale = isStale(b, allTasks)
-		if (aStale && !bStale) return 1
-		if (!aStale && bStale) return -1
-		return latestActivity(b, allTasks) - latestActivity(a, allTasks)
-	})
+	const relevant = filtered.filter(isRelevant)
+	const upcoming = filtered.filter((t) => !isRelevant(t))
+
+	const sortGoals = (list: Task[]) =>
+		[...list].sort((a, b) => {
+			const aStale = isStale(a, allTasks)
+			const bStale = isStale(b, allTasks)
+			if (aStale && !bStale) return 1
+			if (!aStale && bStale) return -1
+			return latestActivity(b, allTasks) - latestActivity(a, allTasks)
+		})
+
+	const sorted = sortGoals(relevant)
+	const sortedUpcoming = sortGoals(upcoming)
 
 	return (
 		<div className="max-w-md mx-auto">
@@ -92,6 +129,31 @@ export default function ActiveTab() {
 					/>
 				))}
 			</div>
+			{upcoming.length > 0 && (
+				<>
+					<button
+						onClick={() => setShowUpcoming(!showUpcoming)}
+						className="w-full text-center text-sm text-gray-400 hover:text-gray-600 py-3 mt-2 cursor-pointer"
+					>
+						{showUpcoming ? 'Hide' : 'Show'} {upcoming.length} upcoming
+					</button>
+					{showUpcoming && (
+						<div className="flex flex-col gap-3 opacity-60">
+							{sortedUpcoming.map((goal) => (
+								<GoalItem
+									key={goal.id}
+									goal={goal}
+									allTasks={allTasks}
+									isExpanded={expandedId === goal.id}
+									onToggle={() =>
+										setExpandedId(expandedId === goal.id ? null : goal.id)
+									}
+								/>
+							))}
+						</div>
+					)}
+				</>
+			)}
 		</div>
 	)
 }
