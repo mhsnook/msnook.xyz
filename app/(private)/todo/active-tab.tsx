@@ -204,7 +204,17 @@ function GoalItem({
 				</div>
 			</button>
 
-			{isExpanded && <GoalExpanded goal={goal} stale={stale} />}
+			<div
+				className="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
+				style={{
+					gridTemplateRows: isExpanded ? '1fr' : '0fr',
+					opacity: isExpanded ? 1 : 0,
+				}}
+			>
+				<div className="overflow-hidden">
+					<GoalExpanded goal={goal} stale={stale} />
+				</div>
+			</div>
 		</div>
 	)
 }
