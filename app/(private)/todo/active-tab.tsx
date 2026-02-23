@@ -10,7 +10,6 @@ import {
 	useAddSubtask,
 	useUpdateTask,
 	useCloseTask,
-	useDeleteTask,
 } from './use-todoist'
 import ProjectFilter from './project-filter'
 import type { Task } from '@doist/todoist-api-typescript'
@@ -67,12 +66,14 @@ export default function ActiveTab() {
 	const [expandedId, setExpandedId] = useState<string | null>(null)
 	const [selectedProject, setSelectedProject] = useState<string | null>(null)
 	const [showUpcoming, setShowUpcoming] = useState(false)
+	const [completingId, setCompletingId] = useState<string | null>(null)
 
 	if (isLoading) {
 		return <p className="text-center text-gray-500 py-8">Loading...</p>
 	}
 
-	const topLevelGoals = goals?.filter((t) => !t.parentId) ?? []
+	const topLevelGoals =
+		goals?.filter((t) => !t.parentId && !t.labels.includes('archived')) ?? []
 	const projectIdsWithTasks = new Set(topLevelGoals.map((t) => t.projectId))
 
 	const filtered = selectedProject
@@ -123,9 +124,11 @@ export default function ActiveTab() {
 						goal={goal}
 						allTasks={allTasks}
 						isExpanded={expandedId === goal.id}
+						completing={completingId === goal.id}
 						onToggle={() =>
 							setExpandedId(expandedId === goal.id ? null : goal.id)
 						}
+						onCompleting={() => setCompletingId(goal.id)}
 					/>
 				))}
 			</div>
@@ -145,6 +148,7 @@ export default function ActiveTab() {
 									goal={goal}
 									allTasks={allTasks}
 									isExpanded={expandedId === goal.id}
+									completing={completingId === goal.id}
 									onToggle={() =>
 										setExpandedId(expandedId === goal.id ? null : goal.id)
 									}
@@ -162,20 +166,28 @@ function GoalItem({
 	goal,
 	allTasks,
 	isExpanded,
+	completing,
 	onToggle,
+	onCompleting,
 }: {
 	goal: Task
 	allTasks: Task[]
 	isExpanded: boolean
+	completing: boolean
 	onToggle: () => void
+	onCompleting: () => void
 }) {
 	const stale = isStale(goal, allTasks)
 
 	return (
 		<div
 			className={cn(
-				'border rounded-lg transition-all',
-				stale ? 'border-amber-300 bg-amber-50' : 'border-gray-200',
+				'border rounded-lg transition-all duration-300',
+				completing
+					? 'border-gray-200 bg-gray-50 opacity-60'
+					: stale
+						? 'border-amber-300 bg-amber-50'
+						: 'border-gray-200',
 			)}
 		>
 			<button
@@ -184,18 +196,28 @@ function GoalItem({
 			>
 				<div className="flex items-start justify-between gap-2">
 					<div className="flex-1 min-w-0">
-						<p className="font-medium text-gray-800">{goal.content}</p>
-						{goal.description && (
+						<p
+							className={cn(
+								'font-medium',
+								completing ? 'text-gray-400 line-through' : 'text-gray-800',
+							)}
+						>
+							{goal.content}
+						</p>
+						{goal.description && !completing && (
 							<p className="text-sm text-gray-500 mt-0.5 truncate">
 								{goal.description}
 							</p>
 						)}
 					</div>
 					<div className="flex items-center gap-2 shrink-0">
-						{goal.due && (
+						{completing && (
+							<span className="text-xs text-green-600">Completed!</span>
+						)}
+						{!completing && goal.due && (
 							<span className="text-xs text-gray-400">{goal.due.date}</span>
 						)}
-						{stale && (
+						{!completing && stale && (
 							<span className="text-xs bg-amber-200 text-amber-800 px-1.5 py-0.5 rounded">
 								stale
 							</span>
@@ -207,25 +229,36 @@ function GoalItem({
 			<div
 				className="grid transition-[grid-template-rows,opacity] duration-300 ease-in-out"
 				style={{
-					gridTemplateRows: isExpanded ? '1fr' : '0fr',
-					opacity: isExpanded ? 1 : 0,
+					gridTemplateRows: isExpanded && !completing ? '1fr' : '0fr',
+					opacity: isExpanded && !completing ? 1 : 0,
 				}}
 			>
 				<div className="overflow-hidden">
-					<GoalExpanded goal={goal} stale={stale} />
+					<GoalExpanded goal={goal} stale={stale} onCompleting={onCompleting} />
 				</div>
 			</div>
 		</div>
 	)
 }
 
-function GoalExpanded({ goal, stale }: { goal: Task; stale: boolean }) {
+function GoalExpanded({
+	goal,
+	stale,
+	onCompleting,
+}: {
+	goal: Task
+	stale: boolean
+	onCompleting: () => void
+}) {
 	const { data: subtasks, isLoading } = useSubtasks(goal.id)
 	const addSubtask = useAddSubtask()
+	const updateTask = useUpdateTask()
 	const closeTask = useCloseTask()
-	const deleteTask = useDeleteTask()
 	const [newStep, setNewStep] = useState('')
 	const [newStepDate, setNewStepDate] = useState('')
+	const [completedSubtaskIds, setCompletedSubtaskIds] = useState<Set<string>>(
+		new Set(),
+	)
 
 	const handleAddStep = () => {
 		if (!newStep.trim()) return
@@ -247,17 +280,22 @@ function GoalExpanded({ goal, stale }: { goal: Task; stale: boolean }) {
 	}
 
 	const handleCompleteGoal = () => {
+		onCompleting()
 		closeTask.mutate(goal.id, {
 			onSuccess: () => toast.success('Goal completed!'),
 			onError: (err) => toast.error(err.message),
 		})
 	}
 
-	const handleDrop = () => {
-		deleteTask.mutate(goal.id, {
-			onSuccess: () => toast.success('Dropped'),
-			onError: (err) => toast.error(err.message),
-		})
+	const handleArchive = () => {
+		onCompleting()
+		updateTask.mutate(
+			{ id: goal.id, labels: [...goal.labels, 'archived'] },
+			{
+				onSuccess: () => toast.success('Archived'),
+				onError: (err) => toast.error(err.message),
+			},
+		)
 	}
 
 	return (
@@ -279,9 +317,36 @@ function GoalExpanded({ goal, stale }: { goal: Task; stale: boolean }) {
 					<p className="text-sm text-gray-400">Loading...</p>
 				) : subtasks && subtasks.length > 0 ? (
 					<div className="flex flex-col gap-1.5">
-						{subtasks.map((sub) => (
-							<SubtaskRow key={sub.id} task={sub} />
-						))}
+						{subtasks
+							.filter((sub) => !completedSubtaskIds.has(sub.id))
+							.map((sub) => (
+								<SubtaskRow
+									key={sub.id}
+									task={sub}
+									onCompleted={() =>
+										setCompletedSubtaskIds((prev) => new Set([...prev, sub.id]))
+									}
+								/>
+							))}
+						{completedSubtaskIds.size > 0 && (
+							<div className="flex flex-col gap-1 mt-2 pt-2 border-t border-gray-100">
+								{subtasks
+									.filter((sub) => completedSubtaskIds.has(sub.id))
+									.map((sub) => (
+										<div
+											key={sub.id}
+											className="flex items-center gap-2 py-0.5"
+										>
+											<span className="text-green-500 text-xs shrink-0">
+												&#10003;
+											</span>
+											<span className="text-sm text-gray-400 line-through line-clamp-1">
+												{sub.content}
+											</span>
+										</div>
+									))}
+							</div>
+						)}
 					</div>
 				) : (
 					<p className="text-sm text-gray-400 italic">
@@ -330,29 +395,36 @@ function GoalExpanded({ goal, stale }: { goal: Task; stale: boolean }) {
 					Complete goal
 				</Button>
 				<button
-					onClick={handleDrop}
-					disabled={deleteTask.isPending}
-					className="px-3 py-1 text-sm text-gray-400 hover:text-red-600 cursor-pointer"
+					onClick={handleArchive}
+					disabled={updateTask.isPending}
+					className="px-3 py-1 text-sm text-gray-400 hover:text-gray-600 cursor-pointer"
 				>
-					Drop
+					Archive
 				</button>
 			</div>
 		</div>
 	)
 }
 
-function SubtaskRow({ task }: { task: Task }) {
+function SubtaskRow({
+	task,
+	onCompleted,
+}: {
+	task: Task
+	onCompleted: () => void
+}) {
 	const closeTask = useCloseTask()
 
 	return (
 		<div className="flex items-center gap-2 py-1">
 			<button
-				onClick={() =>
+				onClick={() => {
+					onCompleted()
 					closeTask.mutate(task.id, {
 						onSuccess: () => toast.success('Done!'),
 						onError: (err) => toast.error(err.message),
 					})
-				}
+				}}
 				disabled={closeTask.isPending}
 				className="w-4 h-4 border rounded-sm border-gray-300 hover:border-cyan-bright cursor-pointer shrink-0 flex items-center justify-center text-xs"
 				aria-label={`Complete: ${task.content}`}
