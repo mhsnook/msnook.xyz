@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { Task } from '@doist/todoist-api-typescript'
+import type { Task, Project } from '@doist/todoist-api-typescript'
 import { createClient } from '@/lib/supabase/client'
 
 // ── Types ──
@@ -86,6 +86,16 @@ export function useDeleteInboxItem() {
 	})
 }
 
+// ── Projects ──
+
+export function useProjects() {
+	return useQuery<Project[]>({
+		queryKey: ['todo', 'projects'],
+		queryFn: () => fetchJson('/api/todo/projects'),
+		staleTime: Infinity,
+	})
+}
+
 // ── Goals & subtasks (Todoist via API routes) ──
 
 function invalidateTodoist(qc: ReturnType<typeof useQueryClient>) {
@@ -99,6 +109,13 @@ export function useGoals(projectId: string | undefined) {
 		queryKey: ['todo', 'goals', projectId],
 		queryFn: () => fetchJson(`/api/todo/tasks?projectId=${projectId}`),
 		enabled: !!projectId,
+	})
+}
+
+export function useAllGoals() {
+	return useQuery<Task[]>({
+		queryKey: ['todo', 'goals', 'all'],
+		queryFn: () => fetchJson('/api/todo/tasks'),
 	})
 }
 
@@ -186,10 +203,14 @@ export function useDeleteTask() {
 	})
 }
 
-export function useCompletedTasks(projectId: string | undefined) {
+export function useCompletedTasks(projectId?: string) {
 	return useQuery<Task[]>({
-		queryKey: ['todo', 'completed', projectId],
-		queryFn: () => fetchJson(`/api/todo/completed?projectId=${projectId}`),
-		enabled: !!projectId,
+		queryKey: ['todo', 'completed', projectId ?? 'all'],
+		queryFn: () =>
+			fetchJson(
+				projectId
+					? `/api/todo/completed?projectId=${projectId}`
+					: '/api/todo/completed',
+			),
 	})
 }

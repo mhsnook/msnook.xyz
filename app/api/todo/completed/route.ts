@@ -18,8 +18,7 @@ export async function GET(req: NextRequest) {
 	} catch (e) {
 		return NextResponse.json(
 			{
-				error:
-					e instanceof Error ? e.message : 'Failed to get completed tasks',
+				error: e instanceof Error ? e.message : 'Failed to get completed tasks',
 			},
 			{ status: 500 },
 		)

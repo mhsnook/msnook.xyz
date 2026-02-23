@@ -72,13 +72,9 @@ export default function TodoPage() {
 			</nav>
 
 			{activeTab === 'Capture' && <CaptureTab />}
-			{activeTab === 'Process' && (
-				<ProcessTab projectId={setup.projectId} />
-			)}
-			{activeTab === 'Active' && (
-				<ActiveTab projectId={setup.projectId} />
-			)}
-			{activeTab === 'Done' && <DoneTab projectId={setup.projectId} />}
+			{activeTab === 'Process' && <ProcessTab projectId={setup.projectId} />}
+			{activeTab === 'Active' && <ActiveTab />}
+			{activeTab === 'Done' && <DoneTab />}
 		</main>
 	)
 }
