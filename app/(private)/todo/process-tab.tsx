@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/lib'
 import {
 	useInbox,
-	useGoals,
+	useAllGoals,
 	useDeleteInboxItem,
 	useAddGoal,
 	useAddSubtask,
@@ -109,10 +109,10 @@ function ProcessCard({
 						className="w-full p-3 border rounded-lg text-left hover:border-cyan-bright hover:bg-cyan-bright/5 cursor-pointer transition-colors"
 					>
 						<p className="font-medium text-gray-800">
-							Part of an existing goal
+							Part of an existing task
 						</p>
 						<p className="text-sm text-gray-500">
-							A new step or note for something I&rsquo;m already working on
+							A new step or note for something I&rsquo;m already tracking
 						</p>
 					</button>
 					<div className="text-center mt-2">
@@ -139,7 +139,6 @@ function ProcessCard({
 			{mode === 'attach' && (
 				<AttachToGoalForm
 					item={item}
-					projectId={projectId}
 					onDone={onProcessed}
 					onBack={() => setMode('choose')}
 				/>
@@ -295,16 +294,14 @@ function NewGoalForm({
 
 function AttachToGoalForm({
 	item,
-	projectId,
 	onDone,
 	onBack,
 }: {
 	item: InboxItem
-	projectId: string
 	onDone: () => void
 	onBack: () => void
 }) {
-	const { data: goals, isLoading } = useGoals(projectId)
+	const { data: allTasks, isLoading } = useAllGoals()
 	const [selectedGoalId, setSelectedGoalId] = useState<string | null>(null)
 	const [stepContent, setStepContent] = useState(item.raw_text)
 	const [stepDueDate, setStepDueDate] = useState('')
@@ -314,16 +311,26 @@ function AttachToGoalForm({
 	const isPending = addSubtask.isPending || deleteInbox.isPending
 
 	if (isLoading) {
-		return <p className="text-center text-gray-500 py-4">Loading goals...</p>
+		return <p className="text-center text-gray-500 py-4">Loading tasks...</p>
 	}
 
-	// Only show top-level tasks (goals), not subtasks
-	const topLevelGoals = goals?.filter((t) => !t.parentId) ?? []
+	const tasks = allTasks ?? []
+	const topLevelTasks = tasks.filter((t) => !t.parentId)
 
-	if (topLevelGoals.length === 0) {
+	// Sort by subtask count (desc), then by most recent update (desc)
+	const sorted = [...topLevelTasks].sort((a, b) => {
+		const aChildren = tasks.filter((t) => t.parentId === a.id).length
+		const bChildren = tasks.filter((t) => t.parentId === b.id).length
+		if (bChildren !== aChildren) return bChildren - aChildren
+		const aDate = new Date(a.updatedAt || a.addedAt || 0).getTime()
+		const bDate = new Date(b.updatedAt || b.addedAt || 0).getTime()
+		return bDate - aDate
+	})
+
+	if (sorted.length === 0) {
 		return (
 			<div className="text-center py-6">
-				<p className="text-gray-600 mb-3">No active goals yet</p>
+				<p className="text-gray-600 mb-3">No active tasks yet</p>
 				<button
 					onClick={onBack}
 					className="text-sm text-cyan-bright hover:underline cursor-pointer"
@@ -359,38 +366,59 @@ function AttachToGoalForm({
 
 	return (
 		<fieldset disabled={isPending} className="flex flex-col gap-4">
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Which goal does this belong to?
-				</label>
-				<div className="flex flex-col gap-2">
-					{topLevelGoals.map((goal) => (
-						<button
-							key={goal.id}
-							type="button"
-							onClick={() => setSelectedGoalId(goal.id)}
-							className={cn(
-								'w-full p-3 border rounded-lg text-left cursor-pointer transition-colors',
-								selectedGoalId === goal.id
-									? 'border-cyan-bright bg-cyan-bright/5'
-									: 'hover:border-gray-300',
-							)}
-						>
-							<p className="text-sm font-medium text-gray-800">
-								{goal.content}
-							</p>
-							{goal.due && (
-								<p className="text-xs text-gray-400 mt-0.5">
-									Due: {goal.due.date}
-								</p>
-							)}
-						</button>
-					))}
+			{!selectedGoalId ? (
+				<div>
+					<label className="block text-sm font-medium text-gray-700 mb-2">
+						Which task does this belong to?
+					</label>
+					<div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+						{sorted.map((task) => {
+							const subtaskCount = tasks.filter(
+								(t) => t.parentId === task.id,
+							).length
+							return (
+								<button
+									key={task.id}
+									type="button"
+									onClick={() => setSelectedGoalId(task.id)}
+									className="w-full p-3 border rounded-lg text-left cursor-pointer transition-colors hover:border-gray-300"
+								>
+									<p className="text-sm font-medium text-gray-800">
+										{task.content}
+									</p>
+									<div className="flex gap-2 mt-0.5">
+										{subtaskCount > 0 && (
+											<span className="text-xs text-gray-400">
+												{subtaskCount} step
+												{subtaskCount !== 1 ? 's' : ''}
+											</span>
+										)}
+										{task.due && (
+											<span className="text-xs text-gray-400">
+												Due: {task.due.date}
+											</span>
+										)}
+									</div>
+								</button>
+							)
+						})}
+					</div>
 				</div>
-			</div>
-
-			{selectedGoalId && (
+			) : (
 				<>
+					<div className="p-3 border rounded-lg border-cyan-bright bg-cyan-bright/5">
+						<p className="text-sm font-medium text-gray-800">
+							{sorted.find((t) => t.id === selectedGoalId)?.content}
+						</p>
+						<button
+							type="button"
+							onClick={() => setSelectedGoalId(null)}
+							className="text-xs text-gray-400 hover:text-gray-600 mt-1 cursor-pointer"
+						>
+							Change
+						</button>
+					</div>
+
 					<div>
 						<label className="block text-sm font-medium text-gray-700 mb-1">
 							What&rsquo;s the action step?
