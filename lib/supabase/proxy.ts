@@ -49,6 +49,7 @@ export async function updateSession(request: NextRequest) {
 		}
 		const url = request.nextUrl.clone()
 		url.pathname = '/login'
+		url.searchParams.set('redirectedFrom', request.nextUrl.pathname)
 		return NextResponse.redirect(url)
 	}
 
