@@ -16,15 +16,20 @@ import ProjectFilter from './project-filter'
 import type { Task } from '@doist/todoist-api-typescript'
 import toast from 'react-hot-toast'
 
-function daysSince(dateStr: string | null | undefined): number {
-	if (!dateStr) return 999
-	return Math.floor(
-		(Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24),
-	)
+function taskDate(task: Task): number {
+	const d = task.updatedAt || task.addedAt
+	return d ? new Date(d).getTime() : 0
 }
 
-function isStale(task: Task): boolean {
-	return daysSince(task.updatedAt || task.addedAt) >= 3
+function latestActivity(task: Task, allTasks: Task[]): number {
+	const children = allTasks.filter((t) => t.parentId === task.id)
+	return Math.max(taskDate(task), ...children.map(taskDate))
+}
+
+const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000
+
+function isStale(task: Task, allTasks: Task[]): boolean {
+	return Date.now() - latestActivity(task, allTasks) >= THREE_DAYS_MS
 }
 
 export default function ActiveTab() {
@@ -55,12 +60,13 @@ export default function ActiveTab() {
 		)
 	}
 
+	const allTasks = goals ?? []
 	const sorted = [...filtered].sort((a, b) => {
-		const aStale = isStale(a)
-		const bStale = isStale(b)
-		if (aStale && !bStale) return -1
-		if (!aStale && bStale) return 1
-		return 0
+		const aStale = isStale(a, allTasks)
+		const bStale = isStale(b, allTasks)
+		if (aStale && !bStale) return 1
+		if (!aStale && bStale) return -1
+		return latestActivity(b, allTasks) - latestActivity(a, allTasks)
 	})
 
 	return (
@@ -78,6 +84,7 @@ export default function ActiveTab() {
 					<GoalItem
 						key={goal.id}
 						goal={goal}
+						allTasks={allTasks}
 						isExpanded={expandedId === goal.id}
 						onToggle={() =>
 							setExpandedId(expandedId === goal.id ? null : goal.id)
@@ -91,14 +98,16 @@ export default function ActiveTab() {
 
 function GoalItem({
 	goal,
+	allTasks,
 	isExpanded,
 	onToggle,
 }: {
 	goal: Task
+	allTasks: Task[]
 	isExpanded: boolean
 	onToggle: () => void
 }) {
-	const stale = isStale(goal)
+	const stale = isStale(goal, allTasks)
 
 	return (
 		<div
