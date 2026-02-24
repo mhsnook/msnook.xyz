@@ -8,6 +8,7 @@ import TimerDisplay from './timer/timer-display'
 import TimerControls from './timer/timer-controls'
 import SessionComplete from './timer/session-complete'
 import SleepLog from '@/components/flow/sleep-log'
+import QuickCheck from './check-in/quick-check'
 import HabitToggle from '@/components/flow/habit-toggle'
 import DomainBadge from '@/components/flow/domain-badge'
 import {
@@ -156,6 +157,9 @@ export default function Dashboard() {
 
 			{/* Sleep log */}
 			<SleepLog existing={todaySleepLog} />
+
+			{/* Quick mood check */}
+			<QuickCheck />
 
 			{/* Timer section */}
 			<section className="flow-card-interactive flex flex-col items-center gap-4 py-6">

@@ -1,10 +1,20 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { checkInsQuery, sessionsQuery, recentSleepQuery } from '../use-flow'
+import {
+	moodCheckinsQuery,
+	sessionsQuery,
+	recentSleepQuery,
+} from '../use-flow'
+
+const MOOD_STYLES: Record<string, { bg: string; text: string }> = {
+	great: { bg: 'bg-green-100', text: 'text-green-800' },
+	okay: { bg: 'bg-flow-surface-alt', text: 'text-flow-muted' },
+	awful: { bg: 'bg-red-50', text: 'text-red-800' },
+}
 
 export default function HistoryPage() {
-	const { data: checkIns = [] } = useQuery(checkInsQuery(30))
+	const { data: moodCheckins = [] } = useQuery(moodCheckinsQuery(50))
 	const { data: sessions = [] } = useQuery(sessionsQuery(50))
 	const { data: sleep = [] } = useQuery(recentSleepQuery(14))
 
@@ -13,52 +23,44 @@ export default function HistoryPage() {
 			<h1 className="h2">History</h1>
 
 			<p className="text-flow-muted text-sm">
-				Trend charts coming after 60+ days of data. For now, here&apos;s the raw
-				data.
+				Tracking spikes &mdash; the big goods and the big bads &mdash; to spot
+				cycles over time.
 			</p>
 
-			{/* Recent check-ins */}
+			{/* Mood check-ins */}
 			<section className="flow-card">
 				<h2 className="flow-section-heading mb-3">
-					Check-ins ({checkIns.length})
+					Mood ({moodCheckins.length})
 				</h2>
-				<div className="overflow-x-auto">
-					<table className="w-full text-sm">
-						<thead>
-							<tr className="text-left text-flow-muted border-b border-flow-border">
-								<th className="py-1.5 pr-2 font-medium">When</th>
-								<th className="py-1.5 px-1 font-medium">Anx</th>
-								<th className="py-1.5 px-1 font-medium">Dep</th>
-								<th className="py-1.5 px-1 font-medium">Eng</th>
-								<th className="py-1.5 px-1 font-medium">Ease</th>
-								<th className="py-1.5 px-1 font-medium">Flow</th>
-								<th className="py-1.5 px-1 font-medium">Focus</th>
-							</tr>
-						</thead>
-						<tbody>
-							{checkIns.map((ci) => (
-								<tr
-									key={ci.id}
-									className="border-b border-flow-border/50"
+				<div className="flex flex-col gap-2">
+					{moodCheckins.map((mc) => {
+						const style = MOOD_STYLES[mc.mood] ?? MOOD_STYLES.okay
+						return (
+							<div
+								key={mc.id}
+								className="flex items-start gap-3 text-sm py-2 border-b border-flow-border/50"
+							>
+								<span className="text-flow-muted w-20 shrink-0">
+									{new Date(mc.created_at).toLocaleDateString([], {
+										month: 'short',
+										day: 'numeric',
+									})}
+								</span>
+								<span
+									className={`px-2 py-0.5 rounded-md text-xs font-bold ${style.bg} ${style.text}`}
 								>
-									<td className="py-1.5 pr-2 text-flow-muted">
-										{new Date(ci.created_at).toLocaleDateString([], {
-											month: 'short',
-											day: 'numeric',
-										})}
-									</td>
-									<td className="py-1.5 px-1">{ci.anxiety ?? '-'}</td>
-									<td className="py-1.5 px-1">{ci.depression ?? '-'}</td>
-									<td className="py-1.5 px-1">{ci.energy ?? '-'}</td>
-									<td className="py-1.5 px-1">{ci.ease ?? '-'}</td>
-									<td className="py-1.5 px-1">{ci.flow ?? '-'}</td>
-									<td className="py-1.5 px-1">{ci.focus ?? '-'}</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+									{mc.mood}
+								</span>
+								{mc.tags.length > 0 && (
+									<span className="text-flow-muted text-xs flex-1 truncate">
+										{mc.tags.join(', ')}
+									</span>
+								)}
+							</div>
+						)
+					})}
 				</div>
-				{checkIns.length === 0 && (
+				{moodCheckins.length === 0 && (
 					<p className="text-flow-muted text-sm mt-2">No check-ins yet</p>
 				)}
 			</section>

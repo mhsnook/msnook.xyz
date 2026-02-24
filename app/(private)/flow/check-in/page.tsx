@@ -8,10 +8,7 @@ export default function CheckInPage() {
 
 	return (
 		<div className="flex flex-col gap-6">
-			<h1 className="h2">Check in</h1>
-			<p className="text-flow-muted">
-				All optional. Just fill in what feels relevant right now.
-			</p>
+			<h1 className="h2">How&apos;s it going?</h1>
 			<CheckInForm onDone={() => router.push('/flow')} />
 		</div>
 	)

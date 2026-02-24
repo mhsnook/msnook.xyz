@@ -10,6 +10,8 @@ import type {
 	PomodoroSessionInsert,
 	CheckIn,
 	CheckInInsert,
+	MoodCheckin,
+	MoodCheckinInsert,
 	SleepLog,
 	SleepLogInsert,
 	HabitDefinition,
@@ -182,6 +184,32 @@ export async function createCheckIn(checkIn: CheckInInsert): Promise<CheckIn> {
 		.single()
 	if (error) throw error
 	return data as CheckIn
+}
+
+// =============================================================================
+// MOOD CHECK-INS
+// =============================================================================
+
+export async function fetchMoodCheckins(limit = 50): Promise<MoodCheckin[]> {
+	const { data, error } = await flow()
+		.from('mood_checkins')
+		.select('*')
+		.order('created_at', { ascending: false })
+		.limit(limit)
+	if (error) throw error
+	return data as MoodCheckin[]
+}
+
+export async function createMoodCheckin(
+	checkin: MoodCheckinInsert,
+): Promise<MoodCheckin> {
+	const { data, error } = await flow()
+		.from('mood_checkins')
+		.insert(checkin)
+		.select()
+		.single()
+	if (error) throw error
+	return data as MoodCheckin
 }
 
 // =============================================================================

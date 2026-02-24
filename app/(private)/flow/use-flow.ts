@@ -6,6 +6,7 @@ import {
 	fetchSessions,
 	fetchTodaySessions,
 	fetchCheckIns,
+	fetchMoodCheckins,
 	fetchRecentSleep,
 	fetchHabitDefinitions,
 	fetchTodayHabitLogs,
@@ -52,6 +53,13 @@ export const checkInsQuery = (limit = 30) =>
 	queryOptions({
 		queryKey: ['flow', 'check-ins', limit],
 		queryFn: () => fetchCheckIns(limit),
+		staleTime: 30_000,
+	})
+
+export const moodCheckinsQuery = (limit = 50) =>
+	queryOptions({
+		queryKey: ['flow', 'mood-checkins', limit],
+		queryFn: () => fetchMoodCheckins(limit),
 		staleTime: 30_000,
 	})
 

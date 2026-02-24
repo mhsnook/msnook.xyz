@@ -2,107 +2,148 @@
 
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createCheckIn } from '@/lib/flow'
-import ScaleInput from '@/components/flow/scale-input'
+import { createMoodCheckin } from '@/lib/flow'
+import type { MoodLevel } from '@/types/flow'
 
-const SCALES = [
-	{
-		key: 'anxiety',
-		label: 'Anxiety',
-		labels: ['calm', 'high'] as [string, string],
-	},
-	{
-		key: 'depression',
-		label: 'Depression',
-		labels: ['light', 'heavy'] as [string, string],
-	},
-	{
-		key: 'energy',
-		label: 'Energy',
-		labels: ['drained', 'buzzing'] as [string, string],
-	},
-	{
-		key: 'ease',
-		label: 'Ease',
-		labels: ['struggling', 'easy'] as [string, string],
-	},
-	{
-		key: 'flow',
-		label: 'Flow',
-		labels: ['stuck', 'flowing'] as [string, string],
-	},
-	{
-		key: 'focus',
-		label: 'Focus',
-		labels: ['scattered', 'locked in'] as [string, string],
-	},
-] as const
+const AWFUL_TAGS = [
+	'heavy anxiety',
+	'dopamine chasing',
+	'lack of interest',
+	'addictions / broken commitments',
+	'bad sleep',
+	'overwhelm',
+]
 
-type ScaleKey = (typeof SCALES)[number]['key']
+const GREAT_TAGS = [
+	'productive day',
+	'saw my friends',
+	'easy flow',
+	'exercised / took care of myself',
+	'good sleep',
+	'felt connected',
+]
+
+type Step = 'pick-mood' | 'pick-tags' | 'done'
 
 export default function CheckInForm({ onDone }: { onDone?: () => void }) {
-	const [values, setValues] = useState<Record<ScaleKey, number | null>>({
-		anxiety: null,
-		depression: null,
-		energy: null,
-		ease: null,
-		flow: null,
-		focus: null,
-	})
-	const [notes, setNotes] = useState('')
+	const [step, setStep] = useState<Step>('pick-mood')
+	const [mood, setMood] = useState<MoodLevel | null>(null)
+	const [selectedTags, setSelectedTags] = useState<string[]>([])
 	const queryClient = useQueryClient()
 
 	const save = useMutation({
-		mutationFn: () =>
-			createCheckIn({
-				...values,
-				notes: notes || null,
+		mutationFn: (params: { mood: MoodLevel; tags: string[] }) =>
+			createMoodCheckin({
+				mood: params.mood,
+				tags: params.tags,
+				notes: null,
 			}),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['flow', 'check-ins'] })
-			onDone?.()
+			queryClient.invalidateQueries({ queryKey: ['flow', 'mood-checkins'] })
+			setStep('done')
 		},
 	})
 
-	const hasAnyValue = Object.values(values).some((v) => v !== null)
+	function pickMood(level: MoodLevel) {
+		setMood(level)
+		if (level === 'okay') {
+			// No follow-up needed, just save
+			save.mutate({ mood: level, tags: [] })
+		} else {
+			setStep('pick-tags')
+		}
+	}
+
+	function toggleTag(tag: string) {
+		setSelectedTags((prev) =>
+			prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
+		)
+	}
+
+	function saveTags() {
+		if (!mood) return
+		save.mutate({ mood, tags: selectedTags })
+	}
+
+	if (step === 'done') {
+		return (
+			<div className="flex flex-col items-center gap-4 py-8">
+				<div className="text-4xl">
+					{mood === 'great' ? '~' : mood === 'awful' ? '~' : '~'}
+				</div>
+				<p className="text-flow-muted text-lg">Noted. Thanks for checking in.</p>
+				{onDone && (
+					<button
+						onClick={onDone}
+						className="text-sm text-cyan-bright hover:underline mt-2"
+					>
+						Back to dashboard
+					</button>
+				)}
+			</div>
+		)
+	}
+
+	if (step === 'pick-tags' && mood) {
+		const tags = mood === 'great' ? GREAT_TAGS : AWFUL_TAGS
+		return (
+			<div className="flex flex-col gap-5">
+				<p className="text-flow-muted text-center">
+					{mood === 'great'
+						? 'What made it great?'
+						: 'What was going on?'}
+				</p>
+				<div className="flex flex-wrap gap-2 justify-center">
+					{tags.map((tag) => (
+						<button
+							key={tag}
+							onClick={() => toggleTag(tag)}
+							className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
+								selectedTags.includes(tag)
+									? mood === 'great'
+										? 'bg-green-600 text-white shadow-md'
+										: 'bg-red-600 text-white shadow-md'
+									: 'bg-flow-surface-alt text-flow-muted hover:bg-flow-border'
+							}`}
+						>
+							{tag}
+						</button>
+					))}
+				</div>
+				<button
+					onClick={saveTags}
+					disabled={save.isPending}
+					className="self-center px-8 py-3 rounded-xl bg-cyan-bright text-white text-lg font-display font-bold hover:bg-cyan disabled:opacity-50 shadow-sm mt-2"
+				>
+					{save.isPending ? 'Saving...' : 'Done'}
+				</button>
+			</div>
+		)
+	}
 
 	return (
-		<div className="flow-card-interactive flex flex-col gap-5">
-			{SCALES.map((scale) => (
-				<div key={scale.key}>
-					<label className="flow-section-heading mb-1 block">
-						{scale.label}
-					</label>
-					<ScaleInput
-						value={values[scale.key]}
-						onChange={(v) => setValues((prev) => ({ ...prev, [scale.key]: v }))}
-						labels={scale.labels}
-					/>
-				</div>
-			))}
-
-			<div>
-				<label className="flow-section-heading mb-1 block">Notes</label>
-				<textarea
-					value={notes}
-					onChange={(e) => setNotes(e.target.value)}
-					rows={3}
-					placeholder="Anything on your mind..."
-					className="w-full border border-flow-border rounded-lg px-3 py-2 text-sm bg-flow-surface-alt focus:border-cyan focus:ring-1 focus:ring-flow-input-ring focus:outline-none"
-				/>
-			</div>
-
+		<div className="flex flex-col gap-4">
 			<button
-				onClick={() => save.mutate()}
-				disabled={save.isPending || !hasAnyValue}
-				className="px-6 py-3 rounded-xl bg-cyan-bright text-white text-lg font-display font-bold hover:bg-cyan disabled:opacity-50 self-center shadow-sm"
+				onClick={() => pickMood('great')}
+				disabled={save.isPending}
+				className="w-full py-8 rounded-2xl text-2xl font-display font-bold bg-green-100 text-green-800 hover:bg-green-200 active:scale-[0.98] transition-all shadow-sm border border-green-200"
 			>
-				{save.isPending ? 'Saving...' : 'Save check-in'}
+				Great day
 			</button>
-
-			{save.isSuccess && (
-				<p className="text-green-600 text-sm text-center">Saved</p>
-			)}
+			<button
+				onClick={() => pickMood('okay')}
+				disabled={save.isPending}
+				className="w-full py-8 rounded-2xl text-2xl font-display font-bold bg-flow-surface-alt text-flow-muted hover:bg-flow-border active:scale-[0.98] transition-all shadow-sm border border-flow-border"
+			>
+				{save.isPending ? 'Saving...' : 'Today was okay'}
+			</button>
+			<button
+				onClick={() => pickMood('awful')}
+				disabled={save.isPending}
+				className="w-full py-8 rounded-2xl text-2xl font-display font-bold bg-red-50 text-red-800 hover:bg-red-100 active:scale-[0.98] transition-all shadow-sm border border-red-200"
+			>
+				Feeling awful
+			</button>
 		</div>
 	)
 }

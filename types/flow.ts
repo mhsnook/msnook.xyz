@@ -69,6 +69,17 @@ export type CheckIn = {
 	created_at: string
 }
 
+export type MoodLevel = 'great' | 'okay' | 'awful'
+
+export type MoodCheckin = {
+	id: number
+	user_id: string
+	mood: MoodLevel
+	tags: string[]
+	notes: string | null
+	created_at: string
+}
+
 export type SleepLog = {
 	id: number
 	user_id: string
@@ -140,6 +151,7 @@ export type PomodoroSessionInsert = Omit<
 	'id' | 'user_id' | 'created_at'
 >
 export type CheckInInsert = Omit<CheckIn, 'id' | 'user_id' | 'created_at'>
+export type MoodCheckinInsert = Omit<MoodCheckin, 'id' | 'user_id' | 'created_at'>
 export type SleepLogInsert = Omit<SleepLog, 'id' | 'user_id' | 'created_at'>
 export type HabitDefinitionInsert = Omit<
 	HabitDefinition,
