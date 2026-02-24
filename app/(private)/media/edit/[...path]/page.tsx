@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, ErrorList, Label } from '@/components/lib'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -38,7 +38,7 @@ const MediaMetaSchema = z.object({
 type FormFields = z.infer<typeof MediaMetaSchema>
 
 function getPublicUrl(path: string, options?: any) {
-	return supabase.storage.from('images').getPublicUrl(path, options).data
+	return createClient().storage.from('images').getPublicUrl(path, options).data
 		.publicUrl
 }
 
@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 	const { data, error, isPending } = useQuery({
 		queryKey: ['media_meta', path],
 		queryFn: async () => {
-			const { data } = await supabase
+			const { data } = await createClient()
 				.from('media_meta')
 				.select('*')
 				.eq('path', path)
@@ -73,7 +73,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 		mutationFn: async (values: MediaMetaUpdate) => {
 			// 'upsert' will create a new row if one doesn't exist for the path,
 			// or update the existing one. This is ideal for our use case.
-			await supabase
+			await createClient()
 				.from('media_meta')
 				.upsert(values, {
 					onConflict: 'path',

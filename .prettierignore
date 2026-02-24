@@ -1,3 +1,4 @@
 .next
+.claude
 node_modules
 pnpm-lock.yaml

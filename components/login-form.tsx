@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { useSession } from '@/app/session-provider'
 import Modal from '@/components/modal'
 import { AlertBox, Button, ErrorList, Label } from '@/components/lib'
-import supabase from '@/app/supabase-client'
+import { createClient } from '@/lib/supabase/client'
 import { AuthError } from '@supabase/supabase-js'
 
 export function LoginChallenge() {
@@ -51,10 +51,16 @@ const ConfirmationMessage = ({ nickname, asModal }) => {
 	)
 }
 
-export default function Login({ asModal = false }) {
+export default function Login({
+	asModal = false,
+	redirectTo,
+}: {
+	asModal?: boolean
+	redirectTo?: string
+}) {
 	const session = useSession()
+	const router = useRouter()
 	const [loginError, setLoginError] = useState<string>(null)
-
 	const nickname = session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'
 
 	const {
@@ -65,10 +71,17 @@ export default function Login({ asModal = false }) {
 
 	const onSubmit = ({ email, password }) => {
 		setLoginError(null)
-		supabase.auth
-			.signInWithPassword({
+		createClient()
+			.auth.signInWithPassword({
 				email,
 				password,
+			})
+			.then(({ error }) => {
+				if (error) {
+					setLoginError(error.message)
+				} else if (redirectTo) {
+					router.replace(redirectTo)
+				}
 			})
 			.catch((err: AuthError) => {
 				console.log(err)

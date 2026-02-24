@@ -1,5 +1,10 @@
-import supabase from '@/app/supabase-client'
+import { createClient } from '@supabase/supabase-js'
 import { TablesInsert, TablesUpdate } from '@/types/supabase'
+
+const supabase = createClient(
+	process.env.NEXT_PUBLIC_SUPABASE_API_URL!,
+	process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+)
 
 export async function fetchPostList() {
 	const { data } = await supabase
