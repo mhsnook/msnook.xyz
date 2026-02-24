@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Tables } from '@/types/supabase'
 import Link from 'next/link'
 import { ErrorList } from '@/components/lib'
+import { imageUrlify } from '@/lib/utils'
 import { UploadImageModal } from './upload-image-modal'
 
 export const revalidate = 0 // Revalidate this page on every request
@@ -26,13 +27,9 @@ async function getMedia() {
 	const media = fileListRes.data
 		.filter((file) => !file.name.startsWith('.')) // filter out .emptyFolderPlaceholder
 		.map((file) => {
-			const { data: urlData } = supabase.storage
-				.from('images')
-				.getPublicUrl(file.name)
-
 			return {
 				...file,
-				publicUrl: urlData.publicUrl,
+				publicUrl: imageUrlify(file.name),
 				meta: metaByPath.get(file.name),
 			}
 		})

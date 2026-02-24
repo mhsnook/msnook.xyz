@@ -7,6 +7,7 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, ErrorList, Label } from '@/components/lib'
 import { createClient } from '@/lib/supabase/client'
+import { imageUrlify } from '@/lib/utils'
 
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -36,11 +37,6 @@ const MediaMetaSchema = z.object({
 })
 
 type FormFields = z.infer<typeof MediaMetaSchema>
-
-function getPublicUrl(path: string, options?: any) {
-	return createClient().storage.from('images').getPublicUrl(path, options).data
-		.publicUrl
-}
 
 export default function Page({ params }: { params: { path: string[] } }) {
 	const path = params.path.join('/')
@@ -128,7 +124,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 	if (error) {
 		return <ErrorList summary="Error loading media details" error={error} />
 	}
-	const url = getPublicUrl(path)
+	const url = imageUrlify(path)
 
 	return (
 		<main className="single-col">
@@ -154,7 +150,7 @@ export default function Page({ params }: { params: { path: string[] } }) {
 						control={control}
 						render={({ field }) => (
 							<CenterBoxEditor
-								imageUrl={getPublicUrl(path)}
+								imageUrl={imageUrlify(path)}
 								value={field.value}
 								onChange={field.onChange}
 							/>
