@@ -29,7 +29,7 @@ export function mapArray<T extends Record<string, any>, K extends keyof T>(
 
 export function imageUrlify(path: string | null): string {
 	if (!path) return ''
-	return `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/storage/v1/object/public/images/${path}`
+	return `${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/images/${path}`
 }
 
 export function filenameFromFile(file: File) {
