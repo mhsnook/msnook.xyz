@@ -22,20 +22,13 @@
 		// "noUnusedParameters": true,
 		// "noFallthroughCasesInSwitch": true,
 		// "forceConsistentCasingInFileNames": true,
-		"plugins": [
-			{
-				"name": "next"
-			}
-		]
 	},
 	"include": [
 		"./app",
 		"./components",
 		"./lib",
 		"./types",
-		"./dist/types/**/*.ts",
-		"./next-env.d.ts",
-		".next/types/**/*.ts"
+		"./vite.config.ts"
 	],
-	"exclude": ["./node_modules", "./.next"]
+	"exclude": ["./node_modules", "./dist"]
 }

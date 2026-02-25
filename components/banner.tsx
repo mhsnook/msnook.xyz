@@ -1,6 +1,7 @@
 import Image from 'next/image'
-import faceImage from '../public/images/my-face-288.png'
-import bannerImage from '../public/images/como.jpg'
+
+const faceImage = '/images/my-face-288.png'
+const bannerImage = '/images/como.jpg'
 
 interface BannerProps {
 	title: string

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import faceImage from '@/public/images/my-face-288.png'
+
+const faceImage = '/images/my-face-288.png'
 
 const linkClasses = 'hover:link flex flex-row gap-2 items-center'
 
