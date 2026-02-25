@@ -9,12 +9,15 @@ import { fetchDraftPosts } from '@/lib/posts'
 import { useSession } from '@/app/session-provider'
 
 export default function Page() {
-	const session = useSession()
-	const { data, error } = useQuery({
+	const { session, isLoading: isSessionLoading } = useSession()
+	const isAuthenticated = session?.user?.role === 'authenticated'
+	const { data, error, isPending } = useQuery({
 		queryKey: ['posts', 'drafts'],
 		queryFn: fetchDraftPosts,
-		enabled: session?.user?.role === 'authenticated',
+		enabled: isAuthenticated,
 	})
+
+	const isLoading = isSessionLoading || (isAuthenticated && isPending)
 
 	return (
 		<>
@@ -34,7 +37,7 @@ export default function Page() {
 					</Link>
 				</div>
 				<ErrorList summary="Can't load drafts" error={error?.message} />
-				<PostList posts={data} />
+				<PostList posts={data} isLoading={isLoading} />
 			</main>
 		</>
 	)

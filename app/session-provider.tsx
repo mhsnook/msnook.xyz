@@ -4,10 +4,19 @@ import { createContext, useState, useEffect, useContext } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Session } from '@supabase/supabase-js'
 
-const SessionContext = createContext(null)
+interface SessionContextValue {
+	session: Session | null
+	isLoading: boolean
+}
+
+const SessionContext = createContext<SessionContextValue>({
+	session: null,
+	isLoading: true,
+})
 
 export default function SessionProvider({ children }) {
-	const [session, setSession] = useState<Session>(null)
+	const [session, setSession] = useState<Session | null>(null)
+	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
 		const supabase = createClient()
@@ -19,6 +28,7 @@ export default function SessionProvider({ children }) {
 				console.log(`Auth state changed: ${event}`, session)
 				setSession(session)
 			}
+			setIsLoading(false)
 		})
 
 		return () => {
@@ -27,12 +37,12 @@ export default function SessionProvider({ children }) {
 	}, [])
 
 	return (
-		<SessionContext.Provider value={session}>
+		<SessionContext.Provider value={{ session, isLoading }}>
 			{children}
 		</SessionContext.Provider>
 	)
 }
 
 export const useSession = () => {
-	return useContext(SessionContext) as Session
+	return useContext(SessionContext)
 }

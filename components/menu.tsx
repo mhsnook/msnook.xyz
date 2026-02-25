@@ -7,7 +7,7 @@ import Overlay from './lib/overlay'
 
 export default function Menu() {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-	const session = useSession()
+	const { session } = useSession()
 	const nickname: string =
 		session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'
 	const loggedInLinks = session
