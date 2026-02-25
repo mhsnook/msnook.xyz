@@ -12,7 +12,6 @@ import {
 	InputImage,
 } from '@/components/form-inputs'
 import { createOnePost } from '@/lib/posts'
-import { PostgrestError } from '@supabase/supabase-js'
 import { TablesInsert } from '@/types/supabase'
 
 export default function Page() {
@@ -23,7 +22,7 @@ export default function Page() {
 		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm()
-	const [formError, setFormError] = useState<PostgrestError | null>(null)
+	const [formError, setFormError] = useState<string | null>(null)
 	const router = useRouter()
 
 	const onSubmit = (data: TablesInsert<'posts'>) => {
@@ -32,7 +31,7 @@ export default function Page() {
 			.then(() => {
 				router.push(`/posts/${data.slug}/edit`)
 			})
-			.catch(setFormError)
+			.catch((err) => setFormError(err?.message ?? String(err)))
 	}
 
 	return (
@@ -65,7 +64,7 @@ export default function Page() {
 						</Button>
 					</div>
 				</fieldset>
-				<ErrorList summary="Error creating post" error={formError?.message} />
+				<ErrorList summary="Error creating post" error={formError} />
 			</form>
 		</main>
 	)
