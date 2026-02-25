@@ -3,9 +3,9 @@
 import { useSession } from './session-provider'
 
 const IffLoggedIn = ({ children }) => {
-	const { session, isLoading } = useSession()
+	const { isLoading, isAuthenticated } = useSession()
 	if (isLoading) return null
-	return session?.user?.role === 'authenticated' ? children : null
+	return isAuthenticated ? children : null
 }
 
 export default IffLoggedIn

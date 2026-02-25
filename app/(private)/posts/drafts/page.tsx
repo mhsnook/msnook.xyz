@@ -9,8 +9,7 @@ import { fetchDraftPosts } from '@/lib/posts'
 import { useSession } from '@/app/session-provider'
 
 export default function Page() {
-	const { session, isLoading: isSessionLoading } = useSession()
-	const isAuthenticated = session?.user?.role === 'authenticated'
+	const { isLoading: isSessionLoading, isAuthenticated } = useSession()
 	const { data, error, isPending } = useQuery({
 		queryKey: ['posts', 'drafts'],
 		queryFn: fetchDraftPosts,

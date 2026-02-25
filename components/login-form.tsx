@@ -11,9 +11,9 @@ import { createClient } from '@/lib/supabase/client'
 import { AuthError } from '@supabase/supabase-js'
 
 export function LoginChallenge() {
-	const { session, isLoading } = useSession()
+	const { isLoading, isAuthenticated } = useSession()
 	if (isLoading) return null
-	return session?.user?.role === 'authenticated' ? null : (
+	return isAuthenticated ? null : (
 		<Modal showing>
 			<Login asModal />
 		</Modal>

@@ -1,17 +1,19 @@
 'use client'
 
-import { createContext, useState, useEffect, useContext } from 'react'
+import { createContext, useState, useEffect, useContext, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Session } from '@supabase/supabase-js'
 
 interface SessionContextValue {
 	session: Session | null
 	isLoading: boolean
+	isAuthenticated: boolean
 }
 
 const SessionContext = createContext<SessionContextValue>({
 	session: null,
 	isLoading: true,
+	isAuthenticated: false,
 })
 
 export default function SessionProvider({ children }) {
@@ -36,8 +38,14 @@ export default function SessionProvider({ children }) {
 		}
 	}, [])
 
+	const isAuthenticated = session?.user?.role === 'authenticated'
+	const value = useMemo(
+		() => ({ session, isLoading, isAuthenticated }),
+		[session, isLoading, isAuthenticated]
+	)
+
 	return (
-		<SessionContext.Provider value={{ session, isLoading }}>
+		<SessionContext.Provider value={value}>
 			{children}
 		</SessionContext.Provider>
 	)
