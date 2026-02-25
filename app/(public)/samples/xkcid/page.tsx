@@ -2,6 +2,8 @@ import Banner from '@/components/banner'
 import xkcid from './xkcid'
 import { Metadata } from 'next'
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
 	title: 'xkcID: A Friendly, K-sortable Compact Identifier | msnook.xyz',
 	description:
