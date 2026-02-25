@@ -17,18 +17,12 @@
 		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
-		"isolatedModules": true,
+		"isolatedModules": true
 		// "noUnusedLocals": true,
 		// "noUnusedParameters": true,
 		// "noFallthroughCasesInSwitch": true,
 		// "forceConsistentCasingInFileNames": true,
 	},
-	"include": [
-		"./app",
-		"./components",
-		"./lib",
-		"./types",
-		"./vite.config.ts"
-	],
+	"include": ["./app", "./components", "./lib", "./types", "./vite.config.ts"],
 	"exclude": ["./node_modules", "./dist"]
 }

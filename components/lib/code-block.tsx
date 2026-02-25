@@ -1,18 +1,22 @@
-import { createHighlighterCoreSync } from 'shiki'
+// TODO: Switch to @shikijs/rehype for server-rendered markdown (blog posts,
+// resume) so shiki never ships to the client except on the editor page.
+// Use MarkdownAsync + rehypeShiki for server, keep this sync CodeBlock for
+// the client-side editor live preview only.
+import { createHighlighterCoreSync } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
-import javascript from 'shiki/langs/javascript'
-import typescript from 'shiki/langs/typescript'
-import jsx from 'shiki/langs/jsx'
-import tsx from 'shiki/langs/tsx'
-import css from 'shiki/langs/css'
-import html from 'shiki/langs/html'
-import json from 'shiki/langs/json'
-import bash from 'shiki/langs/bash'
-import sql from 'shiki/langs/sql'
-import python from 'shiki/langs/python'
-import markdown from 'shiki/langs/markdown'
-import yaml from 'shiki/langs/yaml'
-import oneDarkPro from 'shiki/themes/one-dark-pro'
+import javascript from 'shiki/dist/langs/javascript.mjs'
+import typescript from 'shiki/dist/langs/typescript.mjs'
+import jsx from 'shiki/dist/langs/jsx.mjs'
+import tsx from 'shiki/dist/langs/tsx.mjs'
+import css from 'shiki/dist/langs/css.mjs'
+import html from 'shiki/dist/langs/html.mjs'
+import json from 'shiki/dist/langs/json.mjs'
+import bash from 'shiki/dist/langs/bash.mjs'
+import sql from 'shiki/dist/langs/sql.mjs'
+import python from 'shiki/dist/langs/python.mjs'
+import markdown from 'shiki/dist/langs/markdown.mjs'
+import yaml from 'shiki/dist/langs/yaml.mjs'
+import oneDarkPro from 'shiki/dist/themes/one-dark-pro.mjs'
 
 const highlighter = createHighlighterCoreSync({
 	engine: createJavaScriptRegexEngine(),
