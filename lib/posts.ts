@@ -1,13 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
-import { TablesInsert, TablesUpdate } from '@/types/supabase'
-
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_API_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-)
+import { createClient } from '@/lib/supabase/client'
+import { TablesInsert } from '@/types/supabase'
 
 export async function fetchPostList() {
-	const { data } = await supabase
+	const { data } = await createClient()
 		.from('posts')
 		.select('*')
 		.eq('published', true)
@@ -18,7 +13,7 @@ export async function fetchPostList() {
 }
 
 export async function fetchDraftPosts() {
-	const { data } = await supabase
+	const { data } = await createClient()
 		.from('posts')
 		.select('*')
 		.neq('published', true)
@@ -29,7 +24,7 @@ export async function fetchDraftPosts() {
 }
 
 export async function fetchOnePost(slug: string) {
-	const { data } = await supabase
+	const { data } = await createClient()
 		.from('posts')
 		.select('*')
 		.eq('slug', slug)
@@ -40,7 +35,7 @@ export async function fetchOnePost(slug: string) {
 }
 
 export async function createOnePost(postData: TablesInsert<'posts'>) {
-	const { data } = await supabase
+	const { data } = await createClient()
 		.from('posts')
 		.insert([postData])
 		.select()

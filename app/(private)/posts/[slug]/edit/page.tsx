@@ -47,7 +47,7 @@ const PostEditSchema = z.object({
 type PostUpdate = z.infer<typeof PostEditSchema>
 
 function Client({ initialData }: { initialData: Tables<'posts'> }) {
-	const session = useSession()
+	const { session } = useSession()
 
 	const {
 		register,

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/client'
 import type {
 	Cause,
 	SuperRegion,
@@ -9,12 +9,7 @@ import type {
 	ExcessByRegionRow,
 } from '@/types/mortality'
 
-const supabase = createClient(
-	process.env.NEXT_PUBLIC_SUPABASE_API_URL!,
-	process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-)
-
-const mortality = () => supabase.schema('mortality')
+const mortality = () => createClient().schema('mortality')
 
 export async function fetchCauses(level?: number): Promise<Cause[]> {
 	let query = mortality().from('causes').select('*').order('sort_order')

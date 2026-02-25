@@ -11,8 +11,9 @@ import { createClient } from '@/lib/supabase/client'
 import { AuthError } from '@supabase/supabase-js'
 
 export function LoginChallenge() {
-	const session = useSession()
-	return session?.user?.role === 'authenticated' ? null : (
+	const { isLoading, isAuthenticated } = useSession()
+	if (isLoading) return null
+	return isAuthenticated ? null : (
 		<Modal showing>
 			<Login asModal />
 		</Modal>
@@ -58,7 +59,7 @@ export default function Login({
 	asModal?: boolean
 	redirectTo?: string
 }) {
-	const session = useSession()
+	const { session } = useSession()
 	const router = useRouter()
 	const [loginError, setLoginError] = useState<string>(null)
 	const nickname = session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'

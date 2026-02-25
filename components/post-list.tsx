@@ -41,13 +41,20 @@ const PostCard = ({
 )
 
 interface PostListProps {
-	posts: Array<Tables<'posts'>>
+	posts?: Array<Tables<'posts'>>
+	isLoading?: boolean
 }
 
-export default function PostList({ posts }: PostListProps) {
-	return !posts ? (
-		<p className="py-6">loading posts...</p>
-	) : (
+export default function PostList({ posts, isLoading }: PostListProps) {
+	if (isLoading) {
+		return <p className="py-6 text-gray-500">Loading posts...</p>
+	}
+
+	if (!posts || posts.length === 0) {
+		return <p className="py-6 text-gray-500">No posts to show.</p>
+	}
+
+	return (
 		<div
 			role="list"
 			className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 place-content-stretch"
