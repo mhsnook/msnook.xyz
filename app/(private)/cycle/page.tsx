@@ -27,13 +27,17 @@ export default function CyclePage() {
 	} = progress
 
 	// Resolve theme — blend if transitioning between phases
+	// On the last day of Phase 4 (Sunday), show next cycle's Winter theme
 	const theme = useMemo(() => {
+		if (phase === 4 && daysRemaining === 0) {
+			return getPhaseTheme(1)
+		}
 		if (isTransitioning && phase < 4) {
 			const nextPhase: PhaseNumber = (phase + 1) as PhaseNumber
 			return getTransitionTheme(phase, nextPhase, transitionProgress)
 		}
 		return getPhaseTheme(phase)
-	}, [phase, isTransitioning, transitionProgress])
+	}, [phase, daysRemaining, isTransitioning, transitionProgress])
 
 	// Cycle key for localStorage
 	const cycleKey = `${cycle.year}-${String(cycle.month + 1).padStart(2, '0')}`
@@ -43,8 +47,8 @@ export default function CyclePage() {
 		(now.getTime() - cycle.cycleStart.getTime()) / 86_400_000,
 	)
 
-	// Overall cycle day (1-indexed, capped at 28)
-	const cycleDay = Math.min(dayOffset + 1, 28)
+	// Overall cycle day (0-indexed, capped at 27)
+	const cycleDay = Math.min(dayOffset, 27)
 
 	// Daily title
 	const dailyTitle = getDailyTitle(phase, dayInPhase)
