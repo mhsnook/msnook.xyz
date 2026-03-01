@@ -78,29 +78,32 @@ export function isQuarterlyMonth(month: number): boolean {
 /**
  * Build the full cycle for a given month.
  *
+ * The cycle starts on the Sunday before the first Monday of the month.
  * Layout:
- *   Phase 1: 1 week (2 weeks if quarterly)
- *   Phase 2: 1 week
- *   Phase 3: 1 week
- *   Phase 4: 1 week (extends through to next cycle start)
+ *   Phase 1: Sun–Sat, 1 week (2 weeks if quarterly)
+ *   Phase 2: Sun–Sat, 1 week
+ *   Phase 3: Sun–Sat, 1 week
+ *   Phase 4: Sun–Sat (extends through to next cycle start)
  */
 export function getCycleForMonth(year: number, month: number): Cycle {
 	const quarterly = isQuarterlyMonth(month)
-	const p1Start = getFirstMonday(year, month)
+	const firstMonday = getFirstMonday(year, month)
+	const p1Start = addDays(firstMonday, -1) // Sunday before
 	const p1Weeks = quarterly ? 2 : 1
 
-	const p1End = addDays(p1Start, p1Weeks * 7 - 1) // Sun
-	const p2Start = addDays(p1End, 1)
-	const p2End = addDays(p2Start, 6) // Sun
-	const p3Start = addDays(p2End, 1)
-	const p3End = addDays(p3Start, 6) // Sun
-	const p4Start = addDays(p3End, 1)
+	const p1End = addDays(p1Start, p1Weeks * 7 - 1) // Sat
+	const p2Start = addDays(p1End, 1) // Sun
+	const p2End = addDays(p2Start, 6) // Sat
+	const p3Start = addDays(p2End, 1) // Sun
+	const p3End = addDays(p3Start, 6) // Sat
+	const p4Start = addDays(p3End, 1) // Sun
 
-	// Phase 4 extends through to the day before the next cycle
+	// Phase 4 extends through to the Saturday before the next cycle's Sunday
 	const nextMonth = month === 11 ? 0 : month + 1
 	const nextYear = month === 11 ? year + 1 : year
-	const nextCycleStart = getFirstMonday(nextYear, nextMonth)
-	const p4End = addDays(nextCycleStart, -1)
+	const nextFirstMonday = getFirstMonday(nextYear, nextMonth)
+	const nextCycleStart = addDays(nextFirstMonday, -1) // next cycle's Sunday
+	const p4End = addDays(nextCycleStart, -1) // Saturday
 
 	const phases: PhaseRange[] = [
 		{ phase: 1, start: p1Start, end: p1End, days: p1Weeks * 7 },
