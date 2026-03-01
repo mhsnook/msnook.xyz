@@ -43,8 +43,8 @@ export default function CyclePage() {
 		(now.getTime() - cycle.cycleStart.getTime()) / 86_400_000,
 	)
 
-	// Overall cycle day (1-indexed)
-	const cycleDay = dayOffset + 1
+	// Overall cycle day (1-indexed, capped at 28)
+	const cycleDay = Math.min(dayOffset + 1, 28)
 
 	// Daily title
 	const dailyTitle = getDailyTitle(phase, dayInPhase)
