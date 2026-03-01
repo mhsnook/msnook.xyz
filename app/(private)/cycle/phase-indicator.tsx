@@ -88,12 +88,23 @@ function Moon({
 	)
 }
 
+// 7 reference moons: sliver → crescent → quarter → full → quarter → crescent → sliver
+const refMoons = [
+	{ t: 0, illumination: 0.08, waxing: true },
+	{ t: 1 / 6, illumination: Math.sin(Math.PI / 6), waxing: true },
+	{ t: 2 / 6, illumination: Math.sin((2 * Math.PI) / 6), waxing: true },
+	{ t: 0.5, illumination: 1, waxing: true },
+	{ t: 4 / 6, illumination: Math.sin((2 * Math.PI) / 6), waxing: false },
+	{ t: 5 / 6, illumination: Math.sin(Math.PI / 6), waxing: false },
+	{ t: 1, illumination: 0.08, waxing: false },
+]
+
 /**
  * A dramatic arc of 7 moons sweeping across the sky,
  * with today's moon rendered large and glowing, overlaid.
  */
 export default function MoonArc({ progress, theme }: Props) {
-	const { cycle, status } = progress
+	const { cycle, phase } = progress
 
 	// Total active days across all phases
 	const totalActiveDays = cycle.phases.reduce((sum, p) => sum + p.days, 0)
@@ -102,7 +113,7 @@ export default function MoonArc({ progress, theme }: Props) {
 	let todayIndex = 0
 	let offset = 0
 	for (const p of cycle.phases) {
-		if (p.phase === status) {
+		if (p.phase === phase) {
 			todayIndex = offset + progress.dayInPhase - 1
 			break
 		}
@@ -113,25 +124,6 @@ export default function MoonArc({ progress, theme }: Props) {
 	// Today's illumination
 	const todayIllumination = Math.sin(Math.PI * todayT)
 	const todayWaxing = todayT <= 0.5
-
-	// 7 reference moons: sliver → crescent → quarter → full → quarter → crescent → sliver
-	const refMoons = [
-		{ t: 0, illumination: 0.08, waxing: true },
-		{ t: 1 / 6, illumination: Math.sin(Math.PI / 6), waxing: true },
-		{
-			t: 2 / 6,
-			illumination: Math.sin((2 * Math.PI) / 6),
-			waxing: true,
-		},
-		{ t: 0.5, illumination: 1, waxing: true },
-		{
-			t: 4 / 6,
-			illumination: Math.sin((2 * Math.PI) / 6),
-			waxing: false,
-		},
-		{ t: 5 / 6, illumination: Math.sin(Math.PI / 6), waxing: false },
-		{ t: 1, illumination: 0.08, waxing: false },
-	]
 
 	// ── Layout ──────────────────────────────────────────────────────
 	const W = 640

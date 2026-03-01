@@ -55,8 +55,7 @@ export default function CyclePage() {
 		if (phase === 4) return null
 		const nextTheme = getPhaseTheme((phase + 1) as PhaseNumber)
 		const dayWord = daysRemaining === 1 ? 'Tomorrow' : 'In 2 days'
-		const quoteOnly = nextTheme.mantra.split(' — ')[0]
-		return `${nextTheme.season} begins ${dayWord.toLowerCase()}. "${quoteOnly}"`
+		return `${nextTheme.season} begins ${dayWord.toLowerCase()}. "${nextTheme.mantra.quote}"`
 	}, [isTransitioning, phase, daysRemaining])
 
 	// Format today
@@ -72,11 +71,7 @@ export default function CyclePage() {
 			style={
 				{
 					'--cycle-bg': theme.colors.bg,
-					'--cycle-bg-soft': theme.colors.bgSoft,
 					'--cycle-fg': theme.colors.fg,
-					'--cycle-fg-muted': theme.colors.fgMuted,
-					'--cycle-accent': theme.colors.accent,
-					'--cycle-border': theme.colors.border,
 					'--cycle-gradient': theme.gradient,
 				} as React.CSSProperties
 			}
@@ -123,27 +118,20 @@ export default function CyclePage() {
 					</div>
 
 					{/* Quote overlays on top */}
-					{(() => {
-						const [quote, author] = theme.mantra.split(' — ')
-						return (
-							<div className="relative z-10 h-full flex flex-col items-center justify-start pt-28 max-w-3xl mx-auto px-4">
-								<p
-									className="text-2xl sm:text-3xl md:text-4xl font-display italic text-center leading-snug font-semibold"
-									style={{ color: 'oklch(0.62 0.1 70)' }}
-								>
-									&ldquo;{quote}&rdquo;
-								</p>
-								{author && (
-									<p
-										className="text-sm mt-3 font-semibold"
-										style={{ color: 'oklch(0.52 0.08 70)' }}
-									>
-										— {author}
-									</p>
-								)}
-							</div>
-						)
-					})()}
+					<div className="relative z-10 h-full flex flex-col items-center justify-start pt-28 max-w-3xl mx-auto px-4">
+						<p
+							className="text-2xl sm:text-3xl md:text-4xl font-display italic text-center leading-snug font-semibold"
+							style={{ color: 'oklch(0.62 0.1 70)' }}
+						>
+							&ldquo;{theme.mantra.quote}&rdquo;
+						</p>
+						<p
+							className="text-sm mt-3 font-semibold"
+							style={{ color: 'oklch(0.52 0.08 70)' }}
+						>
+							— {theme.mantra.author}
+						</p>
+					</div>
 				</div>
 			</section>
 

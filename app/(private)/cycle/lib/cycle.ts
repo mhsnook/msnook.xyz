@@ -13,8 +13,6 @@
  */
 
 export type PhaseNumber = 1 | 2 | 3 | 4
-export type CycleStatus = PhaseNumber
-
 export interface PhaseRange {
 	phase: PhaseNumber
 	start: Date
@@ -34,7 +32,6 @@ export interface Cycle {
 export interface PhaseProgress {
 	cycle: Cycle
 	phase: PhaseNumber
-	status: CycleStatus
 	dayInPhase: number // 1-indexed
 	totalDaysInPhase: number
 	daysRemaining: number
@@ -175,7 +172,6 @@ export function getPhaseProgress(date: Date = new Date()): PhaseProgress {
 			return {
 				cycle,
 				phase: pr.phase,
-				status: pr.phase,
 				dayInPhase,
 				totalDaysInPhase: pr.days,
 				daysRemaining,
@@ -191,7 +187,6 @@ export function getPhaseProgress(date: Date = new Date()): PhaseProgress {
 	return {
 		cycle,
 		phase: 4 as PhaseNumber,
-		status: 4 as PhaseNumber,
 		dayInPhase: p4.days,
 		totalDaysInPhase: p4.days,
 		daysRemaining: 0,

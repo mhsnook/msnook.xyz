@@ -33,20 +33,17 @@ export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
 	const stripOffset = -(0.5 + todayFraction) * 100
 
 	// Render one copy of the cycle's color segments
-	const CycleBands = ({ key: k }: { key: string }) => (
-		<>
-			{segments.map((seg) => (
-				<div
-					key={`${k}-${seg.phase}`}
-					className="h-full flex-shrink-0"
-					style={{
-						width: `${seg.widthPct}%`,
-						backgroundColor: seg.theme.colors.band,
-					}}
-				/>
-			))}
-		</>
-	)
+	const renderBands = (prefix: string) =>
+		segments.map((seg) => (
+			<div
+				key={`${prefix}-${seg.phase}`}
+				className="h-full flex-shrink-0"
+				style={{
+					width: `${seg.widthPct}%`,
+					backgroundColor: seg.theme.colors.band,
+				}}
+			/>
+		))
 
 	return (
 		<div className="w-full">
@@ -62,13 +59,13 @@ export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
 					}}
 				>
 					<div className="flex h-full" style={{ width: '33.333%' }}>
-						<CycleBands key="a" />
+						{renderBands('a')}
 					</div>
 					<div className="flex h-full" style={{ width: '33.333%' }}>
-						<CycleBands key="b" />
+						{renderBands('b')}
 					</div>
 					<div className="flex h-full" style={{ width: '33.333%' }}>
-						<CycleBands key="c" />
+						{renderBands('c')}
 					</div>
 				</div>
 

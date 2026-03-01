@@ -5,7 +5,7 @@ export interface PhaseTheme {
 	season: string
 	moonPhase: string
 	label: string // practical name for "This Cycle" cards
-	mantra: string
+	mantra: { quote: string; author: string }
 	description: string
 	colors: {
 		bg: string // deep background
@@ -25,8 +25,10 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		season: 'Winter',
 		moonPhase: 'New Moon',
 		label: 'Planning week',
-		mantra:
-			'In seed time learn, in harvest teach, in winter enjoy. — William Blake',
+		mantra: {
+			quote: 'In seed time learn, in harvest teach, in winter enjoy.',
+			author: 'William Blake',
+		},
 		description:
 			'Stillness, scrying, gathering warmth around the fire. The seeds are beneath the snow. Tend to them with questions, not answers.',
 		colors: {
@@ -46,7 +48,10 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		season: 'Spring',
 		moonPhase: 'Waxing Moon',
 		label: 'Week 1: opening up, experimenting',
-		mantra: 'The earth laughs in flowers. — Ralph Waldo Emerson',
+		mantra: {
+			quote: 'The earth laughs in flowers.',
+			author: 'Ralph Waldo Emerson',
+		},
 		description:
 			'Emergence. The sap rises. Dig your hands into the work and let the tangents take you where they want to go.',
 		colors: {
@@ -66,8 +71,11 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		season: 'Summer',
 		moonPhase: 'Full Moon',
 		label: 'Week 2: full speed ahead',
-		mantra:
-			'Summer afternoon\u2014summer afternoon; to me those have always been the two most beautiful words in the English language. — Henry James',
+		mantra: {
+			quote:
+				'Summer afternoon\u2014summer afternoon; to me those have always been the two most beautiful words in the English language.',
+			author: 'Henry James',
+		},
 		description:
 			'Peak intensity. Full power. Everything that isn\u2019t shipping gets pruned. You are the wolf tonight.',
 		colors: {
@@ -87,8 +95,11 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		season: 'Autumn',
 		moonPhase: 'Waning Moon',
 		label: 'Week 3: harvest and ship',
-		mantra:
-			'Season of mists and mellow fruitfulness, close bosom-friend of the maturing sun. — John Keats',
+		mantra: {
+			quote:
+				'Season of mists and mellow fruitfulness, close bosom-friend of the maturing sun.',
+			author: 'John Keats',
+		},
 		description:
 			'Gratitude, closeout, letting go. Not everything ripens in every cycle. That\u2019s not failure \u2014 that\u2019s seasons.',
 		colors: {
