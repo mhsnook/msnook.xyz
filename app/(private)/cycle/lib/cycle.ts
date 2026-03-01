@@ -3,9 +3,9 @@
  *
  * The monthly creative cycle has four phases, each one week:
  *   Phase 1 (Winter / New Moon)  — Planning
- *   Phase 2 (Spring / Waxing)    — Week 1
- *   Phase 3 (Summer / Full Moon) — Week 2
- *   Phase 4 (Autumn / Waning)    — Week 3 (harvest & ship)
+ *   Phase 2 (Spring / Waxing)    — Week 2
+ *   Phase 3 (Summer / Full Moon) — Week 3
+ *   Phase 4 (Autumn / Waning)    — Week 4 (harvest & ship)
  *
  * Phase 1 begins on the first Monday of each month.
  * In quarterly months (Jan, Apr, Jul, Oct), Phase 1 extends to two weeks.
