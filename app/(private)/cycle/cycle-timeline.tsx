@@ -16,15 +16,29 @@ interface Props {
  * The cycle wraps — after autumn comes winter again.
  */
 export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
-	const totalDays = cycle.phases.reduce((sum, p) => sum + p.days, 0)
-	const todayFraction = totalDays > 1 ? dayOffset / (totalDays - 1) : 0.5
-
-	// Build the phase segments with their proportional widths
+	// Build the phase segments — equal width (25% each)
 	const segments = cycle.phases.map((p) => ({
 		phase: p.phase,
-		widthPct: (p.days / totalDays) * 100,
 		theme: getPhaseTheme(p.phase),
 	}))
+
+	// todayFraction based on equal-sized phases (each 25%)
+	const phaseIndex = cycle.phases.findIndex((p) => {
+		const start = p.start.getTime()
+		const end = p.end.getTime()
+		const now = cycle.cycleStart.getTime() + dayOffset * 86_400_000
+		return now >= start && now <= end
+	})
+	const currentPhase = cycle.phases[Math.max(0, phaseIndex)]
+	const dayInCurrentPhase = Math.round(
+		(cycle.cycleStart.getTime() +
+			dayOffset * 86_400_000 -
+			currentPhase.start.getTime()) /
+			86_400_000,
+	)
+	const fractionInPhase =
+		currentPhase.days > 1 ? dayInCurrentPhase / currentPhase.days : 0
+	const todayFraction = (Math.max(0, phaseIndex) + fractionInPhase) / 4
 
 	// Strip offset: position the strip so todayFraction sits at 50%
 	// Strip is 3x wide (3 copies of the cycle for wrapping)
@@ -32,14 +46,14 @@ export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
 	// To put that at 50% of container: left = -(0.5 + todayFraction) * 100%
 	const stripOffset = -(0.5 + todayFraction) * 100
 
-	// Render one copy of the cycle's color segments
+	// Render one copy of the cycle's color segments (equal 25% each)
 	const renderBands = (prefix: string) =>
 		segments.map((seg) => (
 			<div
 				key={`${prefix}-${seg.phase}`}
 				className="h-full flex-shrink-0"
 				style={{
-					width: `${seg.widthPct}%`,
+					width: '25%',
 					backgroundColor: seg.theme.colors.band,
 				}}
 			/>
