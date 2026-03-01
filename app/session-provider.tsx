@@ -41,13 +41,11 @@ export default function SessionProvider({ children }) {
 	const isAuthenticated = session?.user?.role === 'authenticated'
 	const value = useMemo(
 		() => ({ session, isLoading, isAuthenticated }),
-		[session, isLoading, isAuthenticated]
+		[session, isLoading, isAuthenticated],
 	)
 
 	return (
-		<SessionContext.Provider value={value}>
-			{children}
-		</SessionContext.Provider>
+		<SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 	)
 }
 

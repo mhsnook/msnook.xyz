@@ -102,3 +102,22 @@ layer(base);
 		@apply text-sm mt-4;
 	}
 }
+
+/* ── Cycle Dashboard Theming ──────────────────────────────────── */
+
+@layer base {
+	.cycle-env {
+		--cycle-bg: oklch(0.15 0.03 270);
+		--cycle-bg-soft: oklch(0.22 0.03 265);
+		--cycle-fg: oklch(0.9 0.01 250);
+		--cycle-fg-muted: oklch(0.65 0.02 260);
+		--cycle-accent: oklch(0.72 0.1 70);
+		--cycle-border: oklch(0.3 0.02 265);
+
+		color: var(--cycle-fg);
+		background: var(--cycle-gradient, var(--cycle-bg));
+		transition:
+			color 2s ease,
+			background 2s ease;
+	}
+}
