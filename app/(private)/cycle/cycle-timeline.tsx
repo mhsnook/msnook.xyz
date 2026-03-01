@@ -60,8 +60,8 @@ export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
 		))
 
 	return (
-		<div className="w-full">
-			{/* Timeline container */}
+		<div className="relative w-full py-2">
+			{/* Timeline bar */}
 			<div className="relative h-6 overflow-hidden rounded-full">
 				{/* Scrolling strip — 3 copies for wrapping */}
 				<div
@@ -83,37 +83,29 @@ export default function CycleTimeline({ cycle, dayOffset, theme }: Props) {
 					</div>
 				</div>
 
-				{/* Today marker — fixed at center */}
+				{/* Today line — fixed at center */}
 				<div
 					className="absolute top-0 bottom-0 left-1/2 w-0.5 -translate-x-1/2"
 					style={{
 						backgroundColor: theme.colors.fg,
-						boxShadow: `0 0 8px ${theme.colors.fg}`,
+						boxShadow: `0 0 6px ${theme.colors.fg}`,
 					}}
 				/>
 			</div>
 
-			{/* Chevrons above and below — pointing at the center line */}
-			<div className="relative h-0">
-				{/* Chevron above */}
-				<div
-					className="absolute left-1/2 -translate-x-1/2 -top-[22px]"
-					style={{ color: theme.colors.fg }}
-				>
-					<svg width="10" height="6" viewBox="0 0 10 6">
-						<path d="M0 6 L5 0 L10 6" fill="currentColor" />
-					</svg>
-				</div>
-				{/* Chevron below */}
-				<div
-					className="absolute left-1/2 -translate-x-1/2 top-[2px]"
-					style={{ color: theme.colors.fg }}
-				>
-					<svg width="10" height="6" viewBox="0 0 10 6">
-						<path d="M0 0 L5 6 L10 0" fill="currentColor" />
-					</svg>
-				</div>
-			</div>
+			{/* Paired triangles pointing inward at center */}
+			<svg
+				className="absolute left-1/2 top-0 -translate-x-1/2 h-full pointer-events-none"
+				width="10"
+				viewBox="0 0 10 40"
+				preserveAspectRatio="none"
+				style={{
+					filter: `drop-shadow(0 0 3px ${theme.colors.fg})`,
+				}}
+			>
+				<path d="M5 2 L9 8 L1 8 Z" fill={theme.colors.fg} />
+				<path d="M5 38 L1 32 L9 32 Z" fill={theme.colors.fg} />
+			</svg>
 		</div>
 	)
 }

@@ -46,8 +46,11 @@ export default function CyclePage() {
 	// Overall cycle day (0-indexed, capped at 27)
 	const cycleDay = Math.min(dayOffset, 27)
 
-	// Daily title
-	const dailyTitle = getDailyTitle(phase, dayInPhase)
+	// Daily title — day 0 is the eve before the cycle kicks off
+	const dailyTitle =
+		cycleDay === 0
+			? 'Planning starts tomorrow!'
+			: getDailyTitle(phase, dayInPhase)
 
 	// Transition nudge text
 	const nudgeText = useMemo(() => {
@@ -164,7 +167,7 @@ export default function CyclePage() {
 							className="text-sm font-medium"
 							style={{ color: theme.colors.fg }}
 						>
-							Day {dayInPhase}, {theme.label.toLowerCase()}
+							Day {dayInPhase - 1}, {theme.label.toLowerCase()}
 						</span>
 						<span className="text-sm" style={{ color: theme.colors.fgMuted }}>
 							{daysRemaining === 0
