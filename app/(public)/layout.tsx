@@ -11,7 +11,7 @@ export default function Layout({ children }) {
 
 export function Footer() {
 	return (
-		<footer className="border-t w-full py-10 mt-10">
+		<footer className="border-t w-full py-10 mt-10 print:hidden">
 			<nav className="space-x-4 space-y-10 py-4 mx-auto text-center">
 				<Link href="/" className="text-cyan-content underline">
 					home
