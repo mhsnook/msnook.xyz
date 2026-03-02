@@ -97,6 +97,21 @@ function CheckoutInner() {
 					Back to scanner
 				</Link>
 			</div>
+
+			<div className="mt-10 pt-6 border-t">
+				<p className="text-base text-gray-500">
+					This page is a demo of a process for a furniture expo or
+					similar event. No login or data collection for anyone
+					involved. Anyone visiting the{' '}
+					<Link
+						href="/barcoder/setup"
+						className="text-cyan-content underline"
+					>
+						setup
+					</Link>{' '}
+					page can manage and print QR codes.
+				</p>
+			</div>
 		</main>
 	)
 }

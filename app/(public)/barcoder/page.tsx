@@ -147,7 +147,7 @@ function BarcoderInner() {
 											handleDecrement(item.sku)
 										}
 										disabled={item.quantity <= 1}
-										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
 										aria-label="Decrease quantity"
 									>
 										&minus;
@@ -159,7 +159,7 @@ function BarcoderInner() {
 										onClick={() =>
 											handleIncrement(item.sku)
 										}
-										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100"
+										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
 										aria-label="Increase quantity"
 									>
 										+
@@ -167,7 +167,7 @@ function BarcoderInner() {
 								</div>
 								<button
 									onClick={() => handleRemove(item.sku)}
-									className="text-red-500 hover:text-red-700 text-2xl leading-none px-1"
+									className="text-red-500 hover:text-red-700 text-2xl leading-none px-1 cursor-pointer"
 									aria-label={`Remove ${item.sku}`}
 								>
 									&times;
@@ -226,13 +226,19 @@ function BarcoderInner() {
 				</>
 			)}
 
-			<div className="mt-10 pt-6 border-t text-center">
-				<Link
-					href="/barcoder/setup"
-					className="text-cyan-content underline text-lg"
-				>
-					Vendor Setup
-				</Link>
+			<div className="mt-10 pt-6 border-t">
+				<p className="text-base text-gray-500">
+					This page is a demo of a process for a furniture expo or
+					similar event. No login or data collection for anyone
+					involved. Anyone visiting the{' '}
+					<Link
+						href="/barcoder/setup"
+						className="text-cyan-content underline"
+					>
+						setup
+					</Link>{' '}
+					page can manage and print QR codes.
+				</p>
 			</div>
 		</main>
 	)

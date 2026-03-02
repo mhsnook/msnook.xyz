@@ -59,12 +59,12 @@ export default function SetupPage() {
 
 	return (
 		<main className="max-w-2xl mx-auto px-4 my-8">
-			<h1 className="h2 mb-2">Barcoder Setup</h1>
-			<p className="text-lg text-gray-600 mb-8">
+			<h1 className="h2 mb-2 print:hidden">Barcoder Setup</h1>
+			<p className="text-lg text-gray-600 mb-8 print:hidden">
 				Add your products, then print the QR codes for your shelves.
 			</p>
 
-			<form onSubmit={handleAdd} className="mb-10">
+			<form onSubmit={handleAdd} className="mb-10 print:hidden">
 				<div className="flex flex-col sm:flex-row gap-3 items-end">
 					<div className="flex-1 w-full">
 						<label
@@ -152,7 +152,7 @@ export default function SetupPage() {
 								</div>
 								<button
 									onClick={() => handleRemove(item.sku)}
-									className="text-red-500 hover:text-red-700 text-2xl leading-none px-2 print:hidden"
+									className="text-red-500 hover:text-red-700 text-2xl leading-none px-2 cursor-pointer print:hidden"
 									aria-label={`Remove ${item.sku}`}
 								>
 									&times;
