@@ -24,13 +24,13 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		phase: 1,
 		season: 'Winter',
 		moonPhase: 'New Moon',
-		label: 'Planning week',
+		label: 'Period week',
 		mantra: {
 			quote: 'In seed time learn, in harvest teach, in winter enjoy.',
 			author: 'William Blake',
 		},
 		description:
-			'Stillness, scrying, gathering warmth around the fire. The seeds are beneath the snow. Tend to them with questions, not answers.',
+			'Slow down. Let yourself need things. The visions that come when you stop pushing are the ones worth building toward.',
 		colors: {
 			bg: 'oklch(0.22 0.08 270)',
 			bgSoft: 'oklch(0.28 0.07 265)',
@@ -47,13 +47,13 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		phase: 2,
 		season: 'Spring',
 		moonPhase: 'Waxing Moon',
-		label: 'Week 2: opening up, experimenting',
+		label: 'Week 2: ravenous',
 		mantra: {
 			quote: 'The earth laughs in flowers.',
 			author: 'Ralph Waldo Emerson',
 		},
 		description:
-			'Emergence. The sap rises. Dig your hands into the work and let the tangents take you where they want to go.',
+			'Appetite returns. Take on the biggest chunks first and let the tangents carry you somewhere interesting.',
 		colors: {
 			bg: 'oklch(0.28 0.10 350)',
 			bgSoft: 'oklch(0.33 0.09 345)',
@@ -70,14 +70,14 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		phase: 3,
 		season: 'Summer',
 		moonPhase: 'Full Moon',
-		label: 'Week 3: full speed ahead',
+		label: 'Week 3: ship and prune',
 		mantra: {
 			quote:
 				'Summer afternoon\u2014summer afternoon; to me those have always been the two most beautiful words in the English language.',
 			author: 'Henry James',
 		},
 		description:
-			'Peak intensity. Full power. Everything that isn\u2019t shipping gets pruned. You are the wolf tonight.',
+			'Full intensity. Everything that isn\u2019t shipping gets pruned. Clear the plate while the energy holds.',
 		colors: {
 			bg: 'oklch(0.26 0.08 145)',
 			bgSoft: 'oklch(0.32 0.07 140)',
@@ -94,14 +94,14 @@ const themes: Record<PhaseNumber, PhaseTheme> = {
 		phase: 4,
 		season: 'Autumn',
 		moonPhase: 'Waning Moon',
-		label: 'Week 4: harvest and ship',
+		label: 'Week 4: harvest and release',
 		mantra: {
 			quote:
 				'Season of mists and mellow fruitfulness, close bosom-friend of the maturing sun.',
 			author: 'John Keats',
 		},
 		description:
-			'Gratitude, closeout, letting go. Not everything ripens in every cycle. That\u2019s not failure \u2014 that\u2019s seasons.',
+			'Close out, let go. Ship what\u2019s ready, defer the rest. Not everything ripens in every revolution \u2014 that\u2019s not failure, that\u2019s seasons.',
 		colors: {
 			bg: 'oklch(0.28 0.08 50)',
 			bgSoft: 'oklch(0.33 0.07 45)',
@@ -176,13 +176,13 @@ export const moonIcons: Record<PhaseNumber, string> = {
 /** Daily titles — 7 per phase, indexed by dayInPhase (0-indexed). */
 export const dailyTitles: Record<PhaseNumber, string[]> = {
 	1: [
-		'What needs to happen this cycle? Get clear on scope.',
-		'Set your KPIs. How will you know you succeeded?',
-		'Refine priorities. What\u2019s the one thing that matters most?',
-		'Break it down. Turn intentions into concrete tasks.',
+		'New revolution. Take it slow today.',
+		'What do your users need? What do you need? Sit with it.',
+		'What wants to be built this revolution?',
+		'Scope it. What actually ships in 28 days?',
+		'Break it down. Intentions into tasks, tasks into tickets.',
 		'Check dependencies. Who do you need? What could block you?',
-		'Wind down planning. Are your plans sharp enough to start Monday?',
-		'Rest. Let the plan settle. Your subconscious is working on it.',
+		'Plans are set. Rest one more day. Tomorrow you start.',
 	],
 	2: [
 		'Week 2 begins. Pick the hardest thing and start.',
@@ -225,10 +225,10 @@ export function getDailyTitle(phase: PhaseNumber, dayInPhase: number): string {
 /** Ritual checklists per phase. */
 export const phaseRituals: Record<PhaseNumber, string[]> = {
 	1: [
-		'Kickoff gate: Are all loose ends from last cycle tied up?',
+		'Kickoff gate: Are all loose ends from last revolution tied up?',
 		'Review primary GitHub project board',
 		'Review quarterly plan document',
-		'Team sync / planning meeting',
+		'Team sync / visioning meeting',
 		'Curate link board for this revolution',
 		'Set repo/project intentions for this revolution',
 		'Generate planning report by end of phase',

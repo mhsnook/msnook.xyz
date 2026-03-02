@@ -46,11 +46,8 @@ export default function CyclePage() {
 	// Overall cycle day (0-indexed, capped at 27)
 	const cycleDay = Math.min(dayOffset, 27)
 
-	// Daily title — day 0 is the eve before the cycle kicks off
-	const dailyTitle =
-		cycleDay === 0
-			? 'Planning starts tomorrow!'
-			: getDailyTitle(phase, dayInPhase)
+	// Daily title — day 0 is the first day of period week
+	const dailyTitle = getDailyTitle(phase, dayInPhase)
 
 	// Transition nudge text
 	const nudgeText = useMemo(() => {
