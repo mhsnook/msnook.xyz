@@ -39,21 +39,33 @@ export default function SetupPage() {
 	function handleAdd(e: React.FormEvent) {
 		e.preventDefault()
 		setError('')
+
 		const trimmedSku = sku.trim()
 		if (!trimmedSku) {
 			setError('SKU is required')
 			return
 		}
-		const parsedPrice = parsePrice(price)
-		if (price.trim() && parsedPrice === null) {
-			setError('Price must be a positive number')
-			return
+
+		const trimmedPrice = price.trim()
+		if (trimmedPrice) {
+			const parsedPrice = parsePrice(trimmedPrice)
+			if (parsedPrice === null) {
+				setError('Price must be a positive number')
+				return
+			}
+			const added = addToCatalog(trimmedSku, parsedPrice)
+			if (!added) {
+				setError(`"${trimmedSku}" already exists`)
+				return
+			}
+		} else {
+			const added = addToCatalog(trimmedSku, null)
+			if (!added) {
+				setError(`"${trimmedSku}" already exists`)
+				return
+			}
 		}
-		const added = addToCatalog(trimmedSku, parsedPrice)
-		if (!added) {
-			setError(`"${trimmedSku}" already exists`)
-			return
-		}
+
 		setCatalog(getCatalog())
 		setSku('')
 		setPrice('')
@@ -179,38 +191,43 @@ export default function SetupPage() {
 						</Button>
 					</div>
 					<div className="grid gap-6 print:grid-cols-2 print:gap-4">
-						{catalog.map((item) => (
-							<div
-								key={item.sku}
-								className="border rounded-lg p-5 flex items-center gap-5 print:break-inside-avoid"
-							>
-								<div className="shrink-0">
-									<QRCodeSVG
-										value={itemUrl(item)}
-										size={120}
-										level="M"
-									/>
-								</div>
-								<div className="flex-1 min-w-0">
-									<p className="text-xl font-semibold truncate">
-										{item.sku}
-									</p>
-									<p className="text-lg text-gray-600">
-										{formatPrice(item.price, config)}
-									</p>
-									<p className="text-sm text-gray-400 break-all mt-1 print:hidden">
-										{itemUrl(item)}
-									</p>
-								</div>
-								<button
-									onClick={() => handleRemove(item.sku)}
-									className="text-red-500 hover:text-red-700 text-2xl leading-none px-2 cursor-pointer print:hidden"
-									aria-label={`Remove ${item.sku}`}
+						{catalog.map((item) => {
+							const url = itemUrl(item)
+							return (
+								<div
+									key={item.sku}
+									className="border rounded-lg p-5 flex items-center gap-5 print:break-inside-avoid"
 								>
-									&times;
-								</button>
-							</div>
-						))}
+									<div className="shrink-0">
+										<QRCodeSVG
+											value={url}
+											size={120}
+											level="M"
+										/>
+									</div>
+									<div className="flex-1 min-w-0">
+										<p className="text-xl font-semibold truncate">
+											{item.sku}
+										</p>
+										<p className="text-lg text-gray-600">
+											{formatPrice(item.price, config)}
+										</p>
+										<p className="text-sm text-gray-400 break-all mt-1 print:hidden">
+											{url}
+										</p>
+									</div>
+									<button
+										onClick={() =>
+											handleRemove(item.sku)
+										}
+										className="text-red-500 hover:text-red-700 text-2xl leading-none px-2 cursor-pointer print:hidden"
+										aria-label={`Remove ${item.sku}`}
+									>
+										&times;
+									</button>
+								</div>
+							)
+						})}
 					</div>
 				</>
 			)}

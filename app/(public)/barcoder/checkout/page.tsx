@@ -7,6 +7,7 @@ import {
 	type CurrencyConfig,
 	defaultConfig,
 	decodeCheckoutItems,
+	computeCartTotals,
 	formatPrice,
 } from '../lib'
 
@@ -23,12 +24,7 @@ function CheckoutInner() {
 				: defaultConfig.decimals,
 	}
 
-	const allPriced = items.every((item) => item.price !== null)
-	const total = items.reduce((sum, item) => {
-		if (item.price !== null) return sum + item.price * item.quantity
-		return sum
-	}, 0)
-	const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
+	const { total, totalQuantity, allPriced } = computeCartTotals(items)
 
 	if (items.length === 0) {
 		return (
