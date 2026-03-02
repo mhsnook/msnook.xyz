@@ -90,13 +90,13 @@ function Moon({
 
 // 7 reference moons: sliver → crescent → quarter → full → quarter → crescent → sliver
 const refMoons = [
-	{ t: 0, illumination: 0.08, waxing: true },
-	{ t: 1 / 6, illumination: Math.sin(Math.PI / 6), waxing: true },
-	{ t: 2 / 6, illumination: Math.sin((2 * Math.PI) / 6), waxing: true },
+	{ t: 0, illumination: 1 / 7, waxing: true },
+	{ t: 1 / 6, illumination: 3 / 7, waxing: true },
+	{ t: 2 / 6, illumination: 5 / 7, waxing: true },
 	{ t: 0.5, illumination: 1, waxing: true },
-	{ t: 4 / 6, illumination: Math.sin((2 * Math.PI) / 6), waxing: false },
-	{ t: 5 / 6, illumination: Math.sin(Math.PI / 6), waxing: false },
-	{ t: 1, illumination: 0.08, waxing: false },
+	{ t: 4 / 6, illumination: 5 / 7, waxing: false },
+	{ t: 5 / 6, illumination: 3 / 7, waxing: false },
+	{ t: 1, illumination: 1 / 7, waxing: false },
 ]
 
 /**
