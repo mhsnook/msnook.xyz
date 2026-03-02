@@ -5,23 +5,36 @@ import { QRCodeSVG } from 'qrcode.react'
 import Button from '@/components/lib/button'
 import {
 	type CatalogItem,
+	type CurrencyConfig,
 	getCatalog,
 	addToCatalog,
 	removeFromCatalog,
+	getConfig,
+	saveConfig,
+	defaultConfig,
 	formatPrice,
+	parsePrice,
 } from '../lib'
 
 export default function SetupPage() {
 	const [catalog, setCatalog] = useState<CatalogItem[]>([])
+	const [config, setConfig] = useState<CurrencyConfig>(defaultConfig)
 	const [sku, setSku] = useState('')
 	const [price, setPrice] = useState('')
 	const [error, setError] = useState('')
 
 	useEffect(() => {
 		setCatalog(getCatalog())
+		setConfig(getConfig())
 	}, [])
 
 	const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
+
+	function handleConfigChange(updates: Partial<CurrencyConfig>) {
+		const next = { ...config, ...updates }
+		setConfig(next)
+		saveConfig(next)
+	}
 
 	function handleAdd(e: React.FormEvent) {
 		e.preventDefault()
@@ -31,8 +44,8 @@ export default function SetupPage() {
 			setError('SKU is required')
 			return
 		}
-		const parsedPrice = price.trim() ? parseFloat(price.trim()) : null
-		if (price.trim() && (isNaN(parsedPrice!) || parsedPrice! < 0)) {
+		const parsedPrice = parsePrice(price)
+		if (price.trim() && parsedPrice === null) {
 			setError('Price must be a positive number')
 			return
 		}
@@ -54,6 +67,8 @@ export default function SetupPage() {
 	function itemUrl(item: CatalogItem) {
 		const params = new URLSearchParams({ sku: item.sku })
 		if (item.price !== null) params.set('price', item.price.toString())
+		params.set('cur', config.symbol)
+		params.set('dec', config.decimals.toString())
 		return `${baseUrl}/barcoder?${params.toString()}`
 	}
 
@@ -63,6 +78,43 @@ export default function SetupPage() {
 			<p className="text-lg text-gray-600 mb-8 print:hidden">
 				Add your products, then print the QR codes for your shelves.
 			</p>
+
+			{/* Currency config */}
+			<div className="flex flex-col sm:flex-row gap-4 mb-8 print:hidden">
+				<div className="w-full sm:w-40">
+					<label
+						htmlFor="currency"
+						className="block text-lg font-semibold mb-1"
+					>
+						Currency Symbol
+					</label>
+					<input
+						id="currency"
+						type="text"
+						value={config.symbol}
+						onChange={(e) =>
+							handleConfigChange({ symbol: e.target.value })
+						}
+						placeholder="$"
+						className="w-full border rounded-md px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-cyan"
+					/>
+				</div>
+				<div className="flex items-end gap-3">
+					<label className="flex items-center gap-2 text-lg cursor-pointer py-3">
+						<input
+							type="checkbox"
+							checked={config.decimals === 2}
+							onChange={(e) =>
+								handleConfigChange({
+									decimals: e.target.checked ? 2 : 0,
+								})
+							}
+							className="w-5 h-5 cursor-pointer"
+						/>
+						Show decimals
+					</label>
+				</div>
+			</div>
 
 			<form onSubmit={handleAdd} className="mb-10 print:hidden">
 				<div className="flex flex-col sm:flex-row gap-3 items-end">
@@ -95,7 +147,7 @@ export default function SetupPage() {
 							inputMode="decimal"
 							value={price}
 							onChange={(e) => setPrice(e.target.value)}
-							placeholder="0.00"
+							placeholder={config.decimals === 2 ? '0.00' : '0'}
 							className="w-full border rounded-md px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-cyan"
 						/>
 					</div>
@@ -109,7 +161,7 @@ export default function SetupPage() {
 			</form>
 
 			{catalog.length === 0 ? (
-				<p className="text-xl text-gray-500 text-center py-12">
+				<p className="text-xl text-gray-500 text-center py-12 print:hidden">
 					No items yet. Add your first product above.
 				</p>
 			) : (
@@ -144,7 +196,7 @@ export default function SetupPage() {
 										{item.sku}
 									</p>
 									<p className="text-lg text-gray-600">
-										{formatPrice(item.price)}
+										{formatPrice(item.price, config)}
 									</p>
 									<p className="text-sm text-gray-400 break-all mt-1 print:hidden">
 										{itemUrl(item)}

@@ -3,12 +3,25 @@
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { decodeCheckoutItems, formatPrice } from '../lib'
+import {
+	type CurrencyConfig,
+	defaultConfig,
+	decodeCheckoutItems,
+	formatPrice,
+} from '../lib'
 
 function CheckoutInner() {
 	const searchParams = useSearchParams()
 	const itemsParam = searchParams.get('items') || ''
 	const items = decodeCheckoutItems(itemsParam)
+
+	const config: CurrencyConfig = {
+		symbol: searchParams.get('cur') ?? defaultConfig.symbol,
+		decimals:
+			searchParams.get('dec') !== null
+				? parseInt(searchParams.get('dec')!, 10)
+				: defaultConfig.decimals,
+	}
 
 	const allPriced = items.every((item) => item.price !== null)
 	const total = items.reduce((sum, item) => {
@@ -65,7 +78,10 @@ function CheckoutInner() {
 								</td>
 								<td className="text-xl text-right px-5 py-4">
 									{item.price !== null
-										? formatPrice(item.price * item.quantity)
+										? formatPrice(
+												item.price * item.quantity,
+												config
+											)
 										: '—'}
 								</td>
 							</tr>
@@ -81,7 +97,7 @@ function CheckoutInner() {
 									{totalQuantity}
 								</td>
 								<td className="text-2xl font-bold text-right px-5 py-4">
-									{formatPrice(total)}
+									{formatPrice(total, config)}
 								</td>
 							</tr>
 						</tfoot>

@@ -10,8 +10,32 @@ export type CatalogItem = {
 	price: number | null
 }
 
+export type CurrencyConfig = {
+	symbol: string
+	decimals: number // 0 or 2
+}
+
 const CART_KEY = 'barcoder-cart'
 const CATALOG_KEY = 'barcoder-catalog'
+const CONFIG_KEY = 'barcoder-config'
+
+export const defaultConfig: CurrencyConfig = { symbol: '$', decimals: 2 }
+
+// ---- Currency config ----
+
+export function getConfig(): CurrencyConfig {
+	if (typeof window === 'undefined') return defaultConfig
+	try {
+		const raw = localStorage.getItem(CONFIG_KEY)
+		return raw ? { ...defaultConfig, ...JSON.parse(raw) } : defaultConfig
+	} catch {
+		return defaultConfig
+	}
+}
+
+export function saveConfig(config: CurrencyConfig) {
+	localStorage.setItem(CONFIG_KEY, JSON.stringify(config))
+}
 
 // ---- Cart (customer side) ----
 
@@ -99,15 +123,49 @@ export function removeFromCatalog(sku: string) {
 	saveCatalog(catalog)
 }
 
+// ---- Price parsing ----
+
+/** Strip commas and parse a price string to a number, or null if empty */
+export function parsePrice(input: string): number | null {
+	const cleaned = input.replace(/,/g, '').trim()
+	if (!cleaned) return null
+	const num = parseFloat(cleaned)
+	if (isNaN(num) || num < 0) return undefined as unknown as null // caller checks
+	return num
+}
+
+// ---- Price formatting ----
+
+export function formatPrice(
+	price: number | null,
+	config: CurrencyConfig = defaultConfig
+): string {
+	if (price === null) return '—'
+	const formatted =
+		config.decimals === 2
+			? price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+			: Math.round(price)
+					.toString()
+					.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+	return `${config.symbol}${config.symbol.match(/[a-zA-Z]$/) ? ' ' : ''}${formatted}`
+}
+
 // ---- Checkout encoding ----
 
-export function encodeCartForCheckout(cart: CartItem[]): string {
-	return cart
+export function encodeCartForCheckout(
+	cart: CartItem[],
+	config: CurrencyConfig
+): string {
+	const itemsStr = cart
 		.map((item) => {
 			const p = item.price !== null ? item.price.toString() : ''
 			return `${encodeURIComponent(item.sku)}:${p}:${item.quantity}`
 		})
 		.join(',')
+	const params = new URLSearchParams({ items: itemsStr })
+	params.set('cur', config.symbol)
+	params.set('dec', config.decimals.toString())
+	return params.toString()
 }
 
 export function decodeCheckoutItems(
@@ -122,9 +180,4 @@ export function decodeCheckoutItems(
 			quantity: parseInt(qtyStr || '1', 10),
 		}
 	})
-}
-
-export function formatPrice(price: number | null): string {
-	if (price === null) return '—'
-	return `$${price.toFixed(2)}`
 }

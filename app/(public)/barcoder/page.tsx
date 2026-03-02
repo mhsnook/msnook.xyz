@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Button from '@/components/lib/button'
 import {
 	type CartItem,
+	type CurrencyConfig,
 	getCart,
 	addToCart,
 	incrementItem,
@@ -14,12 +15,16 @@ import {
 	removeFromCart,
 	clearCart,
 	encodeCartForCheckout,
+	getConfig,
+	saveConfig,
+	defaultConfig,
 	formatPrice,
 } from './lib'
 
 function BarcoderInner() {
 	const searchParams = useSearchParams()
 	const [cart, setCart] = useState<CartItem[]>([])
+	const [config, setConfig] = useState<CurrencyConfig>(defaultConfig)
 	const [toast, setToast] = useState<{
 		message: string
 		sku: string
@@ -30,8 +35,25 @@ function BarcoderInner() {
 		setCart(getCart())
 	}, [])
 
-	// On mount, process ?sku= param
+	// On mount, process ?sku= param and pick up currency config
 	useEffect(() => {
+		// Read currency config from URL params if present, otherwise from localStorage
+		const curParam = searchParams.get('cur')
+		const decParam = searchParams.get('dec')
+		if (curParam !== null || decParam !== null) {
+			const urlConfig: CurrencyConfig = {
+				symbol: curParam ?? defaultConfig.symbol,
+				decimals:
+					decParam !== null
+						? parseInt(decParam, 10)
+						: defaultConfig.decimals,
+			}
+			setConfig(urlConfig)
+			saveConfig(urlConfig)
+		} else {
+			setConfig(getConfig())
+		}
+
 		const sku = searchParams.get('sku')
 		if (!sku) {
 			refreshCart()
@@ -71,8 +93,8 @@ function BarcoderInner() {
 
 	function handleCheckout() {
 		const baseUrl = window.location.origin
-		const encoded = encodeCartForCheckout(cart)
-		setCheckoutQR(`${baseUrl}/barcoder/checkout?items=${encoded}`)
+		const qs = encodeCartForCheckout(cart, config)
+		setCheckoutQR(`${baseUrl}/barcoder/checkout?${qs}`)
 	}
 
 	function handleClearAndReset() {
@@ -132,11 +154,11 @@ function BarcoderInner() {
 										{item.sku}
 									</p>
 									<p className="text-lg text-gray-600">
-										{formatPrice(item.price)}
+										{formatPrice(item.price, config)}
 										{item.quantity > 1 &&
 											item.price !== null && (
 												<span className="text-gray-400 ml-2">
-													({formatPrice(item.price * item.quantity)})
+													({formatPrice(item.price * item.quantity, config)})
 												</span>
 											)}
 									</p>
@@ -183,7 +205,7 @@ function BarcoderInner() {
 								Total
 							</span>
 							<span className="text-2xl font-bold">
-								{formatPrice(total)}
+								{formatPrice(total, config)}
 							</span>
 						</div>
 					)}
@@ -210,7 +232,7 @@ function BarcoderInner() {
 							</div>
 							<p className="text-lg text-gray-500 mt-4">
 								{cart.length} item{cart.length !== 1 && 's'}
-								{allPriced && ` \u2014 ${formatPrice(total)}`}
+								{allPriced && ` \u2014 ${formatPrice(total, config)}`}
 							</p>
 							<div className="mt-6 flex flex-col gap-3">
 								<Button
