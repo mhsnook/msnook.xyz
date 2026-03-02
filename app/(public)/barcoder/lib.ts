@@ -130,7 +130,7 @@ export function parsePrice(input: string): number | null {
 	const cleaned = input.replace(/,/g, '').trim()
 	if (!cleaned) return null
 	const num = parseFloat(cleaned)
-	if (isNaN(num) || num < 0) return undefined as unknown as null // caller checks
+	if (isNaN(num) || num < 0) return null
 	return num
 }
 
@@ -148,6 +148,33 @@ export function formatPrice(
 					.toString()
 					.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 	return `${config.symbol}${config.symbol.match(/[a-zA-Z]$/) ? ' ' : ''}${formatted}`
+}
+
+// ---- Totals ----
+
+export type CartTotals = {
+	total: number
+	totalQuantity: number
+	allPriced: boolean
+}
+
+export function computeCartTotals(
+	items: { price: number | null; quantity: number }[]
+): CartTotals {
+	let total = 0
+	let totalQuantity = 0
+	let allPriced = true
+
+	for (const item of items) {
+		totalQuantity += item.quantity
+		if (item.price !== null) {
+			total += item.price * item.quantity
+		} else {
+			allPriced = false
+		}
+	}
+
+	return { total: Math.round(total * 100) / 100, totalQuantity, allPriced }
 }
 
 // ---- Checkout encoding ----
@@ -172,12 +199,28 @@ export function decodeCheckoutItems(
 	itemsParam: string
 ): { sku: string; price: number | null; quantity: number }[] {
 	if (!itemsParam) return []
-	return itemsParam.split(',').map((chunk) => {
-		const [skuEncoded, priceStr, qtyStr] = chunk.split(':')
-		return {
-			sku: decodeURIComponent(skuEncoded || ''),
-			price: priceStr ? parseFloat(priceStr) : null,
-			quantity: parseInt(qtyStr || '1', 10),
-		}
-	})
+	return itemsParam
+		.split(',')
+		.filter(Boolean)
+		.map((chunk) => {
+			const [skuEncoded, priceStr, qtyStr] = chunk.split(':')
+			const sku = decodeURIComponent(skuEncoded || '')
+			const price = priceStr ? parseFloat(priceStr) : null
+			const quantity = parseInt(qtyStr || '1', 10)
+
+			if (
+				!sku ||
+				(price !== null && isNaN(price)) ||
+				isNaN(quantity) ||
+				quantity < 1
+			) {
+				return null
+			}
+
+			return { sku, price, quantity }
+		})
+		.filter(
+			(item): item is { sku: string; price: number | null; quantity: number } =>
+				item !== null
+		)
 }

@@ -15,6 +15,7 @@ import {
 	removeFromCart,
 	clearCart,
 	encodeCartForCheckout,
+	computeCartTotals,
 	getConfig,
 	saveConfig,
 	defaultConfig,
@@ -37,7 +38,6 @@ function BarcoderInner() {
 
 	// On mount, process ?sku= param and pick up currency config
 	useEffect(() => {
-		// Read currency config from URL params if present, otherwise from localStorage
 		const curParam = searchParams.get('cur')
 		const decParam = searchParams.get('dec')
 		if (curParam !== null || decParam !== null) {
@@ -103,12 +103,7 @@ function BarcoderInner() {
 		setCheckoutQR(null)
 	}
 
-	const total = cart.reduce((sum, item) => {
-		if (item.price !== null) return sum + item.price * item.quantity
-		return sum
-	}, 0)
-
-	const allPriced = cart.every((item) => item.price !== null)
+	const { total, allPriced } = computeCartTotals(cart)
 
 	return (
 		<main className="max-w-xl mx-auto px-4 my-8">
