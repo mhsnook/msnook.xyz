@@ -32,7 +32,7 @@ export interface Cycle {
 export interface PhaseProgress {
 	cycle: Cycle
 	phase: PhaseNumber
-	dayInPhase: number // 1-indexed
+	dayInPhase: number // 0-indexed
 	totalDaysInPhase: number
 	daysRemaining: number
 	isTransitioning: boolean // within 2 days of next phase
@@ -164,9 +164,9 @@ export function getPhaseProgress(date: Date = new Date()): PhaseProgress {
 		const phaseEnd = startOfDay(pr.end)
 
 		if (d >= phaseStart && d <= phaseEnd) {
-			const dayInPhase = daysBetween(phaseStart, d) + 1
+			const dayInPhase = daysBetween(phaseStart, d)
 			const daysRemaining = daysBetween(d, phaseEnd)
-			const phaseFraction = (dayInPhase - 1) / (pr.days - 1 || 1)
+			const phaseFraction = dayInPhase / (pr.days - 1 || 1)
 
 			// Transition window: last 2 days of the phase
 			const isTransitioning = daysRemaining <= 1 && pr.phase < 4
@@ -190,7 +190,7 @@ export function getPhaseProgress(date: Date = new Date()): PhaseProgress {
 	return {
 		cycle,
 		phase: 4 as PhaseNumber,
-		dayInPhase: p4.days,
+		dayInPhase: p4.days - 1,
 		totalDaysInPhase: p4.days,
 		daysRemaining: 0,
 		isTransitioning: false,

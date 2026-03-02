@@ -167,7 +167,7 @@ export default function CyclePage() {
 							className="text-sm font-medium"
 							style={{ color: theme.colors.fg }}
 						>
-							Day {dayInPhase - 1}, {theme.label.toLowerCase()}
+							Day {dayInPhase}, {theme.label.toLowerCase()}
 						</span>
 						<span className="text-sm" style={{ color: theme.colors.fgMuted }}>
 							{daysRemaining === 0
@@ -184,7 +184,7 @@ export default function CyclePage() {
 						<div
 							className="h-full rounded-full transition-all duration-1000"
 							style={{
-								width: `${(dayInPhase / totalDaysInPhase) * 100}%`,
+								width: `${((dayInPhase + 1) / totalDaysInPhase) * 100}%`,
 								backgroundColor: theme.colors.accent,
 							}}
 						/>

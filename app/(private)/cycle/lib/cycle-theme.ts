@@ -173,7 +173,7 @@ export const moonIcons: Record<PhaseNumber, string> = {
 	4: 'M12 2a10 10 0 0 0 0 20 10 10 0 0 0 0-20z M12 2a5 10 0 0 1 0 20', // waning (half)
 }
 
-/** Daily titles — 7 per phase, indexed by (dayInPhase - 1). */
+/** Daily titles — 7 per phase, indexed by dayInPhase (0-indexed). */
 export const dailyTitles: Record<PhaseNumber, string[]> = {
 	1: [
 		'What needs to happen this cycle? Get clear on scope.',
@@ -219,7 +219,7 @@ export const dailyTitles: Record<PhaseNumber, string[]> = {
  */
 export function getDailyTitle(phase: PhaseNumber, dayInPhase: number): string {
 	const titles = dailyTitles[phase]
-	return titles[(dayInPhase - 1) % titles.length]
+	return titles[dayInPhase % titles.length]
 }
 
 /** Ritual checklists per phase. */

@@ -114,7 +114,7 @@ export default function MoonArc({ progress, theme }: Props) {
 	let offset = 0
 	for (const p of cycle.phases) {
 		if (p.phase === phase) {
-			todayIndex = offset + progress.dayInPhase - 1
+			todayIndex = offset + progress.dayInPhase
 			break
 		}
 		offset += p.days
