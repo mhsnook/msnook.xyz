@@ -15,7 +15,7 @@
 		"seeds:auth": "supabase db dump --data-only --schema auth --local > ./supabase/seeds/auth.sql",
 		"seeds:public": "supabase db dump --data-only --schema public --local > ./supabase/seeds/public.sql",
 		"seeds:apply": "supabase db reset",
-		"prepare": "husky install"
+		"prepare": "husky install || true"
 	},
 	"dependencies": {
 		"@doist/todoist-api-typescript": "^6.5.1",
@@ -52,8 +52,7 @@
 		"supabase": "^2.34.3",
 		"tailwind-merge": "^2.6.0",
 		"tailwindcss": "4.1.8",
-		"typescript": "^5.8.3",
-		"vercel": "^37.14.0"
+		"typescript": "^5.8.3"
 	},
 	"packageManager": "pnpm@10.14.0"
 }

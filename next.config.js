@@ -2,10 +2,6 @@
 module.exports = {
 	reactStrictMode: true,
 	transpilePackages: ['react-markdown', 'remark-gfm', 'rehype-raw', 'shiki'],
-	i18n: {
-		locales: ['en'],
-		defaultLocale: 'en',
-	},
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
