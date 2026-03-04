@@ -26,9 +26,18 @@ export default function Page({ params: { slug } }) {
 
 	return error ? (
 		<ErrorList summary="Error loading post" error={error?.message} />
+	) : isPending ? (
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
+			loading...
+		</div>
+	) : !data ? (
+		<div className="max-w-xl p-6">
+			<h2 className="h4">Post not found</h2>
+			<p>No post exists with the slug &ldquo;{slug}&rdquo;.</p>
+		</div>
 	) : (
 		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
-			{isPending ? <>loading...</> : <Client initialData={data} />}
+			<Client initialData={data} />
 		</div>
 	)
 }
