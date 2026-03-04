@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useRef, useEffect } from 'react'
 import { Tables } from '@/types/supabase'
 import { useRouter } from 'next/navigation'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
@@ -55,6 +56,103 @@ const PostEditSchema = z.object({
 
 type PostUpdate = z.infer<typeof PostEditSchema>
 
+function OptionsMenu({
+	postId,
+	slug,
+}: {
+	postId: string
+	slug: string
+}) {
+	const [open, setOpen] = useState(false)
+	const menuRef = useRef<HTMLDivElement>(null)
+	const router = useRouter()
+	const queryClient = useQueryClient()
+
+	useEffect(() => {
+		function handleClickOutside(e: MouseEvent) {
+			if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+				setOpen(false)
+			}
+		}
+		if (open) document.addEventListener('mousedown', handleClickOutside)
+		return () => document.removeEventListener('mousedown', handleClickOutside)
+	}, [open])
+
+	async function handleDelete() {
+		setOpen(false)
+		if (!confirm('Are you sure you want to delete this post? This cannot be undone.')) return
+		const { error } = await createClient()
+			.from('posts')
+			.delete()
+			.eq('id', postId)
+		if (error) {
+			alert(`Failed to delete: ${error.message}`)
+			return
+		}
+		await revalidatePost(slug)
+		queryClient.invalidateQueries({ queryKey: ['post', slug] })
+		router.push('/posts/drafts')
+	}
+
+	async function handleChangeSlug() {
+		setOpen(false)
+		const newSlug = prompt('Enter new slug:', slug)
+		if (!newSlug || newSlug === slug) return
+		if (!/^[a-z0-9][a-z0-9-_]+[a-z0-9]$/.test(newSlug)) {
+			alert('Invalid slug. Use lowercase letters, numbers, hyphens, and underscores (min 3 chars).')
+			return
+		}
+		if (!confirm(`Change slug from "${slug}" to "${newSlug}"? This will break existing links.`)) return
+		const { error } = await createClient()
+			.from('posts')
+			.update({ slug: newSlug })
+			.eq('id', postId)
+		if (error) {
+			alert(`Failed to change slug: ${error.message}`)
+			return
+		}
+		await revalidatePost(slug)
+		await revalidatePost(newSlug)
+		queryClient.invalidateQueries({ queryKey: ['post', slug] })
+		router.replace(`/posts/${newSlug}/edit`)
+	}
+
+	return (
+		<div className="relative" ref={menuRef}>
+			<button
+				type="button"
+				onClick={() => setOpen((v) => !v)}
+				className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500"
+				aria-label="Post options"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+					<circle cx="12" cy="5" r="2" />
+					<circle cx="12" cy="12" r="2" />
+					<circle cx="12" cy="19" r="2" />
+				</svg>
+			</button>
+			{open && (
+				<div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-10">
+					<button
+						type="button"
+						onClick={handleChangeSlug}
+						className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+					>
+						Change slug
+					</button>
+					<button
+						type="button"
+						onClick={handleDelete}
+						className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+					>
+						Delete post
+					</button>
+				</div>
+			)}
+		</div>
+	)
+}
+
 function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const { session } = useSession()
 
@@ -94,7 +192,10 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	return (
 		<>
 			<div className="col-span-2">
-				<h1 className="h3">Edit your post</h1>
+				<div className="flex justify-between items-center">
+					<h1 className="h3">Edit your post</h1>
+					<OptionsMenu postId={initialData.id} slug={initialData.slug} />
+				</div>
 				<form
 					noValidate
 					className="form flex flex-col gap-4"
