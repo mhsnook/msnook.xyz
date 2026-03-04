@@ -1,10 +1,17 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useEffect, useCallback, useMemo } from 'react'
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@doist/todoist-api-typescript'
 import type { PhaseNumber } from './cycle'
-import { phaseRituals, dailyTitles, getPhaseTheme } from './cycle-theme'
+import {
+	phaseRituals as defaultRituals,
+	dailyTitles,
+	getPhaseTheme,
+} from './cycle-theme'
+import { appStorage } from '@/lib/app-store'
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -35,38 +42,19 @@ export type CycleContentEntry = {
 	sortOrder: number
 }
 
-// ── localStorage keys ──────────────────────────────────────────────
-
-const KEYS = {
-	ritualTemplates: 'cycle-ritual-templates',
-	phaseRituals: (cycleKey: string, phase: PhaseNumber) =>
-		`cycle-phase-rituals-${cycleKey}-p${phase}`,
-	content: 'cycle-content',
-	lastSeenPhase: 'cycle-last-seen-phase',
-	todoistProjectId: 'cycle-todoist-project-id',
-}
-
-// ── localStorage helpers ───────────────────────────────────────────
-
-function readLS<T>(key: string): T | null {
-	if (typeof window === 'undefined') return null
-	try {
-		const raw = localStorage.getItem(key)
-		return raw ? (JSON.parse(raw) as T) : null
-	} catch {
-		return null
-	}
-}
-
-function writeLS<T>(key: string, value: T) {
-	if (typeof window === 'undefined') return
-	try {
-		localStorage.setItem(key, JSON.stringify(value))
-	} catch {}
-}
+// ── Helpers ────────────────────────────────────────────────────────
 
 function genId(): string {
 	return crypto.randomUUID().slice(0, 12)
+}
+
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+	const res = await fetch(url, init)
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({ error: res.statusText }))
+		throw new Error(err.error || 'Request failed')
+	}
+	return res.json()
 }
 
 // ── Seed data ──────────────────────────────────────────────────────
@@ -74,7 +62,7 @@ function genId(): string {
 function seedTemplates(): RitualTemplate[] {
 	const templates: RitualTemplate[] = []
 	for (const phase of [1, 2, 3, 4] as PhaseNumber[]) {
-		phaseRituals[phase].forEach((content, i) => {
+		defaultRituals[phase].forEach((content, i) => {
 			templates.push({
 				id: genId(),
 				phase,
@@ -92,7 +80,6 @@ function seedContent(): CycleContentEntry[] {
 	for (const phase of [1, 2, 3, 4] as PhaseNumber[]) {
 		const theme = getPhaseTheme(phase)
 
-		// Mantra
 		entries.push({
 			id: genId(),
 			kind: 'mantra',
@@ -103,7 +90,6 @@ function seedContent(): CycleContentEntry[] {
 			sortOrder: 0,
 		})
 
-		// Description
 		entries.push({
 			id: genId(),
 			kind: 'description',
@@ -114,7 +100,6 @@ function seedContent(): CycleContentEntry[] {
 			sortOrder: 0,
 		})
 
-		// Daily titles
 		dailyTitles[phase].forEach((title, i) => {
 			entries.push({
 				id: genId(),
@@ -130,69 +115,164 @@ function seedContent(): CycleContentEntry[] {
 	return entries
 }
 
-// ── Fetch helper ───────────────────────────────────────────────────
+// ── Legacy migration ───────────────────────────────────────────────
 
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-	const res = await fetch(url, init)
-	if (!res.ok) {
-		const err = await res.json().catch(() => ({ error: res.statusText }))
-		throw new Error(err.error || 'Request failed')
-	}
-	return res.json()
+const LEGACY_KEYS = {
+	ritualTemplates: 'cycle-ritual-templates',
+	content: 'cycle-content',
+	lastSeenPhase: 'cycle-last-seen-phase',
+	todoistProjectId: 'cycle-todoist-project-id',
 }
 
-// ── localStorage hooks ─────────────────────────────────────────────
+function readLS<T>(key: string): T | null {
+	if (typeof window === 'undefined') return null
+	try {
+		const raw = localStorage.getItem(key)
+		return raw ? (JSON.parse(raw) as T) : null
+	} catch {
+		return null
+	}
+}
+
+interface LegacyData {
+	content?: CycleContentEntry[]
+	ritualTemplates?: RitualTemplate[]
+	phaseRituals?: Record<string, PhaseRitual[]>
+	lastSeenPhase?: string
+	todoistProjectId?: string
+}
+
+function migrateLegacy(): LegacyData | null {
+	if (typeof window === 'undefined') return null
+
+	const content = readLS<CycleContentEntry[]>(LEGACY_KEYS.content)
+	const templates = readLS<RitualTemplate[]>(LEGACY_KEYS.ritualTemplates)
+	const lastSeen = readLS<string>(LEGACY_KEYS.lastSeenPhase)
+	const projectId = readLS<string>(LEGACY_KEYS.todoistProjectId)
+
+	// Check if any legacy data exists
+	const hasLegacy =
+		content !== null ||
+		templates !== null ||
+		lastSeen !== null ||
+		projectId !== null
+
+	// Also scan for phase ritual keys
+	const phaseRituals: Record<string, PhaseRitual[]> = {}
+	for (let i = 0; i < localStorage.length; i++) {
+		const key = localStorage.key(i)
+		if (key?.startsWith('cycle-phase-rituals-')) {
+			const data = readLS<PhaseRitual[]>(key)
+			if (data) {
+				phaseRituals[key.replace('cycle-phase-rituals-', '')] = data
+			}
+		}
+	}
+
+	if (!hasLegacy && Object.keys(phaseRituals).length === 0) return null
+
+	// Clean up old keys
+	localStorage.removeItem(LEGACY_KEYS.content)
+	localStorage.removeItem(LEGACY_KEYS.ritualTemplates)
+	localStorage.removeItem(LEGACY_KEYS.lastSeenPhase)
+	localStorage.removeItem(LEGACY_KEYS.todoistProjectId)
+	for (let i = localStorage.length - 1; i >= 0; i--) {
+		const key = localStorage.key(i)
+		if (key?.startsWith('cycle-phase-rituals-')) localStorage.removeItem(key)
+	}
+
+	return {
+		...(content?.length ? { content } : {}),
+		...(templates?.length ? { ritualTemplates: templates } : {}),
+		...(Object.keys(phaseRituals).length ? { phaseRituals } : {}),
+		...(lastSeen ? { lastSeenPhase: lastSeen } : {}),
+		...(projectId ? { todoistProjectId: projectId } : {}),
+	}
+}
+
+// Run migration before store creation so initial state can use it
+const legacy = typeof window !== 'undefined' ? migrateLegacy() : null
+
+// ── Zustand store ──────────────────────────────────────────────────
+
+interface CycleState {
+	content: CycleContentEntry[]
+	ritualTemplates: RitualTemplate[]
+	phaseRituals: Record<string, PhaseRitual[]>
+	lastSeenPhase: string | null
+	todoistProjectId: string | null
+}
+
+interface CycleActions {
+	setContent: (entries: CycleContentEntry[]) => void
+	setRitualTemplates: (templates: RitualTemplate[]) => void
+	setPhaseRituals: (key: string, rituals: PhaseRitual[]) => void
+	setLastSeenPhase: (phase: string) => void
+	setTodoistProjectId: (id: string) => void
+}
+
+export const useCycleStore = create<CycleState & CycleActions>()(
+	persist(
+		(set) => ({
+			// State — use legacy data if migrating, otherwise seed defaults
+			content: legacy?.content ?? seedContent(),
+			ritualTemplates: legacy?.ritualTemplates ?? seedTemplates(),
+			phaseRituals: legacy?.phaseRituals ?? {},
+			lastSeenPhase: legacy?.lastSeenPhase ?? null,
+			todoistProjectId: legacy?.todoistProjectId ?? null,
+
+			// Actions
+			setContent: (content) => set({ content }),
+			setRitualTemplates: (ritualTemplates) => set({ ritualTemplates }),
+			setPhaseRituals: (key, rituals) =>
+				set((state) => ({
+					phaseRituals: { ...state.phaseRituals, [key]: rituals },
+				})),
+			setLastSeenPhase: (lastSeenPhase) => set({ lastSeenPhase }),
+			setTodoistProjectId: (todoistProjectId) => set({ todoistProjectId }),
+		}),
+		{
+			name: 'cycle-tracker',
+			storage: createJSONStorage(() => appStorage),
+			version: 1,
+			migrate: (persisted, version) => {
+				// Future migrations go here:
+				// if (version === 0) { ... }
+				return persisted as CycleState & CycleActions
+			},
+		},
+	),
+)
+
+// ── Convenience hooks (same API as the old localStorage hooks) ─────
+
+export function useCycleContent() {
+	const content = useCycleStore((s) => s.content)
+	const setContent = useCycleStore((s) => s.setContent)
+	return [content, setContent] as const
+}
 
 export function useRitualTemplates() {
-	const [templates, setTemplatesState] = useState<RitualTemplate[]>(() => {
-		const stored = readLS<RitualTemplate[]>(KEYS.ritualTemplates)
-		if (stored && stored.length > 0) return stored
-		const seeded = seedTemplates()
-		writeLS(KEYS.ritualTemplates, seeded)
-		return seeded
-	})
-
-	const setTemplates = useCallback((next: RitualTemplate[]) => {
-		setTemplatesState(next)
-		writeLS(KEYS.ritualTemplates, next)
-	}, [])
-
+	const templates = useCycleStore((s) => s.ritualTemplates)
+	const setTemplates = useCycleStore((s) => s.setRitualTemplates)
 	return [templates, setTemplates] as const
 }
 
 export function usePhaseRituals(cycleKey: string, phase: PhaseNumber) {
-	const key = KEYS.phaseRituals(cycleKey, phase)
-
-	const [rituals, setRitualsState] = useState<PhaseRitual[] | null>(() => {
-		return readLS<PhaseRitual[]>(key)
-	})
-
+	const key = `${cycleKey}-p${phase}`
+	const rituals = useCycleStore((s) => s.phaseRituals[key] ?? null)
+	const setPhaseRituals = useCycleStore((s) => s.setPhaseRituals)
 	const setRituals = useCallback(
-		(next: PhaseRitual[]) => {
-			setRitualsState(next)
-			writeLS(key, next)
-		},
-		[key],
+		(next: PhaseRitual[]) => setPhaseRituals(key, next),
+		[key, setPhaseRituals],
 	)
-
 	return [rituals, setRituals] as const
 }
 
-export function useCycleContent() {
-	const [entries, setEntriesState] = useState<CycleContentEntry[]>(() => {
-		const stored = readLS<CycleContentEntry[]>(KEYS.content)
-		if (stored && stored.length > 0) return stored
-		const seeded = seedContent()
-		writeLS(KEYS.content, seeded)
-		return seeded
-	})
-
-	const setEntries = useCallback((next: CycleContentEntry[]) => {
-		setEntriesState(next)
-		writeLS(KEYS.content, next)
-	}, [])
-
-	return [entries, setEntries] as const
+export function useLastSeenPhase() {
+	const value = useCycleStore((s) => s.lastSeenPhase)
+	const setValue = useCycleStore((s) => s.setLastSeenPhase)
+	return [value, setValue] as const
 }
 
 export function useResolvedContent(
@@ -200,10 +280,10 @@ export function useResolvedContent(
 	phase: PhaseNumber,
 	dayIndex?: number,
 ) {
-	const [entries] = useCycleContent()
+	const content = useCycleStore((s) => s.content)
 
 	return useMemo(() => {
-		const matching = entries.filter(
+		const matching = content.filter(
 			(e) =>
 				e.kind === kind &&
 				e.phase === phase &&
@@ -212,7 +292,6 @@ export function useResolvedContent(
 
 		if (matching.length > 0) {
 			matching.sort((a, b) => a.sortOrder - b.sortOrder)
-			// Rotate daily
 			const index = Math.floor(Date.now() / 86_400_000) % matching.length
 			const entry = matching[index]
 
@@ -249,20 +328,7 @@ export function useResolvedContent(
 		}
 
 		return { content: '', author: null, isCustom: false }
-	}, [entries, kind, phase, dayIndex])
-}
-
-export function useLastSeenPhase() {
-	const [value, setValueState] = useState<string | null>(() => {
-		return readLS<string>(KEYS.lastSeenPhase)
-	})
-
-	const setValue = useCallback((next: string) => {
-		setValueState(next)
-		writeLS(KEYS.lastSeenPhase, next)
-	}, [])
-
-	return [value, setValue] as const
+	}, [content, kind, phase, dayIndex])
 }
 
 // ── Todoist hooks (React Query) ────────────────────────────────────
@@ -273,12 +339,11 @@ export function useCycleSetup() {
 	return useQuery<SetupResult>({
 		queryKey: ['cycle', 'setup'],
 		queryFn: async () => {
-			// Check localStorage cache first
-			const cached = readLS<string>(KEYS.todoistProjectId)
-			if (cached) return { projectId: cached }
+			const { todoistProjectId, setTodoistProjectId } = useCycleStore.getState()
+			if (todoistProjectId) return { projectId: todoistProjectId }
 
 			const result = await fetchJson<SetupResult>('/api/cycle/setup')
-			writeLS(KEYS.todoistProjectId, result.projectId)
+			setTodoistProjectId(result.projectId)
 			return result
 		},
 		staleTime: Infinity,
@@ -311,7 +376,6 @@ export function useApproveRituals() {
 			const phaseRitualList: PhaseRitual[] = []
 
 			for (const ritual of args.rituals) {
-				// Create Todoist task
 				const task = await fetchJson<Task>('/api/todo/tasks', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -331,9 +395,9 @@ export function useApproveRituals() {
 				})
 			}
 
-			// Write to localStorage
-			const key = KEYS.phaseRituals(args.cycleKey, args.phase)
-			writeLS(key, phaseRitualList)
+			// Write to Zustand store
+			const key = `${args.cycleKey}-p${args.phase}`
+			useCycleStore.getState().setPhaseRituals(key, phaseRitualList)
 
 			return phaseRitualList
 		},
@@ -357,24 +421,23 @@ export function useToggleRitual() {
 			if (!ritual.todoistTaskId) return ritual
 
 			if (ritual.isCompleted) {
-				// Reopen
 				await fetchJson(`/api/cycle/tasks/${ritual.todoistTaskId}/reopen`, {
 					method: 'POST',
 				})
 			} else {
-				// Close
 				await fetchJson(`/api/todo/tasks/${ritual.todoistTaskId}/close`, {
 					method: 'POST',
 				})
 			}
 
-			// Update localStorage
-			const key = KEYS.phaseRituals(cycleKey, phase)
-			const existing = readLS<PhaseRitual[]>(key) ?? []
+			// Update Zustand store
+			const key = `${cycleKey}-p${phase}`
+			const { phaseRituals, setPhaseRituals } = useCycleStore.getState()
+			const existing = phaseRituals[key] ?? []
 			const updated = existing.map((r) =>
 				r.id === ritual.id ? { ...r, isCompleted: !r.isCompleted } : r,
 			)
-			writeLS(key, updated)
+			setPhaseRituals(key, updated)
 
 			return { ...ritual, isCompleted: !ritual.isCompleted }
 		},
