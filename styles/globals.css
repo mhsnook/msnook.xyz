@@ -103,6 +103,25 @@ layer(base);
 	}
 }
 
+/* ── Starfield (404 hero) ─────────────────────────────────────── */
+
+@keyframes twinkle {
+	0%,
+	100% {
+		opacity: 0.15;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+@utility star {
+	position: absolute;
+	border-radius: 9999px;
+	background: white;
+	animation: twinkle ease-in-out infinite;
+}
+
 /* ── Cycle Dashboard Theming ──────────────────────────────────── */
 
 @layer base {

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 import { buttonStyles, DateSpan } from '@/components/lib'
 import { PostArticle } from '@/components/post'
 import IffLoggedIn from '@/app/iff-logged-in'
@@ -49,6 +50,7 @@ const PostSidebar = ({ post }: { post: Tables<'posts'> }) => {
 
 export default async function Page({ params: { slug } }) {
 	const post = await fetchOnePost(slug)
+	if (!post) notFound()
 
 	return (
 		<>
