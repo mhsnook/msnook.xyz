@@ -6,7 +6,10 @@ export default function RocketDemo() {
 			<div className="flex flex-wrap gap-10 items-center justify-center">
 				{/* With face in porthole */}
 				<div className="flex flex-col items-center gap-2">
-					<div className="relative bg-gray-400 p-4 rounded-lg" style={{ width: 232, height: 232 }}>
+					<div
+						className="relative bg-gray-400 p-4 rounded-lg"
+						style={{ width: 232, height: 232 }}
+					>
 						<img
 							src="/images/my-face.png"
 							alt="Face"
@@ -14,7 +17,7 @@ export default function RocketDemo() {
 							style={{
 								width: 38,
 								height: 38,
-								left: `${16 + 120 - 19}px`,
+								left: `${16 + 121 - 19}px`,
 								top: `${16 + 91 - 19}px`,
 							}}
 						/>
@@ -31,7 +34,10 @@ export default function RocketDemo() {
 
 				{/* On dark background with face */}
 				<div className="flex flex-col items-center gap-2">
-					<div className="relative bg-gray-800 p-4 rounded-lg" style={{ width: 232, height: 232 }}>
+					<div
+						className="relative bg-gray-800 p-4 rounded-lg"
+						style={{ width: 232, height: 232 }}
+					>
 						<img
 							src="/images/my-face.png"
 							alt="Face"
@@ -39,7 +45,7 @@ export default function RocketDemo() {
 							style={{
 								width: 38,
 								height: 38,
-								left: `${16 + 120 - 19}px`,
+								left: `${16 + 121 - 19}px`,
 								top: `${16 + 91 - 19}px`,
 							}}
 						/>
@@ -56,7 +62,10 @@ export default function RocketDemo() {
 
 				{/* On blue background with face */}
 				<div className="flex flex-col items-center gap-2">
-					<div className="relative bg-blue-500 p-4 rounded-lg" style={{ width: 232, height: 232 }}>
+					<div
+						className="relative bg-blue-500 p-4 rounded-lg"
+						style={{ width: 232, height: 232 }}
+					>
 						<img
 							src="/images/my-face.png"
 							alt="Face"
@@ -64,7 +73,7 @@ export default function RocketDemo() {
 							style={{
 								width: 38,
 								height: 38,
-								left: `${16 + 120 - 19}px`,
+								left: `${16 + 121 - 19}px`,
 								top: `${16 + 91 - 19}px`,
 							}}
 						/>
@@ -98,7 +107,7 @@ export default function RocketDemo() {
 							style={{
 								width: 38,
 								height: 38,
-								left: `${16 + 120 - 19}px`,
+								left: `${16 + 121 - 19}px`,
 								top: `${16 + 91 - 19}px`,
 							}}
 						/>

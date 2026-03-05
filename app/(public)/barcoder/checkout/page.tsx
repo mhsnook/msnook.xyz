@@ -66,18 +66,13 @@ function CheckoutInner() {
 					<tbody className="divide-y">
 						{items.map((item, i) => (
 							<tr key={`${item.sku}-${i}`}>
-								<td className="text-xl px-5 py-4">
-									{item.sku}
-								</td>
+								<td className="text-xl px-5 py-4">{item.sku}</td>
 								<td className="text-xl text-center px-3 py-4">
 									{item.quantity}
 								</td>
 								<td className="text-xl text-right px-5 py-4">
 									{item.price !== null
-										? formatPrice(
-												item.price * item.quantity,
-												config
-											)
+										? formatPrice(item.price * item.quantity, config)
 										: '—'}
 								</td>
 							</tr>
@@ -86,9 +81,7 @@ function CheckoutInner() {
 					{allPriced && (
 						<tfoot className="border-t-2">
 							<tr>
-								<td className="text-xl font-bold px-5 py-4">
-									Total
-								</td>
+								<td className="text-xl font-bold px-5 py-4">Total</td>
 								<td className="text-xl text-center px-3 py-4 font-semibold">
 									{totalQuantity}
 								</td>
@@ -102,23 +95,17 @@ function CheckoutInner() {
 			</div>
 
 			<div className="mt-8 text-center">
-				<Link
-					href="/barcoder"
-					className="text-cyan-content underline text-lg"
-				>
+				<Link href="/barcoder" className="text-cyan-content underline text-lg">
 					Back to scanner
 				</Link>
 			</div>
 
 			<div className="mt-10 pt-6 border-t">
 				<p className="text-base text-gray-500">
-					This page is a demo of a process for a furniture expo or
-					similar event. No login or data collection for anyone
-					involved. Anyone visiting the{' '}
-					<Link
-						href="/barcoder/setup"
-						className="text-cyan-content underline"
-					>
+					This page is a demo of a process for a furniture expo or similar
+					event. No login or data collection for anyone involved. Anyone
+					visiting the{' '}
+					<Link href="/barcoder/setup" className="text-cyan-content underline">
 						setup
 					</Link>{' '}
 					page can manage and print QR codes.

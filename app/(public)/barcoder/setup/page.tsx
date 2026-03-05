@@ -104,9 +104,7 @@ export default function SetupPage() {
 						id="currency"
 						type="text"
 						value={config.symbol}
-						onChange={(e) =>
-							handleConfigChange({ symbol: e.target.value })
-						}
+						onChange={(e) => handleConfigChange({ symbol: e.target.value })}
 						placeholder="$"
 						className="w-full border rounded-md px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-cyan"
 					/>
@@ -131,10 +129,7 @@ export default function SetupPage() {
 			<form onSubmit={handleAdd} className="mb-10 print:hidden">
 				<div className="flex flex-col sm:flex-row gap-3 items-end">
 					<div className="flex-1 w-full">
-						<label
-							htmlFor="sku"
-							className="block text-lg font-semibold mb-1"
-						>
+						<label htmlFor="sku" className="block text-lg font-semibold mb-1">
 							SKU / Item Name
 						</label>
 						<input
@@ -147,10 +142,7 @@ export default function SetupPage() {
 						/>
 					</div>
 					<div className="w-full sm:w-36">
-						<label
-							htmlFor="price"
-							className="block text-lg font-semibold mb-1"
-						>
+						<label htmlFor="price" className="block text-lg font-semibold mb-1">
 							Price
 						</label>
 						<input
@@ -167,9 +159,7 @@ export default function SetupPage() {
 						Add Item
 					</Button>
 				</div>
-				{error && (
-					<p className="text-red-600 text-lg mt-2">{error}</p>
-				)}
+				{error && <p className="text-red-600 text-lg mt-2">{error}</p>}
 			</form>
 
 			{catalog.length === 0 ? (
@@ -179,9 +169,7 @@ export default function SetupPage() {
 			) : (
 				<>
 					<div className="flex justify-between items-center mb-4">
-						<h2 className="h3">
-							Your Items ({catalog.length})
-						</h2>
+						<h2 className="h3">Your Items ({catalog.length})</h2>
 						<Button
 							variant="outlines"
 							onClick={() => window.print()}
@@ -199,16 +187,10 @@ export default function SetupPage() {
 									className="border rounded-lg p-5 flex items-center gap-5 print:break-inside-avoid"
 								>
 									<div className="shrink-0">
-										<QRCodeSVG
-											value={url}
-											size={120}
-											level="M"
-										/>
+										<QRCodeSVG value={url} size={120} level="M" />
 									</div>
 									<div className="flex-1 min-w-0">
-										<p className="text-xl font-semibold truncate">
-											{item.sku}
-										</p>
+										<p className="text-xl font-semibold truncate">{item.sku}</p>
 										<p className="text-lg text-gray-600">
 											{formatPrice(item.price, config)}
 										</p>
@@ -217,9 +199,7 @@ export default function SetupPage() {
 										</p>
 									</div>
 									<button
-										onClick={() =>
-											handleRemove(item.sku)
-										}
+										onClick={() => handleRemove(item.sku)}
 										className="text-red-500 hover:text-red-700 text-2xl leading-none px-2 cursor-pointer print:hidden"
 										aria-label={`Remove ${item.sku}`}
 									>
