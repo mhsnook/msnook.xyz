@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useCallback, useMemo } from 'react'
-import { create } from 'zustand'
+import { useStore } from 'zustand'
+import { createStore } from 'zustand/vanilla'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@doist/todoist-api-typescript'
@@ -211,7 +212,9 @@ interface CycleActions {
 	setTodoistProjectId: (id: string) => void
 }
 
-export const useCycleStore = create<CycleState & CycleActions>()(
+type CycleStore = CycleState & CycleActions
+
+export const cycleStore = createStore<CycleStore>()(
 	persist(
 		(set) => ({
 			// State — use legacy data if migrating, otherwise seed defaults
@@ -243,6 +246,12 @@ export const useCycleStore = create<CycleState & CycleActions>()(
 		},
 	),
 )
+
+// ── React hook wrapper ─────────────────────────────────────────────
+
+function useCycleStore<T>(selector: (state: CycleStore) => T): T {
+	return useStore(cycleStore, selector)
+}
 
 // ── Convenience hooks (same API as the old localStorage hooks) ─────
 
@@ -339,7 +348,7 @@ export function useCycleSetup() {
 	return useQuery<SetupResult>({
 		queryKey: ['cycle', 'setup'],
 		queryFn: async () => {
-			const { todoistProjectId, setTodoistProjectId } = useCycleStore.getState()
+			const { todoistProjectId, setTodoistProjectId } = cycleStore.getState()
 			if (todoistProjectId) return { projectId: todoistProjectId }
 
 			const result = await fetchJson<SetupResult>('/api/cycle/setup')
@@ -397,7 +406,7 @@ export function useApproveRituals() {
 
 			// Write to Zustand store
 			const key = `${args.cycleKey}-p${args.phase}`
-			useCycleStore.getState().setPhaseRituals(key, phaseRitualList)
+			cycleStore.getState().setPhaseRituals(key, phaseRitualList)
 
 			return phaseRitualList
 		},
@@ -432,7 +441,7 @@ export function useToggleRitual() {
 
 			// Update Zustand store
 			const key = `${cycleKey}-p${phase}`
-			const { phaseRituals, setPhaseRituals } = useCycleStore.getState()
+			const { phaseRituals, setPhaseRituals } = cycleStore.getState()
 			const existing = phaseRituals[key] ?? []
 			const updated = existing.map((r) =>
 				r.id === ritual.id ? { ...r, isCompleted: !r.isCompleted } : r,
