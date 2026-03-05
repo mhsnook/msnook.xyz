@@ -25,4 +25,18 @@ export async function ensureProjectSetup(): Promise<SetupResult> {
 	return { projectId: project.id }
 }
 
+const CYCLE_PROJECT_NAME = 'Cycle Rituals'
+
+export async function ensureCycleProjectSetup(): Promise<SetupResult> {
+	const api = getApi()
+
+	const { results: projects } = await api.getProjects()
+	let project = projects.find((p) => p.name === CYCLE_PROJECT_NAME)
+	if (!project) {
+		project = await api.addProject({ name: CYCLE_PROJECT_NAME })
+	}
+
+	return { projectId: project.id }
+}
+
 export { type Task }
