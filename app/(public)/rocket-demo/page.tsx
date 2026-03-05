@@ -10,7 +10,7 @@ export default function RocketDemo() {
 						<img
 							src="/images/my-face.png"
 							alt="Face"
-							className="absolute rounded-full object-cover"
+							className="absolute object-cover"
 							style={{
 								width: 38,
 								height: 38,
@@ -35,7 +35,7 @@ export default function RocketDemo() {
 						<img
 							src="/images/my-face.png"
 							alt="Face"
-							className="absolute rounded-full object-cover"
+							className="absolute object-cover"
 							style={{
 								width: 38,
 								height: 38,
@@ -60,7 +60,7 @@ export default function RocketDemo() {
 						<img
 							src="/images/my-face.png"
 							alt="Face"
-							className="absolute rounded-full object-cover"
+							className="absolute object-cover"
 							style={{
 								width: 38,
 								height: 38,
@@ -94,7 +94,7 @@ export default function RocketDemo() {
 						<img
 							src="/images/my-face.png"
 							alt="Face"
-							className="absolute rounded-full object-cover"
+							className="absolute object-cover"
 							style={{
 								width: 38,
 								height: 38,
