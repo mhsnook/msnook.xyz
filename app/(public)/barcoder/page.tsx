@@ -44,9 +44,7 @@ function BarcoderInner() {
 			const urlConfig: CurrencyConfig = {
 				symbol: curParam ?? defaultConfig.symbol,
 				decimals:
-					decParam !== null
-						? parseInt(decParam, 10)
-						: defaultConfig.decimals,
+					decParam !== null ? parseInt(decParam, 10) : defaultConfig.decimals,
 			}
 			setConfig(urlConfig)
 			saveConfig(urlConfig)
@@ -128,9 +126,7 @@ function BarcoderInner() {
 
 			{cart.length === 0 ? (
 				<div className="text-center py-16">
-					<p className="text-2xl text-gray-400 mb-3">
-						No items yet
-					</p>
+					<p className="text-2xl text-gray-400 mb-3">No items yet</p>
 					<p className="text-lg text-gray-500">
 						Scan a product QR code to get started.
 					</p>
@@ -140,29 +136,21 @@ function BarcoderInner() {
 					{/* Cart items */}
 					<ul className="divide-y mb-6">
 						{cart.map((item) => (
-							<li
-								key={item.sku}
-								className="py-4 flex items-center gap-4"
-							>
+							<li key={item.sku} className="py-4 flex items-center gap-4">
 								<div className="flex-1 min-w-0">
-									<p className="text-xl font-semibold truncate">
-										{item.sku}
-									</p>
+									<p className="text-xl font-semibold truncate">{item.sku}</p>
 									<p className="text-lg text-gray-600">
 										{formatPrice(item.price, config)}
-										{item.quantity > 1 &&
-											item.price !== null && (
-												<span className="text-gray-400 ml-2">
-													({formatPrice(item.price * item.quantity, config)})
-												</span>
-											)}
+										{item.quantity > 1 && item.price !== null && (
+											<span className="text-gray-400 ml-2">
+												({formatPrice(item.price * item.quantity, config)})
+											</span>
+										)}
 									</p>
 								</div>
 								<div className="flex items-center gap-1 shrink-0">
 									<button
-										onClick={() =>
-											handleDecrement(item.sku)
-										}
+										onClick={() => handleDecrement(item.sku)}
 										disabled={item.quantity <= 1}
 										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
 										aria-label="Decrease quantity"
@@ -173,9 +161,7 @@ function BarcoderInner() {
 										{item.quantity}
 									</span>
 									<button
-										onClick={() =>
-											handleIncrement(item.sku)
-										}
+										onClick={() => handleIncrement(item.sku)}
 										className="w-10 h-10 rounded-md border text-xl font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
 										aria-label="Increase quantity"
 									>
@@ -196,9 +182,7 @@ function BarcoderInner() {
 					{/* Total */}
 					{allPriced && cart.length > 0 && (
 						<div className="border-t pt-4 mb-6 flex justify-between items-center">
-							<span className="text-xl font-semibold">
-								Total
-							</span>
+							<span className="text-xl font-semibold">Total</span>
 							<span className="text-2xl font-bold">
 								{formatPrice(total, config)}
 							</span>
@@ -207,23 +191,14 @@ function BarcoderInner() {
 
 					{/* Checkout section */}
 					{!checkoutQR ? (
-						<Button
-							onClick={handleCheckout}
-							className="w-full text-xl py-4"
-						>
+						<Button onClick={handleCheckout} className="w-full text-xl py-4">
 							Checkout
 						</Button>
 					) : (
 						<div className="border rounded-lg p-6 text-center">
-							<h2 className="h3 mb-4">
-								Show this to the cashier
-							</h2>
+							<h2 className="h3 mb-4">Show this to the cashier</h2>
 							<div className="inline-block bg-white p-4 rounded-lg">
-								<QRCodeSVG
-									value={checkoutQR}
-									size={220}
-									level="M"
-								/>
+								<QRCodeSVG value={checkoutQR} size={220} level="M" />
 							</div>
 							<p className="text-lg text-gray-500 mt-4">
 								{cart.length} item{cart.length !== 1 && 's'}
@@ -245,13 +220,10 @@ function BarcoderInner() {
 
 			<div className="mt-10 pt-6 border-t">
 				<p className="text-base text-gray-500">
-					This page is a demo of a process for a furniture expo or
-					similar event. No login or data collection for anyone
-					involved. Anyone visiting the{' '}
-					<Link
-						href="/barcoder/setup"
-						className="text-cyan-content underline"
-					>
+					This page is a demo of a process for a furniture expo or similar
+					event. No login or data collection for anyone involved. Anyone
+					visiting the{' '}
+					<Link href="/barcoder/setup" className="text-cyan-content underline">
 						setup
 					</Link>{' '}
 					page can manage and print QR codes.

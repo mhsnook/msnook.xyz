@@ -55,7 +55,7 @@ export function saveCart(cart: CartItem[]) {
 
 export function addToCart(
 	sku: string,
-	price: number | null
+	price: number | null,
 ): 'added' | 'exists' {
 	const cart = getCart()
 	const existing = cart.find((item) => item.sku === sku)
@@ -138,7 +138,7 @@ export function parsePrice(input: string): number | null {
 
 export function formatPrice(
 	price: number | null,
-	config: CurrencyConfig = defaultConfig
+	config: CurrencyConfig = defaultConfig,
 ): string {
 	if (price === null) return '—'
 	const formatted =
@@ -159,7 +159,7 @@ export type CartTotals = {
 }
 
 export function computeCartTotals(
-	items: { price: number | null; quantity: number }[]
+	items: { price: number | null; quantity: number }[],
 ): CartTotals {
 	let total = 0
 	let totalQuantity = 0
@@ -181,7 +181,7 @@ export function computeCartTotals(
 
 export function encodeCartForCheckout(
 	cart: CartItem[],
-	config: CurrencyConfig
+	config: CurrencyConfig,
 ): string {
 	const itemsStr = cart
 		.map((item) => {
@@ -196,7 +196,7 @@ export function encodeCartForCheckout(
 }
 
 export function decodeCheckoutItems(
-	itemsParam: string
+	itemsParam: string,
 ): { sku: string; price: number | null; quantity: number }[] {
 	if (!itemsParam) return []
 	return itemsParam
@@ -221,6 +221,6 @@ export function decodeCheckoutItems(
 		})
 		.filter(
 			(item): item is { sku: string; price: number | null; quantity: number } =>
-				item !== null
+				item !== null,
 		)
 }
