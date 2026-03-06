@@ -56,13 +56,7 @@ const PostEditSchema = z.object({
 
 type PostUpdate = z.infer<typeof PostEditSchema>
 
-function OptionsMenu({
-	postId,
-	slug,
-}: {
-	postId: string
-	slug: string
-}) {
+function OptionsMenu({ postId, slug }: { postId: string; slug: string }) {
 	const [open, setOpen] = useState(false)
 	const menuRef = useRef<HTMLDivElement>(null)
 	const router = useRouter()
@@ -80,7 +74,12 @@ function OptionsMenu({
 
 	async function handleDelete() {
 		setOpen(false)
-		if (!confirm('Are you sure you want to delete this post? This cannot be undone.')) return
+		if (
+			!confirm(
+				'Are you sure you want to delete this post? This cannot be undone.',
+			)
+		)
+			return
 		const { error } = await createClient()
 			.from('posts')
 			.delete()
@@ -99,10 +98,17 @@ function OptionsMenu({
 		const newSlug = prompt('Enter new slug:', slug)
 		if (!newSlug || newSlug === slug) return
 		if (!/^[a-z0-9][a-z0-9-_]+[a-z0-9]$/.test(newSlug)) {
-			alert('Invalid slug. Use lowercase letters, numbers, hyphens, and underscores (min 3 chars).')
+			alert(
+				'Invalid slug. Use lowercase letters, numbers, hyphens, and underscores (min 3 chars).',
+			)
 			return
 		}
-		if (!confirm(`Change slug from "${slug}" to "${newSlug}"? This will break existing links.`)) return
+		if (
+			!confirm(
+				`Change slug from "${slug}" to "${newSlug}"? This will break existing links.`,
+			)
+		)
+			return
 		const { error } = await createClient()
 			.from('posts')
 			.update({ slug: newSlug })
@@ -125,7 +131,13 @@ function OptionsMenu({
 				className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500"
 				aria-label="Post options"
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+				>
 					<circle cx="12" cy="5" r="2" />
 					<circle cx="12" cy="12" r="2" />
 					<circle cx="12" cy="19" r="2" />
