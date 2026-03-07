@@ -116,84 +116,6 @@ function seedContent(): CycleContentEntry[] {
 	return entries
 }
 
-// ── Legacy migration ───────────────────────────────────────────────
-
-const LEGACY_KEYS = {
-	ritualTemplates: 'cycle-ritual-templates',
-	content: 'cycle-content',
-	lastSeenPhase: 'cycle-last-seen-phase',
-	todoistProjectId: 'cycle-todoist-project-id',
-}
-
-function readLS<T>(key: string): T | null {
-	if (typeof window === 'undefined') return null
-	try {
-		const raw = localStorage.getItem(key)
-		return raw ? (JSON.parse(raw) as T) : null
-	} catch {
-		return null
-	}
-}
-
-interface LegacyData {
-	content?: CycleContentEntry[]
-	ritualTemplates?: RitualTemplate[]
-	phaseRituals?: Record<string, PhaseRitual[]>
-	lastSeenPhase?: string
-	todoistProjectId?: string
-}
-
-function migrateLegacy(): LegacyData | null {
-	if (typeof window === 'undefined') return null
-
-	const content = readLS<CycleContentEntry[]>(LEGACY_KEYS.content)
-	const templates = readLS<RitualTemplate[]>(LEGACY_KEYS.ritualTemplates)
-	const lastSeen = readLS<string>(LEGACY_KEYS.lastSeenPhase)
-	const projectId = readLS<string>(LEGACY_KEYS.todoistProjectId)
-
-	// Check if any legacy data exists
-	const hasLegacy =
-		content !== null ||
-		templates !== null ||
-		lastSeen !== null ||
-		projectId !== null
-
-	// Also scan for phase ritual keys
-	const phaseRituals: Record<string, PhaseRitual[]> = {}
-	for (let i = 0; i < localStorage.length; i++) {
-		const key = localStorage.key(i)
-		if (key?.startsWith('cycle-phase-rituals-')) {
-			const data = readLS<PhaseRitual[]>(key)
-			if (data) {
-				phaseRituals[key.replace('cycle-phase-rituals-', '')] = data
-			}
-		}
-	}
-
-	if (!hasLegacy && Object.keys(phaseRituals).length === 0) return null
-
-	// Clean up old keys
-	localStorage.removeItem(LEGACY_KEYS.content)
-	localStorage.removeItem(LEGACY_KEYS.ritualTemplates)
-	localStorage.removeItem(LEGACY_KEYS.lastSeenPhase)
-	localStorage.removeItem(LEGACY_KEYS.todoistProjectId)
-	for (let i = localStorage.length - 1; i >= 0; i--) {
-		const key = localStorage.key(i)
-		if (key?.startsWith('cycle-phase-rituals-')) localStorage.removeItem(key)
-	}
-
-	return {
-		...(content?.length ? { content } : {}),
-		...(templates?.length ? { ritualTemplates: templates } : {}),
-		...(Object.keys(phaseRituals).length ? { phaseRituals } : {}),
-		...(lastSeen ? { lastSeenPhase: lastSeen } : {}),
-		...(projectId ? { todoistProjectId: projectId } : {}),
-	}
-}
-
-// Run migration before store creation so initial state can use it
-const legacy = typeof window !== 'undefined' ? migrateLegacy() : null
-
 // ── Zustand store ──────────────────────────────────────────────────
 
 interface CycleState {
@@ -217,14 +139,12 @@ type CycleStore = CycleState & CycleActions
 export const cycleStore = createStore<CycleStore>()(
 	persist(
 		(set) => ({
-			// State — use legacy data if migrating, otherwise seed defaults
-			content: legacy?.content ?? seedContent(),
-			ritualTemplates: legacy?.ritualTemplates ?? seedTemplates(),
-			phaseRituals: legacy?.phaseRituals ?? {},
-			lastSeenPhase: legacy?.lastSeenPhase ?? null,
-			todoistProjectId: legacy?.todoistProjectId ?? null,
+			content: seedContent(),
+			ritualTemplates: seedTemplates(),
+			phaseRituals: {},
+			lastSeenPhase: null,
+			todoistProjectId: null,
 
-			// Actions
 			setContent: (content) => set({ content }),
 			setRitualTemplates: (ritualTemplates) => set({ ritualTemplates }),
 			setPhaseRituals: (key, rituals) =>
@@ -241,7 +161,7 @@ export const cycleStore = createStore<CycleStore>()(
 			migrate: (persisted, version) => {
 				// Future migrations go here:
 				// if (version === 0) { ... }
-				return persisted as CycleState & CycleActions
+				return persisted as CycleStore
 			},
 		},
 	),
