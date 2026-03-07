@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import type { PhaseNumber } from './lib/cycle'
+import { useState, useCallback, useMemo } from 'react'
+import { type PhaseNumber, PHASES } from './lib/cycle'
 import type { PhaseTheme } from './lib/cycle-theme'
 import { useCycleContent, type CycleContentEntry } from './lib/cycle-store'
+import { genId } from '@/lib/utils'
 
 interface Props {
 	phase: PhaseNumber
@@ -13,22 +14,22 @@ interface Props {
 
 type Tab = 'mantras' | 'descriptions' | 'daily_titles'
 
-function genId(): string {
-	return crypto.randomUUID().slice(0, 12)
-}
-
 export default function ContentEditor({ phase, theme, onClose }: Props) {
 	const [entries, setEntries] = useCycleContent()
 	const [activeTab, setActiveTab] = useState<Tab>('mantras')
 	const [selectedPhase, setSelectedPhase] = useState<PhaseNumber>(phase)
 
-	const filtered = entries.filter((e) => {
-		if (activeTab === 'mantras')
-			return e.kind === 'mantra' && e.phase === selectedPhase
-		if (activeTab === 'descriptions')
-			return e.kind === 'description' && e.phase === selectedPhase
-		return e.kind === 'daily_title' && e.phase === selectedPhase
-	})
+	const kind: CycleContentEntry['kind'] =
+		activeTab === 'mantras'
+			? 'mantra'
+			: activeTab === 'descriptions'
+				? 'description'
+				: 'daily_title'
+
+	const filtered = useMemo(
+		() => entries.filter((e) => e.kind === kind && e.phase === selectedPhase),
+		[entries, kind, selectedPhase],
+	)
 
 	const updateEntry = useCallback(
 		(id: string, updates: Partial<CycleContentEntry>) => {
@@ -46,13 +47,6 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 
 	const addEntry = useCallback(
 		(dayIndex: number | null = null) => {
-			const kind: CycleContentEntry['kind'] =
-				activeTab === 'mantras'
-					? 'mantra'
-					: activeTab === 'descriptions'
-						? 'description'
-						: 'daily_title'
-
 			const sameSlot = entries.filter(
 				(e) =>
 					e.kind === kind &&
@@ -72,7 +66,7 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 
 			setEntries([...entries, newEntry])
 		},
-		[activeTab, selectedPhase, entries, setEntries],
+		[kind, selectedPhase, entries, setEntries],
 	)
 
 	const tabs: { key: Tab; label: string }[] = [
@@ -110,7 +104,7 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 
 				{/* Phase selector */}
 				<div className="flex gap-1 mb-4">
-					{([1, 2, 3, 4] as PhaseNumber[]).map((p) => (
+					{PHASES.map((p) => (
 						<button
 							key={p}
 							onClick={() => setSelectedPhase(p)}

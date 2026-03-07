@@ -1,7 +1,13 @@
 'use client'
 
 import { useMemo, useState, useCallback } from 'react'
-import { getPhaseProgress, getCycleLabel, formatWeekStart } from './lib/cycle'
+import {
+	getPhaseProgress,
+	getCycleLabel,
+	formatWeekStart,
+	PHASES,
+	phaseRitualKey,
+} from './lib/cycle'
 import {
 	getPhaseTheme,
 	getTransitionTheme,
@@ -42,7 +48,7 @@ export default function CyclePage() {
 	const cycleKey = `${cycle.year}-${String(cycle.month + 1).padStart(2, '0')}`
 
 	// Phase key for transition detection
-	const phaseKey = `${cycleKey}-p${phase}`
+	const phaseKey = phaseRitualKey(cycleKey, phase)
 
 	// Day offset from cycle start (for timeline marker)
 	const dayOffset = Math.round(
@@ -126,7 +132,7 @@ export default function CyclePage() {
 			<section className="relative w-full h-dvh flex flex-col px-4 py-8 overflow-hidden">
 				{/* Season color bands — vivid at bottom, fast taper */}
 				<div className="absolute inset-0 flex pointer-events-none">
-					{([1, 2, 3, 4] as PhaseNumber[]).map((p) => {
+					{PHASES.map((p) => {
 						const pt = getPhaseTheme(p)
 						return (
 							<div

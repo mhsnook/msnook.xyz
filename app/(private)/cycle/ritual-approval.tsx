@@ -9,24 +9,15 @@ import {
 	useCycleSetup,
 	type RitualTemplate,
 } from './lib/cycle-store'
+import { genId } from '@/lib/utils'
 
 interface Props {
 	phase: PhaseNumber
 	cycleKey: string
 	theme: PhaseTheme
-	onApproved: () => void
 }
 
-function genId(): string {
-	return crypto.randomUUID().slice(0, 12)
-}
-
-export default function RitualApproval({
-	phase,
-	cycleKey,
-	theme,
-	onApproved,
-}: Props) {
+export default function RitualApproval({ phase, cycleKey, theme }: Props) {
 	const [templates] = useRitualTemplates()
 	const { data: setup } = useCycleSetup()
 	const approve = useApproveRituals()
@@ -104,9 +95,7 @@ export default function RitualApproval({
 			cycleKey,
 			phase,
 		})
-
-		onApproved()
-	}, [setup, items, approve, cycleKey, phase, onApproved])
+	}, [setup, items, approve, cycleKey, phase])
 
 	return (
 		<div

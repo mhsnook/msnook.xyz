@@ -6,12 +6,14 @@ import { createStore } from 'zustand/vanilla'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task } from '@doist/todoist-api-typescript'
-import type { PhaseNumber } from './cycle'
+import { type PhaseNumber, PHASES, phaseRitualKey } from './cycle'
 import {
 	phaseRituals as defaultRituals,
 	dailyTitles,
 	getPhaseTheme,
 } from './cycle-theme'
+import type { SetupResult } from '@/lib/todoist'
+import { genId, fetchJson } from '@/lib/utils'
 import { appStorage } from '@/lib/app-store'
 
 // ── Types ──────────────────────────────────────────────────────────
@@ -43,26 +45,11 @@ export type CycleContentEntry = {
 	sortOrder: number
 }
 
-// ── Helpers ────────────────────────────────────────────────────────
-
-function genId(): string {
-	return crypto.randomUUID().slice(0, 12)
-}
-
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-	const res = await fetch(url, init)
-	if (!res.ok) {
-		const err = await res.json().catch(() => ({ error: res.statusText }))
-		throw new Error(err.error || 'Request failed')
-	}
-	return res.json()
-}
-
 // ── Seed data ──────────────────────────────────────────────────────
 
 function seedTemplates(): RitualTemplate[] {
 	const templates: RitualTemplate[] = []
-	for (const phase of [1, 2, 3, 4] as PhaseNumber[]) {
+	for (const phase of PHASES) {
 		defaultRituals[phase].forEach((content, i) => {
 			templates.push({
 				id: genId(),
@@ -78,7 +65,7 @@ function seedTemplates(): RitualTemplate[] {
 
 function seedContent(): CycleContentEntry[] {
 	const entries: CycleContentEntry[] = []
-	for (const phase of [1, 2, 3, 4] as PhaseNumber[]) {
+	for (const phase of PHASES) {
 		const theme = getPhaseTheme(phase)
 
 		entries.push({
@@ -188,7 +175,7 @@ export function useRitualTemplates() {
 }
 
 export function usePhaseRituals(cycleKey: string, phase: PhaseNumber) {
-	const key = `${cycleKey}-p${phase}`
+	const key = phaseRitualKey(cycleKey, phase)
 	const rituals = useCycleStore((s) => s.phaseRituals[key] ?? null)
 	const setPhaseRituals = useCycleStore((s) => s.setPhaseRituals)
 	const setRituals = useCallback(
@@ -262,8 +249,6 @@ export function useResolvedContent(
 
 // ── Todoist hooks (React Query) ────────────────────────────────────
 
-type SetupResult = { projectId: string }
-
 export function useCycleSetup() {
 	return useQuery<SetupResult>({
 		queryKey: ['cycle', 'setup'],
@@ -302,33 +287,32 @@ export function useApproveRituals() {
 			cycleKey: string
 			phase: PhaseNumber
 		}) => {
-			const phaseRitualList: PhaseRitual[] = []
+			const tasks = await Promise.all(
+				args.rituals.map((ritual) =>
+					fetchJson<Task>('/api/todo/tasks', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							content: ritual.content,
+							projectId: args.projectId,
+						}),
+					}).then(
+						(task): PhaseRitual => ({
+							id: ritual.id,
+							templateId: ritual.templateId,
+							sortOrder: ritual.sortOrder,
+							content: ritual.content,
+							todoistTaskId: task.id,
+							isCompleted: false,
+						}),
+					),
+				),
+			)
 
-			for (const ritual of args.rituals) {
-				const task = await fetchJson<Task>('/api/todo/tasks', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						content: ritual.content,
-						projectId: args.projectId,
-					}),
-				})
+			const key = phaseRitualKey(args.cycleKey, args.phase)
+			cycleStore.getState().setPhaseRituals(key, tasks)
 
-				phaseRitualList.push({
-					id: ritual.id,
-					templateId: ritual.templateId,
-					sortOrder: ritual.sortOrder,
-					content: ritual.content,
-					todoistTaskId: task.id,
-					isCompleted: false,
-				})
-			}
-
-			// Write to Zustand store
-			const key = `${args.cycleKey}-p${args.phase}`
-			cycleStore.getState().setPhaseRituals(key, phaseRitualList)
-
-			return phaseRitualList
+			return tasks
 		},
 		onSuccess: () => {
 			qc.invalidateQueries({ queryKey: ['cycle', 'tasks'] })
@@ -350,7 +334,7 @@ export function useToggleRitual() {
 			if (!ritual.todoistTaskId) return ritual
 
 			if (ritual.isCompleted) {
-				await fetchJson(`/api/cycle/tasks/${ritual.todoistTaskId}/reopen`, {
+				await fetchJson(`/api/todo/tasks/${ritual.todoistTaskId}/reopen`, {
 					method: 'POST',
 				})
 			} else {
@@ -358,15 +342,6 @@ export function useToggleRitual() {
 					method: 'POST',
 				})
 			}
-
-			// Update Zustand store
-			const key = `${cycleKey}-p${phase}`
-			const { phaseRituals, setPhaseRituals } = cycleStore.getState()
-			const existing = phaseRituals[key] ?? []
-			const updated = existing.map((r) =>
-				r.id === ritual.id ? { ...r, isCompleted: !r.isCompleted } : r,
-			)
-			setPhaseRituals(key, updated)
 
 			return { ...ritual, isCompleted: !ritual.isCompleted }
 		},
@@ -382,10 +357,13 @@ export function useSyncRitualStatus(
 	projectId: string | undefined,
 ) {
 	const { data: tasks } = useCycleTasks(projectId)
-	const [rituals, setRituals] = usePhaseRituals(cycleKey, phase)
+	const key = phaseRitualKey(cycleKey, phase)
 
 	useEffect(() => {
-		if (!tasks || !rituals || rituals.length === 0) return
+		if (!tasks) return
+		const { phaseRituals, setPhaseRituals } = cycleStore.getState()
+		const rituals = phaseRituals[key]
+		if (!rituals || rituals.length === 0) return
 
 		let changed = false
 		const updated = rituals.map((r) => {
@@ -402,7 +380,7 @@ export function useSyncRitualStatus(
 		})
 
 		if (changed) {
-			setRituals(updated)
+			setPhaseRituals(key, updated)
 		}
-	}, [tasks, rituals, setRituals])
+	}, [tasks, key])
 }

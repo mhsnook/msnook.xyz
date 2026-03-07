@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import type { PhaseNumber } from './lib/cycle'
 import type { PhaseTheme } from './lib/cycle-theme'
 import {
@@ -21,7 +21,6 @@ export default function RitualChecklist({ phase, cycleKey, theme }: Props) {
 	const [rituals, setRituals] = usePhaseRituals(cycleKey, phase)
 	const { data: setup } = useCycleSetup()
 	const toggle = useToggleRitual()
-	const [, forceUpdate] = useState(0)
 
 	// Sync completion status from Todoist on mount
 	useSyncRitualStatus(cycleKey, phase, setup?.projectId)
@@ -47,20 +46,9 @@ export default function RitualChecklist({ phase, cycleKey, theme }: Props) {
 		[rituals, setRituals, toggle, cycleKey, phase],
 	)
 
-	const handleApproved = useCallback(() => {
-		forceUpdate((n) => n + 1)
-	}, [])
-
 	// Before approval: show the approval UI
 	if (!rituals || rituals.length === 0) {
-		return (
-			<RitualApproval
-				phase={phase}
-				cycleKey={cycleKey}
-				theme={theme}
-				onApproved={handleApproved}
-			/>
-		)
+		return <RitualApproval phase={phase} cycleKey={cycleKey} theme={theme} />
 	}
 
 	// After approval: show synced checklist

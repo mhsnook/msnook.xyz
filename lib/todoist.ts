@@ -13,30 +13,22 @@ export type SetupResult = {
 	projectId: string
 }
 
-export async function ensureProjectSetup(): Promise<SetupResult> {
+async function ensureProject(name: string): Promise<SetupResult> {
 	const api = getApi()
-
 	const { results: projects } = await api.getProjects()
-	let project = projects.find((p) => p.name === PROJECT_NAME)
+	let project = projects.find((p) => p.name === name)
 	if (!project) {
-		project = await api.addProject({ name: PROJECT_NAME })
+		project = await api.addProject({ name })
 	}
-
 	return { projectId: project.id }
 }
 
-const CYCLE_PROJECT_NAME = 'Cycle Rituals'
+export function ensureProjectSetup(): Promise<SetupResult> {
+	return ensureProject(PROJECT_NAME)
+}
 
-export async function ensureCycleProjectSetup(): Promise<SetupResult> {
-	const api = getApi()
-
-	const { results: projects } = await api.getProjects()
-	let project = projects.find((p) => p.name === CYCLE_PROJECT_NAME)
-	if (!project) {
-		project = await api.addProject({ name: CYCLE_PROJECT_NAME })
-	}
-
-	return { projectId: project.id }
+export function ensureCycleProjectSetup(): Promise<SetupResult> {
+	return ensureProject('Cycle Rituals')
 }
 
 export { type Task }
