@@ -5,6 +5,7 @@ import {
 	useEffect,
 	useRef,
 	useCallback,
+	useMemo,
 	type ChangeEvent,
 	type DragEvent,
 } from 'react'
@@ -429,6 +430,16 @@ export default function RSVPReader() {
 		return () => clearTimeout(id)
 	}, [playing, wpm, words.length, idx, delays])
 
+	// Auto-scroll sidebar to keep current sentence visible
+	useEffect(() => {
+		const el = sidebarRef.current
+		if (!el) return
+		const active = el.querySelector('[data-active="true"]') as HTMLElement
+		if (active) {
+			active.scrollIntoView({ block: 'center', behavior: 'smooth' })
+		}
+	}, [currentSentenceIdx])
+
 	const startReading = useCallback(
 		(text: string, name: string) => {
 			const { words: w, delays: d, quoteDepth: q } = tokenize(text)
@@ -495,6 +506,31 @@ export default function RSVPReader() {
 	const ctxEnd = Math.min(words.length, idx + 80)
 	const ctxWords = words.slice(ctxStart, ctxEnd)
 	const ctxLocal = idx - ctxStart
+
+	// Compute sentence boundaries for sidebar navigation
+	const sentences = useMemo(() => {
+		if (words.length === 0) return []
+		const result: { start: number; preview: string }[] = []
+		let sentStart = 0
+		for (let i = 0; i < words.length; i++) {
+			// Sentence ends at punctuation (delay >= 1.8) or paragraph break (delay >= 4)
+			if (delays[i] >= 1.8 || i === words.length - 1) {
+				const preview = words.slice(sentStart, Math.min(sentStart + 8, i + 1)).join(' ')
+				result.push({ start: sentStart, preview })
+				sentStart = i + 1
+			}
+		}
+		return result
+	}, [words, delays])
+
+	const currentSentenceIdx = useMemo(() => {
+		for (let i = sentences.length - 1; i >= 0; i--) {
+			if (idx >= sentences[i].start) return i
+		}
+		return 0
+	}, [idx, sentences])
+
+	const sidebarRef = useRef<HTMLDivElement>(null)
 
 	const savedList = Object.entries(savedTexts)
 		.map(([hash, data]) => ({ hash, ...data }))
@@ -968,26 +1004,38 @@ export default function RSVPReader() {
 				)}
 			</div>
 
-			{/* Right panel: context */}
-			<div className={`border-l ${c.border} p-5 flex flex-col overflow-hidden`}>
-				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-5">
-					Context
+			{/* Right panel: sentence navigation */}
+			<div className={`border-l ${c.border} p-3 flex flex-col overflow-hidden`}>
+				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-3">
+					Sentences
 				</p>
-				<div className="text-xs leading-loose overflow-hidden flex-1">
-					{ctxWords.map((w, i) => (
-						<span
-							key={ctxStart + i}
-							className={`mr-1 transition-colors duration-100 ${
-								i === ctxLocal
-									? c.ctxCurrent
-									: i < ctxLocal
-										? c.ctxPast
-										: c.ctxFuture
-							}`}
-						>
-							{w}
-						</span>
-					))}
+				<div
+					ref={sidebarRef}
+					className="overflow-y-auto flex-1 space-y-0.5"
+				>
+					{sentences.map((s, i) => {
+						const isCurrent = i === currentSentenceIdx
+						const isPast = i < currentSentenceIdx
+						return (
+							<button
+								key={s.start}
+								data-active={isCurrent}
+								onClick={() => {
+									setIdx(s.start)
+									setPlaying(false)
+								}}
+								className={`block w-full text-left text-[11px] leading-snug px-2 py-1 rounded truncate transition-colors cursor-pointer ${
+									isCurrent
+										? `${c.ctxCurrent} ${dark ? 'bg-gray-800' : 'bg-sky-100'}`
+										: isPast
+											? c.ctxPast
+											: c.ctxFuture
+								} ${dark ? 'hover:bg-gray-800' : 'hover:bg-sky-100'}`}
+							>
+								{s.preview}
+							</button>
+						)
+					})}
 				</div>
 			</div>
 
