@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 import SessionProvider from './session-provider'
-import Menu from '../components/menu'
 import { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 
@@ -21,7 +20,6 @@ export default function RootLayout({ children }) {
 		<html lang="en">
 			<body>
 				<SessionProvider>
-					<Menu />
 					{children}
 					<Toaster />
 				</SessionProvider>
