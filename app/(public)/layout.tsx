@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import Menu from '@/components/menu'
 
 export default function Layout({ children }) {
 	return (
 		<>
+			<Menu />
 			{children}
 			<Footer />
 		</>
