@@ -41,7 +41,7 @@ INSERT INTO "public"."media_meta" ("id", "path", "description", "tags", "center_
 --
 
 INSERT INTO "public"."posts" ("content", "created_at", "excerpt", "image", "published", "slug", "title", "updated_at", "id", "author_id", "published_at") VALUES
-	('**I suppose the point** of this post is to speak on a commonly accepted contradiction, say, about people who think with their head or their heart, people who are analytical and those who are empathic. 
+	('**I suppose the point** of this post is to speak on a commonly accepted contradiction, say, about people who think with their head or their heart, people who are analytical and those who are empathic.
 
 Recently we''ve recently had Discourse about this thing, _Long Termism_, which you might say relies on numbers to say ~ "If we want to bring the most benefit to the most humans, we should ______" and then proceed to fill in the blank with something that sounds a lot like eugenics or ecofascism draped in the smug magnanimity that only Silicon Valley can really muster.
 
@@ -55,7 +55,7 @@ I''ll try and go quickly at first, just establishing some starting points that I
 * Many times, I am not the person who knows the best outcome needed or the strategy to achieve it, but I am still responsible for deciding where I place my time, and aligning myself with that work
 * We have to look to the future in order to imagine better ones, but we can''t rely as much on claims about long-term effects.
 
-I think these are all pretty solid; they''re not meant to be airtight, but they feel like pretty good foundations for moving forward. 
+I think these are all pretty solid; they''re not meant to be airtight, but they feel like pretty good foundations for moving forward.
 
 
 ![](https://imgs.xkcd.com/comics/the_problem_with_wikipedia.png)
@@ -66,7 +66,7 @@ Sometimes I''ll spend an afternoon copying and curating data about life expectan
 
 Obviously I have a curiosity for numbers, for thinking about the scale of the thing. If we could stop a bad mining project that endangers an entire indigenous people and a dozen endangered species of bat... obviously that would be huge. These things matter.
 
-Maybe this sounds obvious and uncontroversial – Michael, why are you even bothering to write this? – I suppose because I hear this other voice that says, "When you think only of numbers you might focus on cosmetic or uncertain interventions" (like on things that are very tenuous like investing in a Presidential campaign for a guy who''s maybe, at the end of the day, going to screw you and everyone you hoped they would help). I hear one that says "You''re not thinking about how certain _types_ of harms lead to more and more and more, like traumatic or disabling events, or things that harm a democracy or a society''s ability to operate long term". 
+Maybe this sounds obvious and uncontroversial – Michael, why are you even bothering to write this? – I suppose because I hear this other voice that says, "When you think only of numbers you might focus on cosmetic or uncertain interventions" (like on things that are very tenuous like investing in a Presidential campaign for a guy who''s maybe, at the end of the day, going to screw you and everyone you hoped they would help). I hear one that says "You''re not thinking about how certain _types_ of harms lead to more and more and more, like traumatic or disabling events, or things that harm a democracy or a society''s ability to operate long term".
 
 So this is why I''m writing. I think questions like these two – which in some way defy numerics – are essential for consideration, and I propose to kind of just mash them together.
 
@@ -76,12 +76,12 @@ So this is why I''m writing. I think questions like these two – which in some 
 At the time it was a NextJS app with Supabase for the back-end and Tauri compiling to native apps for Android and iOS. But I was running into problems: most notably, NextJS''s server-first approach doesn''t include client-side routing, so if I want people to be able to create a flash card and then ', '2025-06-06 17:55:49.061172+00', NULL, '', false, 'write-it-three-times', 'The "Write It Three Times" approach', NULL, 'b46c597a-f9a1-4435-ab89-88b962757a7e', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('My ADHD makes more sense to me when I think of it as an addiction response. My biggest medical concern is that someday I''ll develop diabetes, which I''ll get because I''m addicted to sugar. I spend my life in a constant low-gravity tug with my somewhat casual but still very real relationship with a caffeine addiction. I have rendered it with some sort of bourgeois craft consciousness but it is just an addiction I made friends with.
 
-So I sit at my desk and I turn on my machine and I open up work. Staring at the blank page, or the code un-edited, somewhere deep in my brain a metronome clicks over, 
+So I sit at my desk and I turn on my machine and I open up work. Staring at the blank page, or the code un-edited, somewhere deep in my brain a metronome clicks over,
 
 
 * True moderation is very difficult for the addictive or compulsive user; it''s often much easier to say "I''ll entirely cut out X" but this can be an unhealthy or unsustainable mindset, so I say, "What are the situations where this isn''t serving me?" And then I''ll cut those out (almost) entirely. It creates some of the moderation mindset and prevents binging, makes it feel like my indulgences are mindful -- and appreciated! Not shamed.
 
-* If I start earlier in the day, I''ll do it more. The addictive behavior will accelerate until interrupted. 
+* If I start earlier in the day, I''ll do it more. The addictive behavior will accelerate until interrupted.
 ![](https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/signal-2024-01-27-151718_002-1a096d.png)
 So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have a drink till after dinner"
 
@@ -94,11 +94,11 @@ So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have 
 
 ## June 2024: Svelte
 
-The story starts in June of 2024, when Svelte 5 had just released, with a new approach to state management built on _signals_, inline with emerging standards (basically every major framework [except React] is using _signals_ now), while implementing it with this Runes API that feels a bit more like react''s useState or like Redux''s idea of state and then actions that act like reducers to modify state. 
+The story starts in June of 2024, when Svelte 5 had just released, with a new approach to state management built on _signals_, inline with emerging standards (basically every major framework [except React] is using _signals_ now), while implementing it with this Runes API that feels a bit more like react''s useState or like Redux''s idea of state and then actions that act like reducers to modify state.
 
 I''ve always loved Svelte, and I was a bit stalled out on developing the "main quest" of my app, so it was a great time for a distracting side-project, or (best case) a quick spike of work to investigate the viability of a new framework to build the app in. I would spend a couple days on it, update my understanding of the Svelte approach to things and get a chance to try out using signals for the first time.
 
-I love writing with Svelte, and I had fun trying SvelteKit too, but ultimately I couldn''t get React Query to work with this Signals framework -- Tanstack''s `solid-query` should work for Svelte and SvelteKit now, but at the time it just wasn''t ready for Svelte 5 -- so it proved itself inviable after just a few days. 
+I love writing with Svelte, and I had fun trying SvelteKit too, but ultimately I couldn''t get React Query to work with this Signals framework -- Tanstack''s `solid-query` should work for Svelte and SvelteKit now, but at the time it just wasn''t ready for Svelte 5 -- so it proved itself inviable after just a few days.
 
 But at the time, one of my biggest technical blockers was actually a kind of _vibe_ I was getting about being inefficient with the ways I fetch data from the server, how I''m doing N+1 queries far too often, or loading all the data on the Index page, and then re-loading a smaller, included subset of that data later. So because my blocker was that `solid-query` wasn''t ready to go yet, I ended up jumping in to the docs of `@tanstack/query` which is the basis for both `solid-query` and `react-query`, which was backing the queries in the main NextJS app.
 
@@ -106,11 +106,11 @@ I learned about [The Query Options API](https://tkdodo.eu/blog/the-query-options
 
 ##July 2024: Solid Start
 
-I took the first week of July off, and for the second week, I spent my time rewriting Sunlo in Solid Start. Now this one, I didn''t get too far. I did this out of respect for the people behind Solid and because I had learned so much 
+I took the first week of July off, and for the second week, I spent my time rewriting Sunlo in Solid Start. Now this one, I didn''t get too far. I did this out of respect for the people behind Solid and because I had learned so much
 
 -----
-earlier draft: 
-I loved this process, so much. And while I''m not fully 100% done figuring out where to take the main code base, I wanted to tell the story a bit now, while the point isn''t about the outcomes but about the process: how much I *learned*, now just about this code base but about the fundamentals of the web we''re buidling. How it showed me the best and worst parts of my code and helped me remove complexity -- or at least move it to an appropriate place and organize it better. 
+earlier draft:
+I loved this process, so much. And while I''m not fully 100% done figuring out where to take the main code base, I wanted to tell the story a bit now, while the point isn''t about the outcomes but about the process: how much I *learned*, now just about this code base but about the fundamentals of the web we''re buidling. How it showed me the best and worst parts of my code and helped me remove complexity -- or at least move it to an appropriate place and organize it better.
 
 I''m actually still deciding whether to go ahead with rewrite number 2, or stick with NextJS; read on below and I''ll go through each of the three rewrites and how each one helped me understand both my project and web development as a whole.
 
@@ -132,29 +132,29 @@ in other news I think I am abandoning my THIRD rewrite of sunlo!! I have now tri
 
 So after all this... I think I''m going back to the Tanstack Router approach 🙈 . I can use the benefits of the huge React ecosystem but not with NextJS and not with Webpack and with client work as the default -- these guys are speaking my language more than any of the other approaches. So my stack will just be Supabase for the database and auth/storage/API, and React/Tanstack Router which serves a teeny tiny html shell with some metadata and the app''s client entry point.
 
-Before I do this I have one more experiment to try -- switching NextJS to full SPA mode... 
+Before I do this I have one more experiment to try -- switching NextJS to full SPA mode...
 ', '2024-09-11 12:27:38.020433+00', NULL, '', false, 'rewriting-sunlo-three-times', 'Rewriting Sunlo.app Three Times', '2025-07-12 18:48:10.196543+00', '7da5e849-4458-4166-a2cb-56e7e3504e43', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('', '2021-10-30 14:07:18.483097+00', NULL, NULL, false, 'aaaaaa', 'aaa', NULL, 'c5cbdeeb-88d8-4359-895c-08f5ec45fd45', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('In April 2021, while much of the world was starting to see a light at the end of the COVID-19 tunnel, India was in the middle of a health crisis of nearly unimaginable proportions. During the last week in April, the country averaged over 300,000 cases per day, and that number is likely a massive under-count.
 
-There were shortages of just about everything – especially O2 beds in hospitals – and many wage labourers losing most or all of their income. For family health reasons, my household was on near-complete isolation, but you couldn''t avoid reality. My timeline was flooded with requests, friends retweeting leads for supplies; some tech companies stopped their work to build directory apps to help supply meet demand; municipal government hotlines were flooded with calls asking for the right place to go to get the help people desperately needed; heroic efforts from volunteers and self-organising collectives to respond to the pleas for help and call every hospital in town on behalf of patients with more limited time and resources. 
+There were shortages of just about everything – especially O2 beds in hospitals – and many wage labourers losing most or all of their income. For family health reasons, my household was on near-complete isolation, but you couldn''t avoid reality. My timeline was flooded with requests, friends retweeting leads for supplies; some tech companies stopped their work to build directory apps to help supply meet demand; municipal government hotlines were flooded with calls asking for the right place to go to get the help people desperately needed; heroic efforts from volunteers and self-organising collectives to respond to the pleas for help and call every hospital in town on behalf of patients with more limited time and resources.
 
 This post is about the technology we used to build the site [MutualAidIndia.com](https://mutualaidindia.com), but the human factor, the crisis and desperation, are a crucial part of the story.
 
-After a few weeks of doing this gruelling volunteer work and dealing with the second-hand trauma of the unfolding health crisis, a friend of a friend named Riddhi decided they would change tacks and focus on a different problem: during the lockdown, lots of people would die of hunger, or lose their homes, or the shortage of spots in government hospitals would mean that the poor may be unable to afford treatment in private facilities. 
- 
+After a few weeks of doing this gruelling volunteer work and dealing with the second-hand trauma of the unfolding health crisis, a friend of a friend named Riddhi decided they would change tacks and focus on a different problem: during the lockdown, lots of people would die of hunger, or lose their homes, or the shortage of spots in government hospitals would mean that the poor may be unable to afford treatment in private facilities.
+
 What people needed was **_money_**. Big INGOs were accepting money into their bank accounts in London and New York, paying their staff and funding programs here that would take weeks or months and often focus on things far less urgent than basic survival. When news broke of critical Oxygen shortages in Delhi, one major fundraising site partnered with a bunch of big NGOs and raised millions to buy Oxygen cylinders – this of course did little to increase the actual supply of Oxygen cylinders, which are produced in industrial facilities that don''t scale up and down quickly; it just meant that the urban hospitals that had tie-ins with this NGO could now dictate where the Oxygen went.
 
 It was easy to feel like we were all just re-arranging deck chairs on the titanic. So, fed up with basically everything, Riddhi started a list. [It started as a tweet.](https://twitter.com/gaachburi/status/1385139275109343236)
 
-&gt; Hi, I''m getting a lot of questions around whom can we support financially. Want to collate  
+&gt; Hi, I''m getting a lot of questions around whom can we support financially. Want to collate
 &gt; Can you pls comment on this thread if you know of a good organisation doing verified relief work/ supporting vulnerable communities / figuring food and essentials for migrant workers etc?
 
 And within a few hours it was a google doc, with an ever-growing list of fundraisers that needed attention, and a small band of volunteers jumping in to help.
 
 ![A screenshot of a google doc showing "Categories" and a section called "Food" and the first couple entries of fundraisers for mutual aid work for people providing food to vulnerable communities and people without adequate financial support](https://i.imgur.com/Zkg6x6A.png)
 
-I saw Riddhi''s tweet and request for help the next day, and volunteered to help verify which fundraisers on various platforms could accept foreign contributions. It was straightforward enough; i joined the gdoc and started verifying fundraisers. 
+I saw Riddhi''s tweet and request for help the next day, and volunteered to help verify which fundraisers on various platforms could accept foreign contributions. It was straightforward enough; i joined the gdoc and started verifying fundraisers.
 
 Within a few days traffic on the doc was so high, Google had turned off a bunch of features and was permanently showing us the "please use our ''embed'' feature instead of linking people directly to the doc" alert. We were editing the doc live with a team of about a dozen volunteers. And with an aggressive social media strategy I lovingly describe as "shaming influencers," we had several days of very spikey traffic, cresting at around 50,000 visitors a day.
 
@@ -168,7 +168,7 @@ The list was taking off and we were quickly getting a sense for our needs:
 1. An easy way to tag and/or filter different fundraisers as accepting foreign contributions, as urgent, as having met their goals, etc.
 1. An easier way to keep a "highlighted campaigns" section up at the top, and rotate them regularly
 1. We needed it to be visually very simple, but to feature some of the amazing art that our volunteer team was producing and which had been central to our viral success
-1. Bonus points: 
+1. Bonus points:
    1. Easy one-click GPay or UPI links (in India, GPay is one of the most common e-wallets)
    1. Some kind of analytics, maybe!
 
@@ -188,7 +188,7 @@ We had a meeting; gathered all the inputs, wrote up a brief and some options, an
 2. GlideApp which lets you build a site based on a Google Spreadsheets back-end (very attractive option)
 3. We could roll our own site using some low-maintenance static site generator (I had just gotten a bunch of experience with Gatsby, so that was one option)
 
-We ended up kind of going in a few different directions with this, putting out a call for volunteers to start prototyping each of the sites. I took the Gatsby/Airtable site; worked with another volunteer to make the GlideApp version; and we never got the WordPress site off the ground. Regardless, we discussed the tradeoffs with the team, and within about 5 days of it becoming clear we needed this website to exist, we had made our choice: we would go with Gatsby + Airtable. 
+We ended up kind of going in a few different directions with this, putting out a call for volunteers to start prototyping each of the sites. I took the Gatsby/Airtable site; worked with another volunteer to make the GlideApp version; and we never got the WordPress site off the ground. Regardless, we discussed the tradeoffs with the team, and within about 5 days of it becoming clear we needed this website to exist, we had made our choice: we would go with Gatsby + Airtable.
 
 
 ## Building The Site
@@ -201,14 +201,14 @@ For me, this was absolutely perfect. I had worked with Gatsby but didn''t know h
 
 ### Art and Soul
 
-Thanks to the artwork of our volunteers and particularly our resident artist [Sonaksha](https://instagram.com/sonaksha), we were able to showcase the kind of art that had helped spur the original viral success of the site. 
+Thanks to the artwork of our volunteers and particularly our resident artist [Sonaksha](https://instagram.com/sonaksha), we were able to showcase the kind of art that had helped spur the original viral success of the site.
 
 As an example, [here is the cover art for the Zine](https://github.com/michaelsnook/mutual-aid-listing/blob/main/src/images/zine-banner.jpg) – nay, a full e-book! – that Sonaksha and Riddhi wrote for one of our fundraising pushes to help raise funds. It''s just beautiful, and so human, and kind. It captured what we were all feeling.
 
 ### Tailwind
 Tailwind was a joy to work with. I love the separation of concerns (and sometimes the lack thereof), and I love the way they put configuration in javascript and then let the CSS just do styles.
 
-[Tailwind CSS](https://tailwindcss.com/) is a utility-first CSS framework that has become all the rage recently, especially for folks using React, and for good reason: In react, you separate components into different files, and each component contains its own markup and business logic, and often its own styles too.  With Tailwind, you write extremely granular classes like `my-4 md:my-6 bg-red-600 text-white absolute top-0 hover:underline`. Each of these classes basically maps onto just one or two CSS rules (or in the case of `md:my-6` a media query and then a margin-top and margin-bottom). 
+[Tailwind CSS](https://tailwindcss.com/) is a utility-first CSS framework that has become all the rage recently, especially for folks using React, and for good reason: In react, you separate components into different files, and each component contains its own markup and business logic, and often its own styles too.  With Tailwind, you write extremely granular classes like `my-4 md:my-6 bg-red-600 text-white absolute top-0 hover:underline`. Each of these classes basically maps onto just one or two CSS rules (or in the case of `md:my-6` a media query and then a margin-top and margin-bottom).
 
 So why not just write bare CSS? Well, Tailwind uses PostCSS to apply all the browser prefixes you could ever need, and then "purges" the CSS output to include only the classes that are actually used in your application, so it''s close to the same bundle size as writing bare CSS, and a lot less error-prone. It''s also a lot quicker to type `my-4` than `margin-top: 2rem; margin-bottom: 2rem` and easier to read. It provides good support for transitions, gradients, dark mode, and more.
 
@@ -224,7 +224,7 @@ Moving off of the unstructured text of a Google Doc led to _immediate_ gains in 
 
 ### CloudFlare Pages
 
-We hosted the project on CloudFlare pages, which has an extraordinarily simple interface for developers, connects straight to your GitHub repo, and builds a new version of the site any time you push a commit to any branch. 
+We hosted the project on CloudFlare pages, which has an extraordinarily simple interface for developers, connects straight to your GitHub repo, and builds a new version of the site any time you push a commit to any branch.
 
 **Down sides:** At the time, you couldn''t have it automatically rebuild the site every few hours. So a fellow volunteer set up a Github Action to push an empty commit every 2 hours.
 
@@ -258,7 +258,7 @@ When Gatsby was released it was heralded as the next best thing to happen to web
 
 But my experience was that I had landed right back into the kind of WordPress''y hell where you have 5 community-supported plugins that do the same thing, and the official plugin hasn''t been released yet or has been deprecated in favor of something else.
 
-But what really slowed me down was Gatsby''s insistence on making me use GraphQL for _everything_. I''ll be upfront: I don''t know GraphQL. I understand it seems like it is meant to perform a valuable function – let devs issue queries to the database/API and be very specific about what fields and/or nested objects they want it to return. 
+But what really slowed me down was Gatsby''s insistence on making me use GraphQL for _everything_. I''ll be upfront: I don''t know GraphQL. I understand it seems like it is meant to perform a valuable function – let devs issue queries to the database/API and be very specific about what fields and/or nested objects they want it to return.
 
 But I absolutely do not understand why I need to use some Gatsby plugin-specific code nested inside a graphql query in order to fetch and display an Image. Plugin, I just met you. We are not friends. I am just copying and pasting code from the docs. Thank goodness most of the fetch-and-display logic was written into the site before I found it because, although [I could vaguely explain what this code ends up doing, I really couldn''t explain how it knows to do that](https://github.com/michaelsnook/mutual-aid-listing/blob/main/src/components/Hero.jsx#L73).
 
@@ -276,7 +276,7 @@ Months later, after about a year of working with Gatsby, some of it with support
 
 ### Airtable is Not a CMS
 
-Airtable was actually really convenient for keeping track of the fundraisers, tagging them, keeping track of their goals and when they''d met their goals. But it''s not a CMS. The lack of basic validation features, mentioned above, is aa big hindrance when the team grows beyond the very small set of people I speak too on a daily basis. 
+Airtable was actually really convenient for keeping track of the fundraisers, tagging them, keeping track of their goals and when they''d met their goals. But it''s not a CMS. The lack of basic validation features, mentioned above, is aa big hindrance when the team grows beyond the very small set of people I speak too on a daily basis.
 
 And perhaps more to the point, when we wanted to add new pages with custom content, while it was _possible_ to add arbitrary HTML to an Airtable field, how would you even structure a page with, say, 4 sections on it? Would you make a Table called "sections" and each section has a heading and content and a field for "what page does this show up on" and/or "what order does it appear on that page"? Or would you give each fragment a unique name or slug and then write pages that just for "display this fraagment, next display that fragment", so you''re sort of hard-coding the layout and order of things, but not the words themselves?
 
@@ -298,13 +298,13 @@ I learned so much from this project – not only about making websites but about
 Right now it''s surprisingly difficult to tell the application, "find every line that starts with ''DONE'' and format that line as strikethrough", or "Find every time my boss''s name is mentioned and highlight it with bright colors." -- I can turn it into "==!!== NAME ==!!==" with Find & Replace, but I can\''t set its font size or background color and I can''t enforce consistency of that rule throughout the document, which is a problem if other people are editing it and shouldn''t be troubled to follow my crazy formatting whims.
 
 [The original musing about it on Facebook](https://www.facebook.com/michael.snook/posts/10102094430057186)', '2015-05-05 00:00:00+00', NULL, NULL, true, 'conditional-formatting-docs', 'Wanted: Conditional Formatting in Collaborative Text', '2020-04-07 13:06:21.905+00', '1783e6a1-3a79-4f2e-b5fe-d9965c0c7647', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-05-05'),
-	('Long ago I "managed a team" and I wanted to keep managing teams, and bigger ones with more people and bigger budgets. But the anarchist in me hated this vision of success, and I left for more of an IC/freelancer approach. Recently I had the opportunity to work with a team who was without a direct manager for some time, and I was there to help maintain some leadership continuity, but didn''t have nearly the time to provide line management to a team of this size on my limited hours. But in that scarcity of time, I was forced to say, okay, I can''t be your boss or your manager; I don''t have the time to wield that kind of power well, so I''m just going to _suggest_ a bunch of things and _describe_ a bunch of things. It worked kind of beautifully in some ways I''d like to write about. 
+	('Long ago I "managed a team" and I wanted to keep managing teams, and bigger ones with more people and bigger budgets. But the anarchist in me hated this vision of success, and I left for more of an IC/freelancer approach. Recently I had the opportunity to work with a team who was without a direct manager for some time, and I was there to help maintain some leadership continuity, but didn''t have nearly the time to provide line management to a team of this size on my limited hours. But in that scarcity of time, I was forced to say, okay, I can''t be your boss or your manager; I don''t have the time to wield that kind of power well, so I''m just going to _suggest_ a bunch of things and _describe_ a bunch of things. It worked kind of beautifully in some ways I''d like to write about.
 
 First I should say, I went into this job being very explicit, that I was there as a "coach and analyst". Ultimately, everything the team members do is up to them; they''re responsible for the outcome. But as an technical or product analyst, one of the first things I''m going to do is look for the diagram of the system, read the documentation, or (as is often the case) make my own diagram. Or I''m going to ask to see the roadmap, and I''ll look over it and ask people if their section is up-to-date; if some past project should be marked as done, or overdue; etc.
 
 And what happens when you simply _observe_, and record, and repeat back what is already in place and what people are currently working on... is people can see what they need to do already! Or, in one example, I asked about a long-overdue project that was marked "in process" (not "done" or "blocked") and the person said oh phase 1 is done but we actually can''t start phase 2 for another 2 months. So at that point, I suggested we edit the roadmap to cut the project into phase 1 (complete) and phase 2 (not started yet). And we got to have a conversation as a team about _other_ projects that seem to drag on forever, and why it feels that way, and whether we can either reframe our work, or actually restructure it, to create an ebb and flow of our attention, a beginning and ending to predictable time periods, allowing for a sort of in-breath and out-breath to the project structure.
 
-If this were a software team, you might call them sprints, but sprints are just one-at-a-time units of doing tasks. So you''d be better off calling them Epics of related tickets. And in Epics you often focus on having fewer epics open at a time -- you might set a limit like "only 3 epics open at once" to manage attention for the team, reduce context switching during sprints, and so on. 
+If this were a software team, you might call them sprints, but sprints are just one-at-a-time units of doing tasks. So you''d be better off calling them Epics of related tickets. And in Epics you often focus on having fewer epics open at a time -- you might set a limit like "only 3 epics open at once" to manage attention for the team, reduce context switching during sprints, and so on.
 
 By the end of it, it turned out that nearly everyone on the team had _some_ project that was dragging on and feeling like dead weight overhead, which we could actually just split into a couple phases, or we could say, "Come to think of it, we''re done with this project. We can close it out, and take the final remaining items and either ditch them or move them to some other upcoming piece of work."
 
@@ -320,16 +320,16 @@ So far The Space Party mostly exists as:
 * There is some sort of website happening at [TheSpaceParty.org](http://thespaceparty.org).
 * The [Facebook page](https://facebook.com/SpacePartyUSA) has over 4,000 people on it!
 * And there''s a fun but sporadic Twitter feed, [@SpacePartyUSA](https://twitter.com/SpacePartyUSA).', '2014-05-25 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/space-228-1980ce.png', true, 'The-Space-Party', 'The Space Party', '2022-12-18 14:31:50.92552+00', 'e96799c4-a714-4489-a3da-23b3eae64c97', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2014-05-25'),
-	('In March of 2020 I decided it was time to rebuild my personal website using some new things I had learned. 
+	('In March of 2020 I decided it was time to rebuild my personal website using some new things I had learned.
 
 I have had a personal website since I finally got a real footing in website building with Jekyll and Foundation, using Markdown pushed to my GitHub repo for posts. My work is more Product than Code, but there''s a fair amount in the realm of the actual coding, _building things_ that I can do, and it brings me a lot of joy and makes me more effective in my professional and activist life. And it''s fun. I love learning and I love the idea that I can conceive of a thing and _then build it_ and not be held back by all the little parts of the "full stack" that I can''t do up to my own standards of excellence.
 
-Since that site was built, I did a lot more work with various large-scale server-side applications (like Rails), and learned a fair amount working in React, mostly on small projects. So I kind of came at this project sideways – my primary goal was actually to learn, to use and build on new  knowledge, and to have fun. 
+Since that site was built, I did a lot more work with various large-scale server-side applications (like Rails), and learned a fair amount working in React, mostly on small projects. So I kind of came at this project sideways – my primary goal was actually to learn, to use and build on new  knowledge, and to have fun.
 
 So I the final product/goal was decided:
 * A personal blog, basically
 * With the ability to add some custom pages, which I would be fine to / happy to code myself as needed
-* A really nice developer experience and the ability to hook into and play around with little interface things that suit my personal interests like content editing UX, accessibility and language and content that''s dynamic and responsive to the audience, etc. 
+* A really nice developer experience and the ability to hook into and play around with little interface things that suit my personal interests like content editing UX, accessibility and language and content that''s dynamic and responsive to the audience, etc.
 
 And the initial direction for implementation paths was basically already set based on my recent experience and motivations for the project: A Rails server with a React client. We''d use Rails to define API routes that would return JSON, and the react app would have components that fetch the data and display it to the reader, e.g. `&lt;Post id={id} /&gt;`
 
@@ -350,13 +350,13 @@ Much of the debate I was privy to at the time was about these two methods, using
 
 ```
 &lt;%= react_component(
-    "PostsPage", 
-    props: @posts_list, 
+    "PostsPage",
+    props: @posts_list,
     prerender: true
 ) %&gt;
 ```
 
-The approach is exciting for a big production app, especially if you have an existing Rails app and you are trying to migrate over parts of the front end from some other solution to React. At work we had a big giant Rails app with jQuery/AJAX to handle forms and transitions, that badly needed an upgrade to a more React-like solution, so I could see the value of this Component-in-ERB approach. 
+The approach is exciting for a big production app, especially if you have an existing Rails app and you are trying to migrate over parts of the front end from some other solution to React. At work we had a big giant Rails app with jQuery/AJAX to handle forms and transitions, that badly needed an upgrade to a more React-like solution, so I could see the value of this Component-in-ERB approach.
 
 But for me... I just wanted to learn more about working with Rails and React; I didn''t want to learn this middle-layer''s special ticks and idiosyncrasies. So I ruled this entire category out and kept looking, not so much for some gem or npm package, but for a really solid example or instructions manual on how to seamlessly place a React app inside a Rails app''s natural Javascript asset-building/-serving process.
 
@@ -368,7 +368,7 @@ This approach works by placing a pretty standard React app with its own react-ro
 &lt;%= javascript_pack_tag ''Index'' %&gt;
 ```
 
-At this point, the react-router picks up the work of deciding which components to display, and those components are responsible for knowing how to fetch data from the Rails API. It''s nice and clean, a proper Rails app and a proper React app, without much time spent dealing with the layer of glue between them. 
+At this point, the react-router picks up the work of deciding which components to display, and those components are responsible for knowing how to fetch data from the Rails API. It''s nice and clean, a proper Rails app and a proper React app, without much time spent dealing with the layer of glue between them.
 
 Though the glue layer is thin, using the the Rails view as the entry-point to the React bundle means we can use Rails''s built-in CSRF tag seamlessly and pick it up in the React app:
 
@@ -394,7 +394,7 @@ And the design of the site itself, I''m pretty happy there too! It''s quite mini
 
 ## What I Would Change
 
-There are still some issues from the basic feature set that I just never really got around to dealing with: 
+There are still some issues from the basic feature set that I just never really got around to dealing with:
 
 1. A proper login system to administer content securely without having to go into the database itself
 2. Some integration with s3 to upload and store images without having to host them on imgur or similar
@@ -405,7 +405,7 @@ And frankly, if I could do it all over again, I would do a few things differentl
 
 **I would ditch Bootstrap for TailWind.**
 
-What I liked most about Bootstrap 4 over version 3 was that it had so many new utility classes that you could style most things using utilities alone, rather than using (and constantly fighting against) their built-in component concepts. Well, I''ve since learned that there are others doing this better, truly utility-first front-end frameworks like [Tailwind CSS](tailwindcss.com). I''ve used Tailwind for [another project](https://mutualaidindia.com), and I''m pretty much in love. It''s just so much easier to use; I write less code, I have fewer abstractions and middle-steps to think about, and the resulting bundle size is a lot smaller. 
+What I liked most about Bootstrap 4 over version 3 was that it had so many new utility classes that you could style most things using utilities alone, rather than using (and constantly fighting against) their built-in component concepts. Well, I''ve since learned that there are others doing this better, truly utility-first front-end frameworks like [Tailwind CSS](tailwindcss.com). I''ve used Tailwind for [another project](https://mutualaidindia.com), and I''m pretty much in love. It''s just so much easier to use; I write less code, I have fewer abstractions and middle-steps to think about, and the resulting bundle size is a lot smaller.
 
 My work with Bootstrap required me to essentially learn this other language – Bootstrap''s own markup+class combinations – and I would over-rely on SASS to let me create a bunch of my own custom classes and components, which meant I was kind of creating my own design language on the fly, which I then had to learn, remember, debug and QA. (In some cases it will of course be worth the time and care to create your own design language, but then again, Tailwind and PostCSS have tools for that too.) If I were doing this over again, I would try Tailwind for my styles.
 
@@ -417,28 +417,28 @@ I would be keen to try NextJS in the future, and I do plan to try out their blog
 
 And I''m interested in [Svelte](https://svelte.dev/) – it almost seems too good to be true, so why not give it a whirl.
 
-The point is I feel like I should be able to use the site as a bit of a playground for different front-end approaches, while keeping the Rails app, the database, and even the branding/styling pretty consistent and stable. This fits with my overall philosophy toward developing stable but innovative software in small teams and medium-sized networks. 
+The point is I feel like I should be able to use the site as a bit of a playground for different front-end approaches, while keeping the Rails app, the database, and even the branding/styling pretty consistent and stable. This fits with my overall philosophy toward developing stable but innovative software in small teams and medium-sized networks.
 
 For the networks of activist groups I''ve spent most of my career working with, their data is the key to their membership and their donor base – so it has to stay stable, and any security breach could tank the organization overnight. But when it comes to providing rich and creative experiences for users, engaging with online content, consuming news and information, sharing on social media and messaging apps, engaging with and creating and remixing and submitting video, photos and audio... we have to be able to be creative with the sites we build! If we don''t, we''ll lose out to all the other things fighting for people''s attention, or to activism businesses like Change dot org and corporate marketing campaigns. But if are able to keep our apps fresh and dynamic, and keep our dev teams limber, so to speak, we can keep innovating and be responsive to great ideas, even when our scale is big and our teams are small.', '2021-07-02 00:00:00+00', 'A quick run-down of how this site is built', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/logos-for-rails-react-heroku-1980ce.jpg', true, 'under-the-hood-2', 'Under the Hood 2.0: Rails, React', '2022-12-18 14:50:41.777391+00', '81dc168f-b84c-40e1-bd27-79493e58da76', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-07-02'),
-	('Go on, I dare you  
-I could hurt you  
+	('Go on, I dare you
+I could hurt you
 
-Then what''s stopping you?   
-Well I don''t want to hurt you  
+Then what''s stopping you?
+Well I don''t want to hurt you
 
-It''s okay, you can''t   
+It''s okay, you can''t
 You don''t know
 
-Haan okay if you do, make sure to leave marks. Some ink under the skin, a spell rendered, a story to recall  
+Haan okay if you do, make sure to leave marks. Some ink under the skin, a spell rendered, a story to recall
 Oh perfect, I''ll be a story...
 
-... but you might regret it    
-I could never  
+... but you might regret it
+I could never
 
-What if I regret you   
+What if I regret you
 I won''t let that happen
 
-I''d murder you if you did  
+I''d murder you if you did
 Go on then, I dare you
 ', '2023-05-26 16:29:15.984426+00', NULL, '', false, 'free-hand-26-05-2023', 'Free hand 26 May', '2023-05-26 16:43:00.567204+00', 'a61833a8-72cb-4d74-92de-175fad91bfa0', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('', '2021-10-31 18:39:47.783+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'asasas', 'asasas', '2021-10-31 22:33:28.824705+00', '2e3edfa6-8f4f-45d9-86c3-cb0e684eacc6', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
@@ -449,41 +449,41 @@ Three or four organizations all want to canvass in the same place? Great – now
 **CanvassStarter is especially geared towards relatively low-budget organizations looking to build a bridge between online and field** (such as by building up a local organizing chapter around a high-energy moment or event), and for organizations who have a loose sense of others they\''d want to partner up with, but **who find it unwieldy to assemble coalition efforts due to the logistics field organizing and the complexity of ad-hoc coalition-building across different target geos and demos.** So in this sense, it''s like KickStarter for canvassing a neighborhood. And if you''re one of the funders, your question(s) get asked.
 
 We''d want to partner up with proven canvass-managing organizations, and there''d be some work to figure out what options are needed for neighborhood-based and voter-based bid options (like rolling our own Google Adwords bidding system, but not in a competition model, but then sometimes on a script-level basis in a competition-for-placement model). So the technical and logistical challenges are real, but mostly the service would attempt to stay lean and solve a lot of financial, political, and networking problems for highly aligned but distinct progressive advocacy organizations.', '2015-05-24 00:00:00+00', 'An app idea/concept, like KickStarter, but for your canvassing campaigns', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/canvasser-holding-some-lit-1980ce.jpg', true, 'canvass-starter', 'CanvassStarter', '2022-12-18 14:39:20.545204+00', '7035f715-29cb-40c8-9bb1-d947f73a2cf9', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-05-24'),
-	('_roof shingles  
-not mine  
-but Someone''s  
-home and comfort  
-not here  
-but Somewhere  
-there''s peace and quiet  
-not for all  
-but For me  
-foreign streets still welcome  
-not loving  
-but Relenting  
-to power and force  
-and Will to dominate  
-these parks and harbours and proud others  
-not strategic allies  
-but Sisters and brothers We see  
-when we look believe  
-when they speak give up our  
-day Off to fix the leaky roof  
-or Give up our distance and our  
-exclusion and our comfort  
-so They may know the  
-peace We covet because life is short and memory is long--  
-or life is long and memory is short--  
-who can remember?  
-we give up our comfortable beds to  
-another or for the stepping out we have  
-chosen not to take, chosen not  
-to See the textures, the wrinkled  
-faces and cracked shingles of  
+	('_roof shingles
+not mine
+but Someone''s
+home and comfort
+not here
+but Somewhere
+there''s peace and quiet
+not for all
+but For me
+foreign streets still welcome
+not loving
+but Relenting
+to power and force
+and Will to dominate
+these parks and harbours and proud others
+not strategic allies
+but Sisters and brothers We see
+when we look believe
+when they speak give up our
+day Off to fix the leaky roof
+or Give up our distance and our
+exclusion and our comfort
+so They may know the
+peace We covet because life is short and memory is long--
+or life is long and memory is short--
+who can remember?
+we give up our comfortable beds to
+another or for the stepping out we have
+chosen not to take, chosen not
+to See the textures, the wrinkled
+faces and cracked shingles of
 brothers and sisters We forgot_', '2015-09-17 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/notepad-and-pen-1980ce.jpg', false, 'unnamed-poem', 'Unnamed Poem Written Far From Home', '2022-12-18 14:44:37.785406+00', 'b980f435-8394-46aa-80df-33200fd3574d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-09-17'),
 	('This frustration has been bubbling up for a while, and it''s almost difficult to write about because there are so so many examples of Democrats, Liberals and Leftists getting this wrong. And not just a little wrong but Wrong with a capital "W" and a great deal of certainty. But I guess this is somewhere to begin, so I''ll jump right in.
 
-When the right does things that seem hypocritical, lefties and liberals love to point out the hypocrisy. Love it. Just absolutely in love with the hypocrisy attack. 
+When the right does things that seem hypocritical, lefties and liberals love to point out the hypocrisy. Love it. Just absolutely in love with the hypocrisy attack.
 
 * You claim to be pro life but when the babies are born you oppose funding childcare!
 * You claim to care about women''s rights in Afghanistan but war is bad but Afghan women opposed US intervention!
@@ -494,20 +494,20 @@ This is silly for a number of reasons, but I''ll lead with two: 1) it doesn''t p
 &gt; ## Hypocrisy isn''t the takedown you think it is
 
 ', '2021-08-27 14:18:54.973+00', NULL, NULL, false, 'no-such-thing-as-hypocrisy', 'Don''t Call Bad People Hypocrites When You Can Call Them Bad People', '2021-08-27 14:18:54.973+00', '171c8683-87aa-4408-88de-2fbe599dd6b3', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('It is making my stomach turn to have to say this, but: 
+	('It is making my stomach turn to have to say this, but:
 
-&gt; I absolutely cannot support the idea of using the terrorist watch list as our way of regulating access to guns. 
+&gt; I absolutely cannot support the idea of using the terrorist watch list as our way of regulating access to guns.
 
-It''s not just a little off, it''s downright wrong. It legitimizes 
-the existence of this list, which has no transparency or due process, no judicial oversight, and whose existence the ACLU opposes. 
-And worse, it''s a cowardly attempt to "get something done" that _still_ relies on the use of [brown] terrorists as 
+It''s not just a little off, it''s downright wrong. It legitimizes
+the existence of this list, which has no transparency or due process, no judicial oversight, and whose existence the ACLU opposes.
+And worse, it''s a cowardly attempt to "get something done" that _still_ relies on the use of [brown] terrorists as
 the political and rhetorical boogey-man.
 
-I love, love, love, that someone in Congress is finally standing up and disrupting business as usual to make something happen on gun regulation. I welled up when I first saw the headlines. I was so proud of having helped Chris Murphy (in my own small way) get elected to the Senate in 2012. 
+I love, love, love, that someone in Congress is finally standing up and disrupting business as usual to make something happen on gun regulation. I welled up when I first saw the headlines. I was so proud of having helped Chris Murphy (in my own small way) get elected to the Senate in 2012.
 
 But that feeling quickly wore off when I read what was actually happening. Even on this issue, which should be a slam dunk for Democrats right now, it happens that the party that''s ostensibly on my side is doing things I find to be not just imperfect but harmful and counter-productive. **Taking shortcuts with civil liberties and racial animus should never be acceptable strategies for getting a bill across the finish line.** Shame on the Senate Democrats for their opportunism, for this moral and political cowardice. And now we''re going to have a facebook feed full of liberals and progressives vehemently defending this approach in terms of both the policy and the politics.
 
-I''m not against compromise, but compromise means you put up a bill to ban *a lot of guns* and eventually say yes to a deal that just bans *some guns* plus high-capacity mags. It doesn''t mean that you pick an approach that appeals in one part to your base and in another part to the worst instincts that feed and strengthen your opponents over the long-term. 
+I''m not against compromise, but compromise means you put up a bill to ban *a lot of guns* and eventually say yes to a deal that just bans *some guns* plus high-capacity mags. It doesn''t mean that you pick an approach that appeals in one part to your base and in another part to the worst instincts that feed and strengthen your opponents over the long-term.
 
 This seems to be the Democratic way of doing things – validate the bad worldview to get the good result. (And it''s seen as a virtue! a sign that one knows how to Get Things Done™.) But it''s a recipe for a generational backslide like the one we''ve been experiencing all my life, and it does nothing to build the kind of political culture and meaningful narratives that will help us when the next Iraq War comes up for a vote, or the next Welfare Reform, or the next Crime Bill. The GOP is a huge and active driver of culture in their own way; on the left, social media and hollywood and pride parades and #BlackLivesMatter drive culture – and Democrats just keep sucking.
 ', '2016-06-16 00:00:00+00', 'It is making my stomach turn to have to say this, but I can''t support using the terrorist watch list as our way of regulating guns. It''s not just a little off, it''s downright wrong.', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/watchlist-1980cf.jpg', true, 'gun-regulation', 'How Democrats Managed to Fuck Up the Gun Control Filibuster', '2022-12-18 14:45:53.619019+00', '01a57c3a-c461-4ef8-b459-cd66a0181fd7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2016-06-16'),
@@ -535,9 +535,9 @@ For something so easy to deploy, it''s worth a test, right?
 
 **[Love this idea? Click here to share it with your WhatsApp friends.](whatsapp://send?text=Check%20out%20this%20fast%20easy%20way%20to%20get%20people%20sharing%20your%20page%20on%20WhatsApp!%20http%3A%2F%2Fsnook.pub%2Fposts%2F2015%2F06%2F05%2FEasy-WhatsApp-Shares.html)**', '2015-06-05 00:00:00+00', 'A quick how-to on easy WhatsApp sharing links', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/whatsapp-logo-with-two-silhouettes-1980ce.jpg', true, 'easy-whatsapp-shares', 'Easy WhatsApp Shares', '2024-05-03 10:17:51.830038+00', 'dd2cc05f-5101-4108-8200-289e8ecc9401', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-06-05'),
 	('content', '2024-05-07 18:26:15.993654+00', NULL, '', false, 'test-title', 'mmm a title', NULL, '931e6853-2199-4da3-ab8b-1c1c224b9dc7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('I was procrastinating the other day, and went Googling for a better ID. I''ve been using UUIDv4 for years, but I was reading about how their randomness can cause the database to do a bunch of extra work rebalancing your index trees when you''re doing a lot of inserts all over the tree. 
+	('I was procrastinating the other day, and went Googling for a better ID. I''ve been using UUIDv4 for years, but I was reading about how their randomness can cause the database to do a bunch of extra work rebalancing your index trees when you''re doing a lot of inserts all over the tree.
 
-And to be honest, I kind of hate how they look: `11bf5b37-e0b8-42e0-8dcf-dc8c4aefc000`. ("Help, they''re plugging me into the matrix!" vibes. Strings like this are how I imagine I might express my desires after my consciousness is uploaded to the cloud.) 
+And to be honest, I kind of hate how they look: `11bf5b37-e0b8-42e0-8dcf-dc8c4aefc000`. ("Help, they''re plugging me into the matrix!" vibes. Strings like this are how I imagine I might express my desires after my consciousness is uploaded to the cloud.)
 
 I don''t mind the shape of them, but they''re huge, and formal, and they look pretty bad in a chat:
 
@@ -554,7 +554,7 @@ I''ll walk you through my reasons and my thought process, but first, here''s wha
 Okay, UUIDs are ugly but... why? Why are they all so long. Why are there 8 versions of the UUID spec, plus a cottage industry of custom implementations like:
 * `1831102147731652608` (Snowflake ID)
 * `01ARZ3NDEKTSV4RRFFQ69G5FAV` (ULID)
-* `1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2` (Bitcoin uuid)  
+* `1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2` (Bitcoin uuid)
 
 Why are they all so... aggressive? Why do they seem so stuffy?
 
@@ -562,8 +562,8 @@ Well, for starters, I assume it''s because they''re balancing a lot of different
 
 So what''s wrong with the existing IDs? (Let''s get really personal here. What do we really hate about them? What do they do that makes us feel bad feelings?)
 
-1. I''ll tell you -- they''re ugly! When I get lost in the middle and have to find my place again, it''s frustrating and makes me feel stupid. 
-2. They''re so loooooong I immediately know I will never type this or ask another human being to type it. 
+1. I''ll tell you -- they''re ugly! When I get lost in the middle and have to find my place again, it''s frustrating and makes me feel stupid.
+2. They''re so loooooong I immediately know I will never type this or ask another human being to type it.
 3. They have such bad vibes you don''t even want to look at them long enough to see if two things have the same ID. Even this level, this "just tell me the last 4 digits" approach feels painful. If I had a headache already, this would make it worse.
 4. Can you imagine trying to type this bitcoin style ID, going from lowercase to uppercase letters over and over and over again... You''ll never get through it on a phone. Just go to the computer. This is now a big-screen activity.
 
@@ -620,11 +620,11 @@ You read it out to yourself: "kay, big em, big dublyu.  ee, five, waiy. dash -- 
 
 Did you hear that? At the end? You went `3 letters, pause. 3 letters, pause. dash, 3 letters, pase. 2 letters.`
 
-Can you feel it? Someone will ask you to read it back to them so they''ll say, "Hey can you read that back to me?" And you''ll say "Why don''t you read it back to me and I''ll tell you if you got it right?" And they''ll say okay and they''ll read it back. Can you hear it? At the end: "big N, little i, big A. little p, big L." That down-note on "big-L", you can feel it. It feels final. It feels like "yeah, we did it. 3, 3, dash, 3, 2. 
+Can you feel it? Someone will ask you to read it back to them so they''ll say, "Hey can you read that back to me?" And you''ll say "Why don''t you read it back to me and I''ll tell you if you got it right?" And they''ll say okay and they''ll read it back. Can you hear it? At the end: "big N, little i, big A. little p, big L." That down-note on "big-L", you can feel it. It feels final. It feels like "yeah, we did it. 3, 3, dash, 3, 2.
 
 &gt; 3, 3, dash, 3, 2.
 
-Science tells us we can easily remember 5-7 characters at a time, but when we have to put the uppercase/lowercase in there, it feels like it gets a lot harder. So hopefully people will naturally break them up into 3s, but I have to be honest: I really wish we could just use the lowercase letters. 
+Science tells us we can easily remember 5-7 characters at a time, but when we have to put the uppercase/lowercase in there, it feels like it gets a lot harder. So hopefully people will naturally break them up into 3s, but I have to be honest: I really wish we could just use the lowercase letters.
 
 ## Lowercase is much nicer
 
@@ -653,21 +653,21 @@ By eliminating the uppercase letters it''s easier to read and speak, even though
 And now lowercase:
 &gt; Hey friend, how''s it going? check out this phrase https://xampl.app/phrase/share/2zwt79n5-kbr3i5
 
-I can barely tell the difference. The lowercase version is _much_ easier to speak, and I think it''s even prettier to look at. Look at that "kMWe" -- what is going on there. "EN eye AYE pee ELL" oh my god we get it you have lots of uniqueness -- it looks like a meme is yelling at me. I don''t want my ID to be yelling at me; actually the use of lowercase letters in the uuidv4 is one of the things they really got right! 
+I can barely tell the difference. The lowercase version is _much_ easier to speak, and I think it''s even prettier to look at. Look at that "kMWe" -- what is going on there. "EN eye AYE pee ELL" oh my god we get it you have lots of uniqueness -- it looks like a meme is yelling at me. I don''t want my ID to be yelling at me; actually the use of lowercase letters in the uuidv4 is one of the things they really got right!
 
 I think it''s kind of nice actually, and familiar, that this "8-6" in base 34 with lowercase letters is _visually_ similar to the uuid''s "8-4-4-4-12" hexadecimal.
 
 * 2zwt79n5-kbr3i5
 * f81d4fae-7dec-11d0-a765-00a0c91e6bf6
 
-But having the extra characters in there is nice, I think. Hexadecimal feels sterile; it feels like how I will express my desires when I am uploaded into the cloud. The "2zwt" actually has some kind of personality... it is more open, and more diverse; letters now make up the healthy majority. It feels nice. 
+But having the extra characters in there is nice, I think. Hexadecimal feels sterile; it feels like how I will express my desires when I am uploaded into the cloud. The "2zwt" actually has some kind of personality... it is more open, and more diverse; letters now make up the healthy majority. It feels nice.
 
 -------------------------------------------
 
 The biggest factor in being able to read and type one of these IDs feels like their character count. The xkcid is 12 characters , 5 characters of timestamp (resolution: 3.4 seconds), a dash, and 6 characters of randomness (cardinality: 38 Billion).
 
 
-It should be easy to follow as you try to read it out character by character and write. We know from how we write phone numbers that `555-123-9876` is easier to read and even to speak, than `5551239987`. You forget where you were; you lose your spot. I imagine the difference could get worse when you''re tired or if you are having some cognitive impairment like brain fog or low blood sugar. Basically it makes interacting more of a _chore_ and a _drain_, and we want users to feel joy. So the xkcid is split between a 5-character section for the time, and a 6-character section for randomness. 
+It should be easy to follow as you try to read it out character by character and write. We know from how we write phone numbers that `555-123-9876` is easier to read and even to speak, than `5551239987`. You forget where you were; you lose your spot. I imagine the difference could get worse when you''re tired or if you are having some cognitive impairment like brain fog or low blood sugar. Basically it makes interacting more of a _chore_ and a _drain_, and we want users to feel joy. So the xkcid is split between a 5-character section for the time, and a 6-character section for randomness.
 
 ```javascript
 const id = xkcid() // ''kMWe5-NiApLy''
@@ -678,9 +678,9 @@ const id = xkcid() // ''kMWe5-NiApLy''
 
 I also know I need to handle dates prior to 1970, and I had an idea for this... currently we''ve gone 54 years and we have 5x to go so that''s 270 years -- till 2294. You can start positive numbers at 1 let a leading "0" mean "this is negative", and then remove one digit of significance.
 
-This means that before 1970 we don''t have "double-click" precision on events (going from 58 ms to 3.4 s ticks), but we can now handle negative numbers back to 1646. But let''s do just one more of these -- let''s let the leading 0 blow up the ticks not once but twice, to about 3 minutes and 15 seconds. Now we can handle dates back about 17,000 years ago, and 200 years into the future, with precision pre-1970 of about 3 minutes and precision of 58 milliseconds since then. 
+This means that before 1970 we don''t have "double-click" precision on events (going from 58 ms to 3.4 s ticks), but we can now handle negative numbers back to 1646. But let''s do just one more of these -- let''s let the leading 0 blow up the ticks not once but twice, to about 3 minutes and 15 seconds. Now we can handle dates back about 17,000 years ago, and 200 years into the future, with precision pre-1970 of about 3 minutes and precision of 58 milliseconds since then.
 
-This is good. I am pretty happy with this solution. I want to be able to put timestamps for past things, but we simply don''t need the same precision for these things because nothing was recorded so quickly in the first place. Nothing was so immediate. The idea of a "time stamp" actually has an interesting kind of immediacy and moment-ness to it which makes me wonder if folks pre-modernity would find it silly from the start. 
+This is good. I am pretty happy with this solution. I want to be able to put timestamps for past things, but we simply don''t need the same precision for these things because nothing was recorded so quickly in the first place. Nothing was so immediate. The idea of a "time stamp" actually has an interesting kind of immediacy and moment-ness to it which makes me wonder if folks pre-modernity would find it silly from the start.
 
 And, again, if you really need precision, use a datetime field; don''t ask the ID to do everything.', '2024-09-19 18:54:36.488146+00', '2zwt79n5-kbr3i5', '', false, 'a-good-id', 'In Search of a Good ID', '2024-10-11 09:58:15.177996+00', '76dc2ac9-288f-4274-b3e4-905a635d6e46', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('a', '2021-10-29 21:39:46.667268+00', NULL, '', false, 'aaaa', 'a', NULL, '5283ae62-1ac4-4a4d-a158-07528f9588fb', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
@@ -698,16 +698,16 @@ But what if the start of the day were not midnight but noon? What if one culture
 
 If these two cultures are too rigid about how they see the cycles of life, what will they do when they encounter a culture whose seasons are totally different, like "hot, wet, dry"? How will you understand their metaphors of death and life, of sowing and reaping, if you only how to know how to breathe inhale-first?
 
-So I have been teaching myself to breathe backwards, inhaling last, and exhaling first. 
+So I have been teaching myself to breathe backwards, inhaling last, and exhaling first.
 
 What if the end was the beginning. What if Autumn was the first season, before Winter, Spring and Summer finishes it out. If harvesting came before planting, might we remember that the land was fertile and feeding creatures and people before the farm was invented? If we breathed out first, do you think we''d be more mindful that we need to make space to put more into a container that is already full? Why is Saturday/Sunday the week-end and not the week-beginning?
 
-I''m serious though. Why does the time-off come at the _end_ and not the beginning? And what does this arbitrary choice of language mean for how we think about our place in society and our relationship to employment labour? To me, it seems to say, "You have worked for 5 days and so now the lords grant you 2 days off." It says, "Be thankful we have granted you this 28% of your life. 
+I''m serious though. Why does the time-off come at the _end_ and not the beginning? And what does this arbitrary choice of language mean for how we think about our place in society and our relationship to employment labour? To me, it seems to say, "You have worked for 5 days and so now the lords grant you 2 days off." It says, "Be thankful we have granted you this 28% of your life.
 
 This is such a terrible notion, and I think maybe we could do something about it, if we got better at just switching things around a little bit. Don''t you think we all carry too much of this lie, that work is required to _earn_ our life, and wouldn''t we be a bit better off if we practiced chipping away at it? What if we center the knowledge that humans were free long before their land was taken by feudal lords, and before they were forced into the cities to work in factories, that the _natural_ state for a person to be in is not working a 60-hour-a-week job for someone who hates you, that the time we spend not-working is our birthright, and the 5 days that come after that represent what we must do to survive the system the bad guys built when they stole the commons from us and replaced it with factory farms and commodity capitalism and insurance companies and fintech startups.
 
 At this point in the post, I don''t know if you''re with me, but in any case, even if you don''t get why it''s important, have you ever tried to seriously learn box breathing? It''s a simple technique used by ', '2025-07-15 11:32:43.125737+00', 'We tend to think of a breath as starting from the inhale and ending with an exhale...', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/soft-but-1ac2b7.jpeg', false, 'learning-to-breathe-backwards', 'Learning to Breathe Backwards', '2025-08-20 16:23:13.975619+00', '2531d6f2-c8aa-47d0-9db2-77332629c8ef', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('Many eons ago, in a land near the crossroads of civilisation, a child was born. Divine messengers spoke of their coming and called them a great builder, a leader and humble servant of the people, a light of justice for all to see. When the child was born the emperor sent agents to kill the child, but the angels protected them and they were disappeared into the hills to live with the people there. 
+	('Many eons ago, in a land near the crossroads of civilisation, a child was born. Divine messengers spoke of their coming and called them a great builder, a leader and humble servant of the people, a light of justice for all to see. When the child was born the emperor sent agents to kill the child, but the angels protected them and they were disappeared into the hills to live with the people there.
 
 The child grew strong and learned fast. They wanted for nothing and never cried. They were never sick and never fell. In time the angels came and told the child, "You are the child of god and your life is without limit. Make your life whatever you wish, and show the people of this land that they may do the same. No one can harm you and you will accomplish anything you set your will to."
 
@@ -721,7 +721,7 @@ More villages came to their aid, for the governor had over the years encroached 
 
 On the eve of the child''s 17th birthday, after 6 years of war, the angels came again. They said to the child "You are the child of god and your strength in battle is without limit. Your strength is a river that flows across the battlefield, unstoppable, your army will destroy any enemy they may face." The boy meditated on this message, for the child had given all their strength and still they had suffered as many defeats as victories.
 
-That night as they slept, they had another dream, a premonition of a majestic ceremony with idols and food, and a great circle with all commanders. And so the next day they called upon the council to hold a feast for the soldiers, and at this feast they created the great circle, with food and idols and all the commanders, and the child reached within themselves and remembered the words "Your life is without limit" and from this truth poured out the light and energy of their power. It flowed into the commanders and they too became powerful. 
+That night as they slept, they had another dream, a premonition of a majestic ceremony with idols and food, and a great circle with all commanders. And so the next day they called upon the council to hold a feast for the soldiers, and at this feast they created the great circle, with food and idols and all the commanders, and the child reached within themselves and remembered the words "Your life is without limit" and from this truth poured out the light and energy of their power. It flowed into the commanders and they too became powerful.
 
 Their forces devastated the governor''s forces, and before long the emperor sent imperial forces to quell the growing rebellion. But they were no match; the child of god had built war machines and discovered the secrets of harder metals. Their power now flowed through the armies of the entire hill country who fought as if their hearts beat as one. They battled toward the lowlands, bringing their builders, touched themselves by the child of god, and building bridges and roads, irrigation and boats. And so the people of the lowlands became allies, adding their numbers and the wealth of their farmlands. And so it went with the coastal people, until three provinces were in open rebellion under the child of god''s command.
 
@@ -733,7 +733,7 @@ They entered the city alone and made their way to the castle gates, with only th
 
 "The city has fallen; the war is over. Come out and surrender." But no answer came. And so the child of god ordered the keep destroyed by catapults and fire, and it burned to ash with the imperial family and their guard inside.
 
-Finally the war was over and the governors of the empire came before the child of god to give their allegiance to their new emperor, the great warrior with gifts straight from god. And they gathered in the circle, surrounded by food and idols, and held the great ceremony. And for the first time the child of god understood what the angels had said. As the life force left their body and went into the governors, binding them together, giving their wisdom and generous spirit, the child could also feel something that had been there all along -- a taking that happened in the same breath. A taking of allegiance. A kind of taking of the mind, the will. As they gained from the child''s will, so also did they lose something in return. 
+Finally the war was over and the governors of the empire came before the child of god to give their allegiance to their new emperor, the great warrior with gifts straight from god. And they gathered in the circle, surrounded by food and idols, and held the great ceremony. And for the first time the child of god understood what the angels had said. As the life force left their body and went into the governors, binding them together, giving their wisdom and generous spirit, the child could also feel something that had been there all along -- a taking that happened in the same breath. A taking of allegiance. A kind of taking of the mind, the will. As they gained from the child''s will, so also did they lose something in return.
 
 After the ceremony the child disappeared into the mountains. They meditated by a waterfall and on a rocky cliff. They walked through the forest and drank from the streams. And they relived every ceremony from the first time to the last, and experienced every one again with new eyes. They felt the terrible taking of every one. They sensed the fear the others had felt, an undercurrent hidden beneath the exhilaration of access to power. It was a fear of loss, of disobedience, of failure. It was a shrinking of the self, becoming a tool for the master''s use.
 
@@ -757,7 +757,7 @@ When the war brought famine, there were many ailments that rest and medicine cou
 
 They could feel their life shortening and their power waning. And they felt content that the dark shadow of fear and pain held no sway over them. They did no harm and gave of themselves, and moved on to the next village before they could be recognized. Life was still hard, but the two of them were together, and content.
 
-When the war came to an end, they moved on to another province, to find a new hillside to make their home. They came to a mountainside where the villages were all rebuilding, and trading with one another peacefully. And there they built a house on a hillside and helped out their neighbors. And they built tools for farming, fishing, and games. 
+When the war came to an end, they moved on to another province, to find a new hillside to make their home. They came to a mountainside where the villages were all rebuilding, and trading with one another peacefully. And there they built a house on a hillside and helped out their neighbors. And they built tools for farming, fishing, and games.
 
 They carved musical instruments and found the best fruit in the forest. When a new baby was born the village people would bring them before the child of god, and they would draw a circle and lay out fish or barley and carved idols, and the child would give some of their will to the newborn to bless them for a healthy childhood and long life.
 
@@ -771,7 +771,7 @@ As the child of god grew older, their power dwindled. They aged like anyone woul
 &gt; 2) When the disruption first happened, the crowd (mostly white) turned ugly. It''s hard to say what is the chicken or the egg. Some of it may have stemmed from the protestors calling the whole crowd racist. Some of it was from annoyance at the disruption. Some was probably from deep disagreement about tactics in a movement to get attention to an issue. Some was from deep disappointment because people had stood in the hot sun for hours to hear Bernie. Whatever it was, the conversations that ensued--the name calling of white and black people against each other, including some people calling blacks who didn''t agree with what was happening racist--were so painful. I was in the speakers tent and Pam Keeley alerted me to two young black girls (Gina Owens grandchildren) who were weeping, they were so scared, so I went over to comfort them. We stood with our arms around each other, and in some small way, that gave me the greatest sense of doing something tangible--to be with people I love, assuring them they would be safe, and that none of us would ever let harm come to them. After the protests, several people came up and wanted to talk. Many were furious--some white people said they no longer support BLM. Others said they do support but this erodes their support. Some said outrageous things from anger. Others seemed befuddled. Some understood. People will have to work this out for themselves, but as we all do, I hope that we can open our hearts to all of the pain and suffering in the world and be as compassionate and kind as possible to each other so that we can also heal as we learn and listen.
 &gt;
 &gt; 3) I don''t have any answer on what is "right." Bernie Sanders was a guest in our city--invited by a multiracial coalition to speak on some very important issues. Enormous amounts of work went into yesterday''s event and it was so important to talk about preserving and expanding Social Security and Medicare. None of the papers today are covering those issues, because they were eclipsed by what happened. That''s not necessarily "wrong"--it just is what it is. But here''s what I would have loved to have happen: after the protestors were able to get the mic and say their piece and have the 4.5 minutes of silence for all the black people who have been killed, I would have loved for Bernie Sanders to take the mic and respond. And also to speak about Social Security and Medicare too. Here''s what I would love even more: for the Sanders campaign and BLM nationally to sit down and talk about an agenda on racial justice that he can use his presidential platform to help move. Imagine rolling out that agenda and inviting black people to talk about it on stage with him. Now that excites me.
-&gt; 
+&gt;
 &gt; 4) I had not yet endorsed Bernie Sanders (and still have not), although I was incredibly excited about his candidacy. One of the primary reasons is because I wanted to know more about his stands on race and racism. I asked the campaign for some time to discuss this with him, and he did very graciously make some time for me to have a short conversation with him. What I got from the conversation is that he knows he comes from a very white state and he''s a 70+ year old white guy. He knows that running for President, he must now speak to voters who are very different from those in his state. He IS deeply committed to equality on all counts but his primary lens for all of his work--and a HUGELY necessary and not-often-enough-acknowledged lens--is economic. He is a truth-teller on economic issues in a way that no other candidate is. he gets the connection between large corporations, elections, and income inequality. He does understand the problems of the criminal justice system and I fully believe he will work to change that if elected. But the deeper comfort with talking about race and racism is harder. As Mayor of Burlington, early on, he endorsed Jesse Jackson for President and Jackson went on to win the state. He was active in the civil rights movement. But more than that, he is someone who has fought for so many of the threads that connect our movements. He has to learn to talk about racism in that way, to connect his ideas on education, economics, incarceration, and race. As I said when I had the honor of introducing him at his evening rally, he is in a unique position to do so. And we are in a unique moment where we crave that leadership in a Presidential campaign. I told him in my conversation with him that he needed to talk head on about institutional racism--he said he agreed and he would do it in the evening. And he did--to an enormous, cheering crowd of 15,000 people. That''s a huge platform for our messages. There''s more to do and learn for sure, but is any one of us perfect? The most we can ask for is for someone who listens and cares deeply, who is trustworthy, and who will do what he says. I know I learned a lot in my campaign and I will continue to grow from listening to people''s voices. I believe Bernie Sanders is growing too--and I hope (and yes, believe) that we''ll look back on this and see his emergence as a leader who brings our movements for economic, racial and social justice together in a powerful way.
 &gt;
 &gt; 5) Here''s what I am trying to deeply think about: How do we call people in even as we call them out? As a brown woman, the only woman of color in the state senate, often the only person of color in many rooms, I am constantly thinking about this. To build a movement, we have to be smarter than those who are trying to divide us. We have to take our anger and rage and channel it into building, growing, loving, holding each other up. We need our outlets too, our places of safety where we can say what we think without worrying about how it''s going to land, where we can call out even our white loved ones, friends, allies for what they are not doing. But in the end, if we want to win for ALL of us on racial, economic and social justice issues, we need multiple sets of tactics, working together. Some are disruptive tactics. Some are loving tactics. Some are truth-telling tactics. Some can only be taken on by white people. Some can only be taken on by people of color. Sometimes we need someone from the other strand to step in and hold us up. Other times, we have to step out and hold them up. Each of us has a different role to play but we all have to hold the collective space for movement building together. That''s what I hope we all keep in mind and work on together. It''s the only way we move forward.
@@ -792,15 +792,15 @@ If we treated health as an integral part of security and allocated resources to 
 
 Mostly English is not a super gendered language, but gender still shows up a lot, and a big part of this comes from our gendered pronouns; "she/he" "her/him" "hers/his" "herself/himself". We also apply gender to lots of job or role category nouns, like "actor/actress"), and use "woman/man" and "girl/boy" in parts of other words, like chairwoman and boyfriend.
 
-But looking at other languages, we are not in a very bad situation, by comparison. In French they gender every single noun so that you then know how to gender the adjectives about them! In Hindi you even gender verbs sometimes!? ("accha lagta hai") 
+But looking at other languages, we are not in a very bad situation, by comparison. In French they gender every single noun so that you then know how to gender the adjectives about them! In Hindi you even gender verbs sometimes!? ("accha lagta hai")
 
-But at least in Hindi (and, as I understand it, in many other Indian languages) they have some great gender-neutral pronouns. In hindi the word for "she" "he" and the singular "they" is just "voh" and you use it for everyone and everything. There is no option of using a "voh (m)" or "voh (f)" even if you wanted to. Everyone is a they/them in Hindi! -- just as long as you don''t use any verbs or adjectives about them (facepalm). 
+But at least in Hindi (and, as I understand it, in many other Indian languages) they have some great gender-neutral pronouns. In hindi the word for "she" "he" and the singular "they" is just "voh" and you use it for everyone and everything. There is no option of using a "voh (m)" or "voh (f)" even if you wanted to. Everyone is a they/them in Hindi! -- just as long as you don''t use any verbs or adjectives about them (facepalm).
 
 But this is what I want to talk about, the English, singular they/them. (I''m not against it; that is not where this is going.) I am so happy that language is evolving and they/them is becoming really normal; it''s really nice that a lot of friends use they/them when telling a story just because the gender of the person isn''t a part of the story! Even if I know you know the person and their gender, if I am telling a story and by some miracle the story doesn''t involve their gender -- doesn''t touch on how they get treated, or the expectations placed upon them by others, or the amount they get paid, or the respect and deference they''re given, or how much their sexuality is policed, or their beauty standards, or anything like that -- I will simply use gender neutral terms throughout. Simple!
 
-It''s not quite a revolution, but I notice something happen in my brain, when I notice myself looking for the gender referents so I know how to interpret events. And then I catch myself doing it, and I think wow silly brain conditioning, and then I simply will myself to picture the events without gendered imagery and attributes. The existence of gender-nonspecificity is momentarily frustrating, but it is so freeing to lean into it and just really hear what''s being communicated. 
+It''s not quite a revolution, but I notice something happen in my brain, when I notice myself looking for the gender referents so I know how to interpret events. And then I catch myself doing it, and I think wow silly brain conditioning, and then I simply will myself to picture the events without gendered imagery and attributes. The existence of gender-nonspecificity is momentarily frustrating, but it is so freeing to lean into it and just really hear what''s being communicated.
 
-For myself, personally, I like being they/them''d but I also don''t mind if people want to use their preferred gender-neutral pronound -- like if ze/zir is just your way of languaging-without-gender, then go for it. And if you can''t get over the grammars of it, then you can use she/her for me; just please don''t he/him me. Anything but my assigned-at-birth gender is fine, really. Because I want gender to be _less_ a part of everyone''s life; less a part of how salary negotiations go, how much freedom/obligation they have in raising kids and caretaking, how much of the home''s reproductive and emotional labour they have to do, etc. I don''t think we should get rid of gender -- so many people like their gender! -- but I don''t think people''s social, economic and personal lives should all be gendered, against their will, at all times and from all directions. I think it should be actually literally illegal to have a blue razor and a pink razor that cost different amounts. 
+For myself, personally, I like being they/them''d but I also don''t mind if people want to use their preferred gender-neutral pronound -- like if ze/zir is just your way of languaging-without-gender, then go for it. And if you can''t get over the grammars of it, then you can use she/her for me; just please don''t he/him me. Anything but my assigned-at-birth gender is fine, really. Because I want gender to be _less_ a part of everyone''s life; less a part of how salary negotiations go, how much freedom/obligation they have in raising kids and caretaking, how much of the home''s reproductive and emotional labour they have to do, etc. I don''t think we should get rid of gender -- so many people like their gender! -- but I don''t think people''s social, economic and personal lives should all be gendered, against their will, at all times and from all directions. I think it should be actually literally illegal to have a blue razor and a pink razor that cost different amounts.
 
 -------
 
@@ -808,8 +808,8 @@ For myself, personally, I like being they/them''d but I also don''t mind if peop
 And don''t really mind if people want to use other gender-neutral pronouns, or even she/her
 
 
- brain, over time. You notice yourself thinking "wait I can''t picture this person until I know their gender" and then you go "oh no silly, of course I can, I just have to picture a person doing the things in the story, and pick images in my 
-But we aren''t out there gendering all our nouns and adjectives. There''s no French-style "acteur" "actrice", for example -- French has a whole system for creating gobs of nouns like this and you''re just constantly having to gender everything. And even when nouns aren''t including their gender in their spelling, they still have a gender and you have to know what it is because every adjective you use will have a gender, like (m) "blond" vs. (f) "blonde". 
+ brain, over time. You notice yourself thinking "wait I can''t picture this person until I know their gender" and then you go "oh no silly, of course I can, I just have to picture a person doing the things in the story, and pick images in my
+But we aren''t out there gendering all our nouns and adjectives. There''s no French-style "acteur" "actrice", for example -- French has a whole system for creating gobs of nouns like this and you''re just constantly having to gender everything. And even when nouns aren''t including their gender in their spelling, they still have a gender and you have to know what it is because every adjective you use will have a gender, like (m) "blond" vs. (f) "blonde".
 
 My understanding is that Spanish and Italian and many romance-style languages have this. In my time learning Hindi I have found a whole new set of rules by which even verbs become gendered! ("accha lagta hai" means "I like it (m)" and "acchi lagti hai" means "I like it (f)". But in Hindi the pronouns are neutral -- "voh" is the singular he/she/they/it, but as soon as you make it possessive (his/hers/theirs/its) you have to gender it as "uska/uski".
 
@@ -857,9 +857,9 @@ The site has no Apache config to worry about, no URLs.py, and no database, with 
 
 ## Jekyll
 
-[Jekyll](http://jekyllrb.com/) is a tool for creating static sites, which is integrated into GitHub Pages. It allows you to use [Liquid templates](http://liquidmarkup.org/), which are almost identical to the templates I''m used to in Django and Flask, and the combination of Jekyll and GitHub Pages results in a pretty dreamy workflow: 
+[Jekyll](http://jekyllrb.com/) is a tool for creating static sites, which is integrated into GitHub Pages. It allows you to use [Liquid templates](http://liquidmarkup.org/), which are almost identical to the templates I''m used to in Django and Flask, and the combination of Jekyll and GitHub Pages results in a pretty dreamy workflow:
 
-1. Serve the site locally with `jekyll serve --watch`. 
+1. Serve the site locally with `jekyll serve --watch`.
 1. Work on the site. Refresh browser window to view changes.
 1. When I''m ready to publish, commit and `git push`.
 
@@ -869,11 +869,11 @@ The `--watch` flag tells Jekyll to redeploy the site each time it detects that y
 
 I really can''t say enough good things about Foundation. I don''t love to write CSS, or feel terribly good at it. I don''t like worrying about whether my paddings have caused my paragraphs to overrun, or second-guessing the way I''ve set up my `.panel` style. Foundation, like its big cousin Bootstrap, provides an easy-to-use grid and utility classes, with simple JavaScript-y add-ons like dropdown menus and modals.
 
-My preference for Foundation isn''t based on anything terribly scientific; I just find it easier to use. The markup just makes sense to me, and feels less repetitive. It leaves me needing to write less custom CSS, and I rarely if ever find myself writing code to fight against Foundation''s defaults or the assumptions that went into the design of their grid. 
+My preference for Foundation isn''t based on anything terribly scientific; I just find it easier to use. The markup just makes sense to me, and feels less repetitive. It leaves me needing to write less custom CSS, and I rarely if ever find myself writing code to fight against Foundation''s defaults or the assumptions that went into the design of their grid.
 
 ## SCSS
 
-Okay, I have to confess: I''m really not writing any less CSS than I was before I was using SCSS. The fact is, I have been meaning to learn SCSS/SASS or LESS for a while, so I finally did it, thanks to [Foundation''s incredibly simple instructions](http://foundation.zurb.com/docs/sass.HTML). 
+Okay, I have to confess: I''m really not writing any less CSS than I was before I was using SCSS. The fact is, I have been meaning to learn SCSS/SASS or LESS for a while, so I finally did it, thanks to [Foundation''s incredibly simple instructions](http://foundation.zurb.com/docs/sass.HTML).
 
 This site''s styles are so simple, I may decide to revert back to old-fashioned CSS. The current arrangement just adds a step to my workflow (`grunt build` at the command line every time I update the stylesheet). That said, I''m excited to keep learning SCSS and to try out some of its more advanced features, so I''ll probably put up with the extra step for now.
 
@@ -890,15 +890,15 @@ If you have a problem with that, I''d like you to read one of my favorite tweets
 ## More To Do
 
 This is definitely my favorite stack to build a website on, so far. As I build out the "projects" section, I may end up with project pages that really want to be more like "apps" than "pages", in which case I''ll have to re-examine my priorities and the reasons that make this the ideal stack for me, for this site, for now. But for the time being, this is working just fine -- it''s fast, it''s free, and it''s fun!', '2014-05-26 00:00:00+00', 'From the Archives: How the Jekyll site was built', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/monitor-keyboard-tablet-clipart-1980ce.webp', true, '2014-05-26-Under-the-Hood', 'Under the Hood', '2022-12-18 14:37:31.167673+00', 'f0db7867-a587-469c-a075-4871234e624d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2014-05-26'),
-	(' If your beloved friend is a bird  
- And she sings  
- not for you but for all of creation  
- not in your song but in hers  
- not on cue but when the light is just so  
-   and the ravens are playing and the hawks are resting  
-   and she joins, and others join  
- and they fill the trees and the rooftops with their sing song  
-   with their hellos and good afternoons to their beloved friends  
+	(' If your beloved friend is a bird
+ And she sings
+ not for you but for all of creation
+ not in your song but in hers
+ not on cue but when the light is just so
+   and the ravens are playing and the hawks are resting
+   and she joins, and others join
+ and they fill the trees and the rooftops with their sing song
+   with their hellos and good afternoons to their beloved friends
  Will you be angry that the song she sings is her own?
 
 _29th Jan 2023_', '2023-01-31 17:10:41.577398+00', '(A poem from 29th Jan 2023)', '', true, 'poem-song', 'The song of a friend', '2023-02-01 07:16:28.378134+00', '3fb75203-45d4-4f26-b1de-426fadd679dd', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-01-31'),
@@ -914,23 +914,23 @@ a website. I connected with TBD''s founder, Divya Kandukuri, and spoke about
 their needs. They didn''t need much – just a site with a CMS and some forms.
 I got the sense that Divya was supremely competent and had picked a really
 good intervention point: directly connecting people with resources that can
-help them in their time of greatest need, raising awareness about one of 
-the most vicious forms of oppression, and helping those affected build 
-community resilience among those affected by it. 
+help them in their time of greatest need, raising awareness about one of
+the most vicious forms of oppression, and helping those affected build
+community resilience among those affected by it.
 
 How could I not get involved with such a great project! Besides, I was taking
 some extra time off work anyway, and I am trying to find more ways to be _directly
-useful_ to _smaller organisations_ rather than always (as I do at my day job) 
+useful_ to _smaller organisations_ rather than always (as I do at my day job)
 working with larger scale tech systems for more professionalised organisations.
 
 _[Check out the repository here](https://github.com/michaelsnook/thebluedawn-wp-bedrock)_
 
-We have been using Bedrock at work so I started there. The other WordPress 
+We have been using Bedrock at work so I started there. The other WordPress
 site I maintain uses Sage, so I used that to deploy the first
 draft of the site at [thebluedawn.org](https://thebluedawn.org). But the
 design I wanted wasn''t easy to execute even with Sage''s relatively simple
-(but still very WordPress-y), so I added the Timber plugin and started 
-porting the theme into [Twig templates like this one](https://github.com/michaelsnook/thebluedawn-wp-bedrock/blob/master/web/app/themes/thebluedawn/resources/views/home.twig). 
+(but still very WordPress-y), so I added the Timber plugin and started
+porting the theme into [Twig templates like this one](https://github.com/michaelsnook/thebluedawn-wp-bedrock/blob/master/web/app/themes/thebluedawn/resources/views/home.twig).
 
 ![A screenshot of TheBlueDawn.org''s top section showing the site''s title and a brief description with two buttons to get started, overlaid over an image of Bahujan leaders](https://snook.pub/static/images/thebluedawn-jumbotron.png)
 ![A screenshot of The Blue Dawn''s google form to join the counselors network](https://snook.pub/static/images/thebluedawn-counselors.png)
@@ -940,7 +940,7 @@ The styles are BootStrap 4 with very little customisation. The WordPress
 server is my own Digital Ocean box where I host another WP site. And Cloudflare
 manages the DNS and provides its free Universal SSL. Since I already had the
 server, the site is basically free to run for the foreseeable future (which
-is important for a volunteer collective that doesn''t have funding). 
+is important for a volunteer collective that doesn''t have funding).
 
 Left to do:
 
@@ -966,7 +966,7 @@ Comment below and I''ll let you know when it''s ready for beta testing.
 
 Hello World! This is a post. This site is getting real, and this post is its introduction.
 
-Welcome to it, by the way, and thank you for coming to see my website. You''ll find posts, projects, and, before too long, a contact form to get in touch with me if needed. 
+Welcome to it, by the way, and thank you for coming to see my website. You''ll find posts, projects, and, before too long, a contact form to get in touch with me if needed.
 
 I''m building this site for a few reasons. First is that I am a web developer (sort of) and so I should have my own website. Second is that I find longer-form writing to be a relief and a joy and I want to encourage myself to do it. I have a few hobby projects now and I like to talk about them, or at least I imagine when I finish one of them I will want to talk about it.
 
@@ -997,7 +997,7 @@ All in all, I finished the the movie pretty bored. I''m happy that we have some 
 	('', '2021-10-30 10:13:45.276+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'title-goes-here', 'Title', '2021-10-31 22:33:16.868682+00', 'a7db0f6a-927d-4bf5-848f-ba6020ddd77d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('I never felt at home with my assigned gender. I grew up as a boy and at some point I grew into a man, but there were a lot of things that just didn''t feel good about it.
 
-Last year, while everything around me seemed to be falling apart, something about my gender just clicked. I sort of "tried on" the notion that I might be non-binary and... it fit. 
+Last year, while everything around me seemed to be falling apart, something about my gender just clicked. I sort of "tried on" the notion that I might be non-binary and... it fit.
 
 It felt right; it felt like it had been missing from my self-conception, like in my pursuit of self-discovery and actualization, I had been set free from certain roles and expectations, the constant performance of or failure to perform as a certain type of person. Masculinity was a cage, a crutch, and a cudgel, all in one, and at some point I realized that life is just too short and if I didn''t want it, I could put it down, opt out, unsubscribe, quit being a man and be whatever else I am instead.
 
@@ -1060,7 +1060,7 @@ In early 2020 I rebuilt my old Jekyll site as a Rails + React, which [I wrote ab
 
 Overall it was a success, and I liked my new site a million times more than the old one, but there were a number of things that didn''t quite fit right, which I wrote about toward the end of that post.
 
-* I was using more and more of Bootstrap''s utility classes, but still fighting against their built-in design language. 
+* I was using more and more of Bootstrap''s utility classes, but still fighting against their built-in design language.
 * The code base still relied on React''s class-based components, and not in a particularly elegant way -- would be better to rewrite using Hooks.
 * The Rails back-end was doing both more and less than I would have wanted -- for this site I don''t really need much fanciness in Models and Controllers, but I would have loved more built-in support for Auth and Storage rather than feeling a bit like I had to write them both from scratch.
 
@@ -1068,13 +1068,13 @@ Overall it was a success, and I liked my new site a million times more than the 
 
 My intent when I started off on this rewrite was always to be experimental and very light-weight. In my professional work I tend to focus heavily on the simplicity of the architecture, so that a small team of usually general-purpose devs can maintain a large-scale app without needing a bunch of specialists to keep it running, stable and secure. For example, I''d go with Heroku to avoid server admin or complex EC2 configuration; I''d put as much as possible behind a Cloudflare reverse-proxy rather than configuring and maintaining an NGINX server, etc.
 
-So with the limited time I have to devote to personal projects, I tend to chase the same kinds of requirements for scalability and simplicity, even though the code I''m writing here is quite simple by comparison. 
+So with the limited time I have to devote to personal projects, I tend to chase the same kinds of requirements for scalability and simplicity, even though the code I''m writing here is quite simple by comparison.
 
 [![A tweet that reads: "My very big brain 200 IQ method for making programming easier is I only build easy things. Try it out; it probably won''t work for you but if it does its sweet and you can combine with other methods like using functions or whatever"](https://i.imgur.com/xx2oKyj.png)](https://twitter.com/michaelsnook/status/1391476837474131969)
 
 So I figured I would keep the Rails app in place, and rebuild the front end on some more framework-y react-type setup. Almost on a whim one weekend I tried prototyping the front end with Svelte, and it was surprisingly easy to get started!
 
-Svelte is not a React framework, and they claim to have completely reimagined the way a reactive application should work – there''s no shadow DOM; now there''s a _compiler_ that examines all the components and state changes in your application and compiles the vanilla JavaScript needed to directly update the DOM in response to changes. It''s kind of incredible! 
+Svelte is not a React framework, and they claim to have completely reimagined the way a reactive application should work – there''s no shadow DOM; now there''s a _compiler_ that examines all the components and state changes in your application and compiles the vanilla JavaScript needed to directly update the DOM in response to changes. It''s kind of incredible!
 
 But actually I wasn''t looking for a better React-DOM experience; what I was looking for was more like a less chaotic version of Gatsby to pre-render my React project and serve it statically.
 
@@ -1091,7 +1091,7 @@ And instead of the relative plugin-hell of the Gatsby world, I found a handful o
 
 Conveniently, NextJS also polyfills `fetch`, `window`, and `console` for the server, and `process` for the client, so you can write the same Javascript that runs in either environment without wrapping everything in "if this, do that, otherwise skip". The key here is that we are starting to get into truly Isomorphic Javascript -- i.e. it runs the same on client and server -- which allows the framework to do a bunch of interesting things.
 
-For example, say you have a page which contains a mix of pre-render-able content and content that needs to be fetched per-user from the client. You can write your component with `getStaticProps` to fetch the main content, so when the user visits the page, the main article or post loads immediately and causes no server load, but then the framework runs through the React components/code as well in a process called "Hydration", activating any Hooks used for state, running any additional data-fetching that needs to happen from the client, and rendering whatever additional components rely on it. 
+For example, say you have a page which contains a mix of pre-render-able content and content that needs to be fetched per-user from the client. You can write your component with `getStaticProps` to fetch the main content, so when the user visits the page, the main article or post loads immediately and causes no server load, but then the framework runs through the React components/code as well in a process called "Hydration", activating any Hooks used for state, running any additional data-fetching that needs to happen from the client, and rendering whatever additional components rely on it.
 
 ### Handling Forms and Live Preview
 
@@ -1121,7 +1121,7 @@ On a previous job I had used [Formik](https://formik.org/) for some pretty big/c
   } = useForm()
 ```
 
-Likewise, I just pass that `register` function into the inputs themselves: 
+Likewise, I just pass that `register` function into the inputs themselves:
 
 ```
 &lt;input
@@ -1145,7 +1145,7 @@ This `thePost` variable is a Hook that I pass to a component that renders the po
 
 ### Tailwind CSS
 
-This writeup couldn''t be complete without a mention of TailwindCSS and how fun and easy it was to use. By now a lot of ink has been spilled about how great it is, but you should probably just [check it out for yourself](https://tailwindcss.com). In May of 2021 I had [a chance to use Tailwind and loved it](https://michaelsnook.com/posts/mutual-aid-india), so I was keen to give it a try for this project because I''d be writing the front end afresh, trying to reproduce a somewhat clumsy, but visually good-looking Bootstrap site; I expected it would be a good test case, and it delivered. 
+This writeup couldn''t be complete without a mention of TailwindCSS and how fun and easy it was to use. By now a lot of ink has been spilled about how great it is, but you should probably just [check it out for yourself](https://tailwindcss.com). In May of 2021 I had [a chance to use Tailwind and loved it](https://michaelsnook.com/posts/mutual-aid-india), so I was keen to give it a try for this project because I''d be writing the front end afresh, trying to reproduce a somewhat clumsy, but visually good-looking Bootstrap site; I expected it would be a good test case, and it delivered.
 
 To get a quick glance at how Tailwind is being used here, check out [this site''s global file](https://github.com/michaelsnook/michaelsnook.com/blob/main/styles/globals.css): it isn''t terribly remarkable except that it shows how little CSS is involved here. There are some very classes being declared here for headings, buttons and inputs, but the rest of the site''s styles are handled entirely in utility classes in JSX. Here''s a little sample of that 75-line long CSS file:
 
@@ -1173,7 +1173,7 @@ To boot: with Tailwind CSS''s Purge utilities, the result is a 20kb (unzipped) f
 
 ## Part 2: Supabase Back-End to Replace Rails
 
-Like I said, I was originally planning to just rewrite the front-end and keep the Rails back-end, but once I got done with the front-end rewrite, I had these two separate repos michaelsnook.com-client and michaelsnook.com-server, and the next things I wanted to do immediately made it clear why Rails wasn''t right for me: handling user logins, and handling image uploads. I actually did implement user logins on the Rails server, and it wasn''t too bad, but when I got to image uploads... the number of different choices I would have to make, and the code I would have to write, all to do what seemed like an extremely common set of tasks... seemed unreasonable. 
+Like I said, I was originally planning to just rewrite the front-end and keep the Rails back-end, but once I got done with the front-end rewrite, I had these two separate repos michaelsnook.com-client and michaelsnook.com-server, and the next things I wanted to do immediately made it clear why Rails wasn''t right for me: handling user logins, and handling image uploads. I actually did implement user logins on the Rails server, and it wasn''t too bad, but when I got to image uploads... the number of different choices I would have to make, and the code I would have to write, all to do what seemed like an extremely common set of tasks... seemed unreasonable.
 
 ### Enter Supabase
 [Supabase](http://supabase.io/) bills itself as an open-source alternative to Firebase, and they have gotten a ton of attention (and some decent funding) in recent months. They rely heavily on Postgres and PostgREST for its API, and using Postgres''s Row-Level Security (RLS) to handle all authorization on the data you access. PostgREST is already a fantastic project, applying a thin (but fast and scalable) REST API layer ontop of your Postgres database, using your database''s table and column structure to generate REST API endpoints for basic CRUD applications. And Supabase packages it up inside the officially maintained Supabase-JS library so I can write code as simple as this:
@@ -1194,7 +1194,7 @@ export async function fetchPostList() {
 }
 ```
 
-Because I know supabase is handling access permissions for me, I have no concerns at all about writing this code in client side Javascript! 
+Because I know supabase is handling access permissions for me, I have no concerns at all about writing this code in client side Javascript!
 
 This has the effect of shifting the way the responsibilities are handled; a little bit more onto the database and a little bit more onto the react app, to the point that now, **the need for a Rails app vanishes into thin air.**
 
@@ -1227,24 +1227,24 @@ This would have been hours and hours of work (for me) in Rails, plus an s3 bucke
 
 ## Conclusion
 
-I love this stack. I think it''s fantastic and I plan to keep using it, but I won''t pretend it''s for every project Most organizations won''t have the luxury of ditching the server altogether and moving to Supabase or a similar Back-end As A Service (BAAS) approach. But many organizations will have one or two projects where BAAS makes sense! 
- 
+I love this stack. I think it''s fantastic and I plan to keep using it, but I won''t pretend it''s for every project Most organizations won''t have the luxury of ditching the server altogether and moving to Supabase or a similar Back-end As A Service (BAAS) approach. But many organizations will have one or two projects where BAAS makes sense!
+
 Especially if you''re using this kind of serverless or isomorphic approach for the "front end" application. NextJS and similar platforms are increasingly supporting lambda functions and incremental rebuilds; React has released Server-Side Components and these hosting platforms will likely support that as well. NextJS allows you to write functions in an `/api/` folder which create API routes that execute only on the host server and have access to additional server-side Environment variables. So more and more, we can push functionality out of the back-end frameworks in helpful ways, ways that actually improve performance, security and scalability.
 
-So I encourage folks to give BAAS a whirl, but the big take-away for me on this project has been how useful the combination of NextJS and Tailwind has been. It makes it easy to prototype, and then easy to build and customize and refine from there. And when I put the two pieces together, I finally start to feel like more and more of the things I want to build are straightforward, just a matter of writing the function. 
+So I encourage folks to give BAAS a whirl, but the big take-away for me on this project has been how useful the combination of NextJS and Tailwind has been. It makes it easy to prototype, and then easy to build and customize and refine from there. And when I put the two pieces together, I finally start to feel like more and more of the things I want to build are straightforward, just a matter of writing the function.
 
 When I think about how this stack would scale, either in traffic or in complexity, I think I''m finally feeling like I''ve got the tools and the knowledge that just about anything I want to build would be just a matter of taking the time to sit down and write the feature, rather than a hard technical barrier. But here are a few things about the current setup that I think could bite me in time, either for complexity or scale:
 
-* Moving to NextJS, I was able to do all this easy server-side generation because I''m hosting on Vercel, which seems like it could get expensive at scale, especially if we were using incremental site regeneration or server-side generation (not static but real-time, on the server). But right now there''s no ISG or SSR, so I''d only be charged for their CDN (cheap) and SSG (infrequent). 
+* Moving to NextJS, I was able to do all this easy server-side generation because I''m hosting on Vercel, which seems like it could get expensive at scale, especially if we were using incremental site regeneration or server-side generation (not static but real-time, on the server). But right now there''s no ISG or SSR, so I''d only be charged for their CDN (cheap) and SSG (infrequent).
   * It is possible to host the NextJS back-end on your own server, but it doesn''t appear to be a point of focus for the team.
 * Similarly, Supabase seems like it will get expensive at scale. They offer their server(s) as open source software and in a Docker container, and it seems like it is a point of open-source pride for them to make sure that''s a good experience.
 * The app doesn''t really handle context at all right now. I started writing a little user context provider hook but `supabase.auth.session()` is fast and caches responses so it essentially acts as its own context store. But as an app running on this stack grew in size I would have to make some choices, given the specific needs at hand, about how to proceed.
 
 For now, all of this is working great! I have to say the thing I''m least comfortable with is how much it seems that relying on NextJS means relying on Vercel''s hosting long into the future.
 
-I don''t like vendor lock-in, and it makes me uncomfortable to think I''d build something small that relies down to its core on a technology that will be very expensive at scale. So I''m thinking about checking out [Remix](https://remix.run/docs/en/v1/tutorials/blog), which appears to be aiming for the same pre-render-then-hydrate approach as NextJS, and uses a similar approach to building routes with the filesystem, and running server-side functions defined in the same app. 
+I don''t like vendor lock-in, and it makes me uncomfortable to think I''d build something small that relies down to its core on a technology that will be very expensive at scale. So I''m thinking about checking out [Remix](https://remix.run/docs/en/v1/tutorials/blog), which appears to be aiming for the same pre-render-then-hydrate approach as NextJS, and uses a similar approach to building routes with the filesystem, and running server-side functions defined in the same app.
 
-It looks like actually a Remix port would be pretty easy to do, and would still work with Supabase and react-hook-form and Tailwind and all the rest of the tooling I''ve got now. I''d have to change some folder names and the way I define my data fetching functions (or maybe just what I call them). But there could be some benefits too -- in Remix, for example, you can define data fetching for, and then pre-generate individual components, not just pages, whereas I am not sure how gracefully NextJS will integrate server-side components when they are finally ready to be added into the framework. 
+It looks like actually a Remix port would be pretty easy to do, and would still work with Supabase and react-hook-form and Tailwind and all the rest of the tooling I''ve got now. I''d have to change some folder names and the way I define my data fetching functions (or maybe just what I call them). But there could be some benefits too -- in Remix, for example, you can define data fetching for, and then pre-generate individual components, not just pages, whereas I am not sure how gracefully NextJS will integrate server-side components when they are finally ready to be added into the framework.
 
 But I am happy for now; no plans for another rewrite any time soon. What I''m looking forward to next is just _using_ this nice, modern, lightweight, low-lift stack to build more things; maybe take another crack at writing [Sunlo](http://sunlo.co), the language learning app I have been dreaming and scheming about for 5+ years; or maybe just keep working on new features for this site like a media library and auto-save backups and the like. Right now though, I am so happy it''s done, and I''m ready to put the code away for a little while and finish up some of the posts in my drafts folder. Wish me luck!', '2021-07-08 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/XbL5Ljs-18fd68.png', true, 'trying-nextjs-supabase', 'Trying something new: NextJS + Supabase', '2021-11-27 10:25:56.242745+00', '4ed1a651-55ca-41b9-8898-7ccb5d7afc54', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-11-24'),
 	('', '2022-01-23 09:59:59.978651+00', NULL, '', false, 'working-on-sunlo', 'Working on: Sunlo, a social language learning app', NULL, 'fc08137f-6585-4fb0-a3ad-89f34a177815', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
@@ -1266,15 +1266,15 @@ some cod
 2. No process*
 3. Bad process
 
-What I mean by "Bad Process" 
+What I mean by "Bad Process"
 
 This is only an easy claim to make because of the big giant "*" – where "No Process" actually means a finding very low-interference ways of advancing projects, coming up with creative solutions and reaching consensus. There are plenty of situations where processes can go wrong', '2021-08-16 17:43:32.739+00', NULL, NULL, false, 'bad-process-no-process', 'Bad Process is the Worst Process', '2021-08-16 17:43:32.739+00', 'f649db52-c1d3-4191-ace8-b7f16395b336', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('1. Identify actual enemies, and make them good ones. [here is a great example.](https://twitter.com/WaywardWinifred/status/1430555879993184262) Erik Prince is an objectively terrible person and this question is supremely relevant to what kinds of people we are and what kind of countrywide sense of identity we want to have. And for all the traction of hating on Elon Musk, you''d think we could make this guy radioactive outside of just political circles, eh? 
+	('1. Identify actual enemies, and make them good ones. [here is a great example.](https://twitter.com/WaywardWinifred/status/1430555879993184262) Erik Prince is an objectively terrible person and this question is supremely relevant to what kinds of people we are and what kind of countrywide sense of identity we want to have. And for all the traction of hating on Elon Musk, you''d think we could make this guy radioactive outside of just political circles, eh?
 2. Imbalance coalitions, e.g. if you can make Erik Prince radioactive, can you then force out blackwater? And if you hammer on that, does it become a strained relationship for Members of Congress? We typically think of Reps being "beholden" to interests like the military industrial complex, but imagine they have weak spots, that they can be separated, and take your shot.
 3. Think ahead, looking back on now. The right does this all the time in destructive ways by saying "soon they''ll have storm troopers confiscate your bibles", but we can do it in a different way like, "we can have nice things and this can be a turning point and gee won''t that be nice looking back." We can use this to give calm during crisis, almost like a soothing prayer, despite the feeling of emergency that we all feel these days when engaging in political action or labor.', '2021-08-25 20:15:35.498+00', NULL, NULL, false, 'ways-of-power', 'Ways of Power', '2021-08-25 20:15:35.498+00', '092f85ed-dc53-454c-9ba2-8d1e8345a905', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
 	('## Hello
 #### Smooth
- 
+
 **How are you**
 ![Samosa](https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/139372.jpg?resize=1200:*)
 
@@ -1336,6 +1336,17 @@ I do have a journal for private thoughts, and I like it – but some things want
 In _just one day_ you can go from: too bashful to be heard singing or seen dancing, too shy to walk the way you want to walk and wear clothes that say a little more, too afraid to let your voice rise to another pitch and fall back down throughout our conversation – it''s exhausting and frankly boring. I''m growing too tired to keep on shrinking from that fear that something I''m doing might be creative, might be seen as taking effort, being a Big Thing but failing to match professional quality.
 
 So I''m going to practice this: just, writing something small, and letting it out. Maybe I will learn to love the fear. Maybe it will go away entirely, or fade to a more appropriate size. Or maybe I will succeed with other things first, like if I just end up singing and dancing more, and then all this anxiety about writing and being judged just ends up feeling kind of small.', '2023-05-15 19:26:44.848962+00', 'Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has...', '', true, 'writing-something-small', 'Writing Something Small', '2023-05-15 20:41:49.238388+00', '7857c35c-7551-4c49-8d4a-9cc610159776', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-05-15');
+
+
+--
+-- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO "public"."projects" ("id", "title", "description", "url", "github", "tags", "sort_order", "published", "created_at") VALUES
+	('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', 'Sunlo', 'A social language-learning app where friends and family help you learn. Built with Tanstack Router, Supabase, and TailwindCSS. Think Anki + AskReddit + Wikipedia.', 'https://sunlo.app', 'https://github.com/mhsnook/sunlo', '{Tanstack Router,Supabase,React}', 1, true, '2026-03-08 00:00:00+00'),
+	('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', 'Scenetest', 'A local-first testing framework based on Playwright and Server Actions. Separate orchestration from assertions, and validate your mental model (not just your tests).', 'https://scenetest.msnook.xyz', 'https://github.com/scenetest/scenetest-js', '{Testing,Local-first}', 2, true, '2026-03-08 00:00:00+00'),
+	('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', 'Tailwind OkLCH', 'A Tailwind CSS color tool built around the OKLCH color space — composable utility classes for L, C, and H.', 'https://twok.msnook.xyz', 'https://github.com/mhsnook/tailwind-oklch', '{Tailwind,OKLCH,Color,Themes}', 3, true, '2026-03-08 00:00:00+00'),
+	('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80', 'RSVP Reader', 'An RSVP (Rapid Serial Visual Presentation) speed reader, meant to help you read any PDF at 500+ WPM, and to identify the settings that work best for your learning and reading needs.', 'https://reader.msnook.xyz', 'https://github.com/mhsnook/rsvp-reader', '{Speed-reading,Accessibility,Dyslexia}', 4, true, '2026-03-08 00:00:00+00');
 
 
 --
