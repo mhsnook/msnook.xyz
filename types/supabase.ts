@@ -7,6 +7,461 @@ export type Json =
 	| Json[]
 
 export type Database = {
+	mortality: {
+		Tables: {
+			baselines: {
+				Row: {
+					cause_id: number
+					id: number
+					is_default: boolean | null
+					name: string
+					notes: string | null
+					rate: number
+					reference_country_id: number | null
+					reference_region_id: number | null
+					year: number | null
+				}
+				Insert: {
+					cause_id: number
+					id?: number
+					is_default?: boolean | null
+					name: string
+					notes?: string | null
+					rate: number
+					reference_country_id?: number | null
+					reference_region_id?: number | null
+					year?: number | null
+				}
+				Update: {
+					cause_id?: number
+					id?: number
+					is_default?: boolean | null
+					name?: string
+					notes?: string | null
+					rate?: number
+					reference_country_id?: number | null
+					reference_region_id?: number | null
+					year?: number | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'baselines_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'causes'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'baselines_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'baselines_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'baselines_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_parent_id']
+					},
+					{
+						foreignKeyName: 'baselines_reference_country_id_fkey'
+						columns: ['reference_country_id']
+						isOneToOne: false
+						referencedRelation: 'countries'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'baselines_reference_country_id_fkey'
+						columns: ['reference_country_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['country_id']
+					},
+					{
+						foreignKeyName: 'baselines_reference_region_id_fkey'
+						columns: ['reference_region_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'baselines_reference_region_id_fkey'
+						columns: ['reference_region_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'baselines_reference_region_id_fkey'
+						columns: ['reference_region_id']
+						isOneToOne: false
+						referencedRelation: 'regions'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			causes: {
+				Row: {
+					description: string | null
+					gbd_level: number
+					id: number
+					name: string
+					parent_id: number | null
+					slug: string
+					sort_order: number
+				}
+				Insert: {
+					description?: string | null
+					gbd_level: number
+					id: number
+					name: string
+					parent_id?: number | null
+					slug: string
+					sort_order?: number
+				}
+				Update: {
+					description?: string | null
+					gbd_level?: number
+					id?: number
+					name?: string
+					parent_id?: number | null
+					slug?: string
+					sort_order?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'causes_parent_id_fkey'
+						columns: ['parent_id']
+						isOneToOne: false
+						referencedRelation: 'causes'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'causes_parent_id_fkey'
+						columns: ['parent_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'causes_parent_id_fkey'
+						columns: ['parent_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'causes_parent_id_fkey'
+						columns: ['parent_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_parent_id']
+					},
+				]
+			}
+			countries: {
+				Row: {
+					id: number
+					iso3: string | null
+					name: string
+					population: number | null
+					population_year: number | null
+					region_id: number
+				}
+				Insert: {
+					id: number
+					iso3?: string | null
+					name: string
+					population?: number | null
+					population_year?: number | null
+					region_id: number
+				}
+				Update: {
+					id?: number
+					iso3?: string | null
+					name?: string
+					population?: number | null
+					population_year?: number | null
+					region_id?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'countries_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'countries_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'countries_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'regions'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			rates: {
+				Row: {
+					age_standardized_rate: number | null
+					cause_id: number
+					country_id: number | null
+					crude_rate: number | null
+					data_quality: string
+					deaths_count: number | null
+					id: number
+					notes: string | null
+					region_id: number | null
+					source: string | null
+					year: number
+				}
+				Insert: {
+					age_standardized_rate?: number | null
+					cause_id: number
+					country_id?: number | null
+					crude_rate?: number | null
+					data_quality?: string
+					deaths_count?: number | null
+					id?: number
+					notes?: string | null
+					region_id?: number | null
+					source?: string | null
+					year: number
+				}
+				Update: {
+					age_standardized_rate?: number | null
+					cause_id?: number
+					country_id?: number | null
+					crude_rate?: number | null
+					data_quality?: string
+					deaths_count?: number | null
+					id?: number
+					notes?: string | null
+					region_id?: number | null
+					source?: string | null
+					year?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'rates_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'causes'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'rates_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'rates_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_id']
+					},
+					{
+						foreignKeyName: 'rates_cause_id_fkey'
+						columns: ['cause_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['cause_parent_id']
+					},
+					{
+						foreignKeyName: 'rates_country_id_fkey'
+						columns: ['country_id']
+						isOneToOne: false
+						referencedRelation: 'countries'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'rates_country_id_fkey'
+						columns: ['country_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['country_id']
+					},
+					{
+						foreignKeyName: 'rates_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'rates_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['region_id']
+					},
+					{
+						foreignKeyName: 'rates_region_id_fkey'
+						columns: ['region_id']
+						isOneToOne: false
+						referencedRelation: 'regions'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			regions: {
+				Row: {
+					id: number
+					name: string
+					population: number | null
+					population_year: number | null
+					slug: string
+					sort_order: number
+					super_region_id: number
+				}
+				Insert: {
+					id: number
+					name: string
+					population?: number | null
+					population_year?: number | null
+					slug: string
+					sort_order?: number
+					super_region_id: number
+				}
+				Update: {
+					id?: number
+					name?: string
+					population?: number | null
+					population_year?: number | null
+					slug?: string
+					sort_order?: number
+					super_region_id?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'regions_super_region_id_fkey'
+						columns: ['super_region_id']
+						isOneToOne: false
+						referencedRelation: 'excess_by_region'
+						referencedColumns: ['super_region_id']
+					},
+					{
+						foreignKeyName: 'regions_super_region_id_fkey'
+						columns: ['super_region_id']
+						isOneToOne: false
+						referencedRelation: 'rate_matrix'
+						referencedColumns: ['super_region_id']
+					},
+					{
+						foreignKeyName: 'regions_super_region_id_fkey'
+						columns: ['super_region_id']
+						isOneToOne: false
+						referencedRelation: 'super_regions'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			super_regions: {
+				Row: {
+					id: number
+					name: string
+					slug: string
+					sort_order: number
+				}
+				Insert: {
+					id: number
+					name: string
+					slug: string
+					sort_order?: number
+				}
+				Update: {
+					id?: number
+					name?: string
+					slug?: string
+					sort_order?: number
+				}
+				Relationships: []
+			}
+		}
+		Views: {
+			excess_by_region: {
+				Row: {
+					actual_rate: number | null
+					baseline_name: string | null
+					baseline_rate: number | null
+					cause_id: number | null
+					cause_name: string | null
+					cause_slug: string | null
+					data_quality: string | null
+					excess_deaths_est: number | null
+					excess_pct: number | null
+					excess_rate: number | null
+					gbd_level: number | null
+					population: number | null
+					rate_id: number | null
+					region_id: number | null
+					region_name: string | null
+					region_slug: string | null
+					super_region_id: number | null
+					super_region_name: string | null
+					year: number | null
+				}
+				Relationships: []
+			}
+			rate_matrix: {
+				Row: {
+					age_standardized_rate: number | null
+					cause_id: number | null
+					cause_name: string | null
+					cause_parent_id: number | null
+					cause_parent_name: string | null
+					cause_slug: string | null
+					country_id: number | null
+					country_name: string | null
+					crude_rate: number | null
+					data_quality: string | null
+					deaths_count: number | null
+					gbd_level: number | null
+					id: number | null
+					iso3: string | null
+					notes: string | null
+					population: number | null
+					region_id: number | null
+					region_name: string | null
+					region_slug: string | null
+					source: string | null
+					super_region_id: number | null
+					super_region_name: string | null
+					super_region_slug: string | null
+					year: number | null
+				}
+				Relationships: []
+			}
+		}
+		Functions: {
+			[_ in never]: never
+		}
+		Enums: {
+			[_ in never]: never
+		}
+		CompositeTypes: {
+			[_ in never]: never
+		}
+	}
 	public: {
 		Tables: {
 			media: {
@@ -123,6 +578,72 @@ export type Database = {
 				}
 				Relationships: []
 			}
+			projects: {
+				Row: {
+					created_at: string
+					description: string | null
+					github: string | null
+					id: string
+					image: string | null
+					published: boolean
+					sort_order: number
+					tags: string[] | null
+					title: string
+					updated_at: string | null
+					url: string | null
+				}
+				Insert: {
+					created_at?: string
+					description?: string | null
+					github?: string | null
+					id?: string
+					image?: string | null
+					published?: boolean
+					sort_order?: number
+					tags?: string[] | null
+					title: string
+					updated_at?: string | null
+					url?: string | null
+				}
+				Update: {
+					created_at?: string
+					description?: string | null
+					github?: string | null
+					id?: string
+					image?: string | null
+					published?: boolean
+					sort_order?: number
+					tags?: string[] | null
+					title?: string
+					updated_at?: string | null
+					url?: string | null
+				}
+				Relationships: []
+			}
+			todo_inbox: {
+				Row: {
+					created_at: string
+					id: string
+					raw_text: string
+					source: string
+					user_id: string
+				}
+				Insert: {
+					created_at?: string
+					id?: string
+					raw_text: string
+					source?: string
+					user_id?: string
+				}
+				Update: {
+					created_at?: string
+					id?: string
+					raw_text?: string
+					source?: string
+					user_id?: string
+				}
+				Relationships: []
+			}
 		}
 		Views: {
 			[_ in never]: never
@@ -150,6 +671,7 @@ export type Database = {
 					owner: string | null
 					owner_id: string | null
 					public: boolean | null
+					type: Database['storage']['Enums']['buckettype']
 					updated_at: string | null
 				}
 				Insert: {
@@ -162,6 +684,7 @@ export type Database = {
 					owner?: string | null
 					owner_id?: string | null
 					public?: boolean | null
+					type?: Database['storage']['Enums']['buckettype']
 					updated_at?: string | null
 				}
 				Update: {
@@ -174,9 +697,156 @@ export type Database = {
 					owner?: string | null
 					owner_id?: string | null
 					public?: boolean | null
+					type?: Database['storage']['Enums']['buckettype']
 					updated_at?: string | null
 				}
 				Relationships: []
+			}
+			buckets_analytics: {
+				Row: {
+					created_at: string
+					deleted_at: string | null
+					format: string
+					id: string
+					name: string
+					type: Database['storage']['Enums']['buckettype']
+					updated_at: string
+				}
+				Insert: {
+					created_at?: string
+					deleted_at?: string | null
+					format?: string
+					id?: string
+					name: string
+					type?: Database['storage']['Enums']['buckettype']
+					updated_at?: string
+				}
+				Update: {
+					created_at?: string
+					deleted_at?: string | null
+					format?: string
+					id?: string
+					name?: string
+					type?: Database['storage']['Enums']['buckettype']
+					updated_at?: string
+				}
+				Relationships: []
+			}
+			buckets_vectors: {
+				Row: {
+					created_at: string
+					id: string
+					type: Database['storage']['Enums']['buckettype']
+					updated_at: string
+				}
+				Insert: {
+					created_at?: string
+					id: string
+					type?: Database['storage']['Enums']['buckettype']
+					updated_at?: string
+				}
+				Update: {
+					created_at?: string
+					id?: string
+					type?: Database['storage']['Enums']['buckettype']
+					updated_at?: string
+				}
+				Relationships: []
+			}
+			iceberg_namespaces: {
+				Row: {
+					bucket_name: string
+					catalog_id: string
+					created_at: string
+					id: string
+					metadata: Json
+					name: string
+					updated_at: string
+				}
+				Insert: {
+					bucket_name: string
+					catalog_id: string
+					created_at?: string
+					id?: string
+					metadata?: Json
+					name: string
+					updated_at?: string
+				}
+				Update: {
+					bucket_name?: string
+					catalog_id?: string
+					created_at?: string
+					id?: string
+					metadata?: Json
+					name?: string
+					updated_at?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'iceberg_namespaces_catalog_id_fkey'
+						columns: ['catalog_id']
+						isOneToOne: false
+						referencedRelation: 'buckets_analytics'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			iceberg_tables: {
+				Row: {
+					bucket_name: string
+					catalog_id: string
+					created_at: string
+					id: string
+					location: string
+					name: string
+					namespace_id: string
+					remote_table_id: string | null
+					shard_id: string | null
+					shard_key: string | null
+					updated_at: string
+				}
+				Insert: {
+					bucket_name: string
+					catalog_id: string
+					created_at?: string
+					id?: string
+					location: string
+					name: string
+					namespace_id: string
+					remote_table_id?: string | null
+					shard_id?: string | null
+					shard_key?: string | null
+					updated_at?: string
+				}
+				Update: {
+					bucket_name?: string
+					catalog_id?: string
+					created_at?: string
+					id?: string
+					location?: string
+					name?: string
+					namespace_id?: string
+					remote_table_id?: string | null
+					shard_id?: string | null
+					shard_key?: string | null
+					updated_at?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'iceberg_tables_catalog_id_fkey'
+						columns: ['catalog_id']
+						isOneToOne: false
+						referencedRelation: 'buckets_analytics'
+						referencedColumns: ['id']
+					},
+					{
+						foreignKeyName: 'iceberg_tables_namespace_id_fkey'
+						columns: ['namespace_id']
+						isOneToOne: false
+						referencedRelation: 'iceberg_namespaces'
+						referencedColumns: ['id']
+					},
+				]
 			}
 			migrations: {
 				Row: {
@@ -205,6 +875,7 @@ export type Database = {
 					created_at: string | null
 					id: string
 					last_accessed_at: string | null
+					level: number | null
 					metadata: Json | null
 					name: string | null
 					owner: string | null
@@ -219,6 +890,7 @@ export type Database = {
 					created_at?: string | null
 					id?: string
 					last_accessed_at?: string | null
+					level?: number | null
 					metadata?: Json | null
 					name?: string | null
 					owner?: string | null
@@ -233,6 +905,7 @@ export type Database = {
 					created_at?: string | null
 					id?: string
 					last_accessed_at?: string | null
+					level?: number | null
 					metadata?: Json | null
 					name?: string | null
 					owner?: string | null
@@ -245,6 +918,38 @@ export type Database = {
 				Relationships: [
 					{
 						foreignKeyName: 'objects_bucketId_fkey'
+						columns: ['bucket_id']
+						isOneToOne: false
+						referencedRelation: 'buckets'
+						referencedColumns: ['id']
+					},
+				]
+			}
+			prefixes: {
+				Row: {
+					bucket_id: string
+					created_at: string | null
+					level: number
+					name: string
+					updated_at: string | null
+				}
+				Insert: {
+					bucket_id: string
+					created_at?: string | null
+					level?: number
+					name: string
+					updated_at?: string | null
+				}
+				Update: {
+					bucket_id?: string
+					created_at?: string | null
+					level?: number
+					name?: string
+					updated_at?: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'prefixes_bucketId_fkey'
 						columns: ['bucket_id']
 						isOneToOne: false
 						referencedRelation: 'buckets'
@@ -350,14 +1055,70 @@ export type Database = {
 					},
 				]
 			}
+			vector_indexes: {
+				Row: {
+					bucket_id: string
+					created_at: string
+					data_type: string
+					dimension: number
+					distance_metric: string
+					id: string
+					metadata_configuration: Json | null
+					name: string
+					updated_at: string
+				}
+				Insert: {
+					bucket_id: string
+					created_at?: string
+					data_type: string
+					dimension: number
+					distance_metric: string
+					id?: string
+					metadata_configuration?: Json | null
+					name: string
+					updated_at?: string
+				}
+				Update: {
+					bucket_id?: string
+					created_at?: string
+					data_type?: string
+					dimension?: number
+					distance_metric?: string
+					id?: string
+					metadata_configuration?: Json | null
+					name?: string
+					updated_at?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: 'vector_indexes_bucket_id_fkey'
+						columns: ['bucket_id']
+						isOneToOne: false
+						referencedRelation: 'buckets_vectors'
+						referencedColumns: ['id']
+					},
+				]
+			}
 		}
 		Views: {
 			[_ in never]: never
 		}
 		Functions: {
+			add_prefixes: {
+				Args: { _bucket_id: string; _name: string }
+				Returns: undefined
+			}
 			can_insert_object: {
 				Args: { bucketid: string; metadata: Json; name: string; owner: string }
 				Returns: undefined
+			}
+			delete_leaf_prefixes: {
+				Args: { bucket_ids: string[]; names: string[] }
+				Returns: undefined
+			}
+			delete_prefix: {
+				Args: { _bucket_id: string; _name: string }
+				Returns: boolean
 			}
 			extension: {
 				Args: { name: string }
@@ -368,6 +1129,18 @@ export type Database = {
 				Returns: string
 			}
 			foldername: {
+				Args: { name: string }
+				Returns: string[]
+			}
+			get_level: {
+				Args: { name: string }
+				Returns: number
+			}
+			get_prefix: {
+				Args: { name: string }
+				Returns: string
+			}
+			get_prefixes: {
 				Args: { name: string }
 				Returns: string[]
 			}
@@ -409,11 +1182,43 @@ export type Database = {
 					updated_at: string
 				}[]
 			}
+			lock_top_prefixes: {
+				Args: { bucket_ids: string[]; names: string[] }
+				Returns: undefined
+			}
 			operation: {
 				Args: Record<PropertyKey, never>
 				Returns: string
 			}
 			search: {
+				Args:
+					| {
+							bucketname: string
+							levels?: number
+							limits?: number
+							offsets?: number
+							prefix: string
+					  }
+					| {
+							bucketname: string
+							levels?: number
+							limits?: number
+							offsets?: number
+							prefix: string
+							search?: string
+							sortcolumn?: string
+							sortorder?: string
+					  }
+				Returns: {
+					created_at: string
+					id: string
+					last_accessed_at: string
+					metadata: Json
+					name: string
+					updated_at: string
+				}[]
+			}
+			search_legacy_v1: {
 				Args: {
 					bucketname: string
 					levels?: number
@@ -433,9 +1238,57 @@ export type Database = {
 					updated_at: string
 				}[]
 			}
+			search_v1_optimised: {
+				Args: {
+					bucketname: string
+					levels?: number
+					limits?: number
+					offsets?: number
+					prefix: string
+					search?: string
+					sortcolumn?: string
+					sortorder?: string
+				}
+				Returns: {
+					created_at: string
+					id: string
+					last_accessed_at: string
+					metadata: Json
+					name: string
+					updated_at: string
+				}[]
+			}
+			search_v2: {
+				Args:
+					| {
+							bucket_name: string
+							levels?: number
+							limits?: number
+							prefix: string
+							sort_column?: string
+							sort_column_after?: string
+							sort_order?: string
+							start_after?: string
+					  }
+					| {
+							bucket_name: string
+							levels?: number
+							limits?: number
+							prefix: string
+							start_after?: string
+					  }
+				Returns: {
+					created_at: string
+					id: string
+					key: string
+					metadata: Json
+					name: string
+					updated_at: string
+				}[]
+			}
 		}
 		Enums: {
-			[_ in never]: never
+			buckettype: 'STANDARD' | 'ANALYTICS' | 'VECTOR'
 		}
 		CompositeTypes: {
 			[_ in never]: never
@@ -561,10 +1414,15 @@ export type CompositeTypes<
 		: never
 
 export const Constants = {
+	mortality: {
+		Enums: {},
+	},
 	public: {
 		Enums: {},
 	},
 	storage: {
-		Enums: {},
+		Enums: {
+			buckettype: ['STANDARD', 'ANALYTICS', 'VECTOR'],
+		},
 	},
 } as const
