@@ -15,6 +15,11 @@ export default function Menu() {
 				['Cycle', '/cycle'],
 				['Drafts', '/posts/drafts'],
 				['Compose', '/posts/new'],
+				['Barcoder', '/barcoder'],
+				['Marriage', '/marriage'],
+				['Mortality', '/mortality'],
+				['Reader', '/reader'],
+				['Resume', '/resume'],
 			]
 		: []
 	const menuItems = [
