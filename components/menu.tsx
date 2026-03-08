@@ -12,23 +12,24 @@ export default function Menu() {
 		session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'
 	const loggedInLinks = session
 		? [
-				['Cycle', '/cycle'],
 				['Drafts', '/posts/drafts'],
 				['Compose', '/posts/new'],
 			]
 		: []
 	const projectLinks = [
+		['Cycle', '/cycle'],
 		['Barcoder', '/barcoder'],
 		['Marriage', '/marriage'],
 		['Mortality', '/mortality'],
 		['Reader', '/reader'],
 		['Resume', '/resume'],
+		['XKCID', '/xkcid'],
 	]
 	const menuItems = [
 		['Home', '/'],
-		session ? ['Logout', '/logout'] : ['Login', '/login'],
+		session ? null : ['Login', '/login'],
 		...loggedInLinks,
-	]
+	].filter(Boolean) as string[][]
 
 	return (
 		<>
@@ -101,6 +102,17 @@ export default function Menu() {
 											</li>
 										))}
 									</ul>
+								</li>
+							)}
+							{session && (
+								<li className="border-t py-1" role="menuitem">
+									<Link
+										href="/logout"
+										className="list-item py-2 text-cyan-content hover:underline px-10"
+										onClick={() => setIsOpen(false)}
+									>
+										Logout
+									</Link>
 								</li>
 							)}
 						</ul>
