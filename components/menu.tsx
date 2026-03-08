@@ -16,14 +16,18 @@ export default function Menu() {
 				['Compose', '/posts/new'],
 			]
 		: []
+	const pageLinks = [
+		['XKCID', '/xkcid'],
+		['Certificate', '/marriage'],
+		['Resume', '/resume'],
+	]
 	const projectLinks = [
 		['Cycle', '/cycle'],
+		['Scenetest', 'https://scenetest.msnook.xyz'],
+		['tw/oklch', 'https://twok.msnook.xyz'],
 		['Barcoder', '/barcoder'],
-		['Marriage', '/marriage'],
 		['Mortality', '/mortality'],
 		['Reader', '/reader'],
-		['Resume', '/resume'],
-		['XKCID', '/xkcid'],
 	]
 	const menuItems = [
 		['Home', '/'],
@@ -84,6 +88,26 @@ export default function Menu() {
 									</Link>
 								</li>
 							))}
+							{session && (
+								<li className="border-t py-2" role="none">
+									<p className="px-10 py-1 text-sm text-gray-500">
+										Pages
+									</p>
+									<ul>
+										{pageLinks.map(([label, path]) => (
+											<li key={path} role="menuitem">
+												<Link
+													href={path}
+													className="list-item py-1.5 text-cyan-content hover:underline px-10 text-sm"
+													onClick={() => setIsOpen(false)}
+												>
+													{label}
+												</Link>
+											</li>
+										))}
+									</ul>
+								</li>
+							)}
 							{session && (
 								<li className="border-t py-2" role="none">
 									<p className="px-10 py-1 text-sm text-gray-500">
