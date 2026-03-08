@@ -15,13 +15,15 @@ export default function Menu() {
 				['Cycle', '/cycle'],
 				['Drafts', '/posts/drafts'],
 				['Compose', '/posts/new'],
-				['Barcoder', '/barcoder'],
-				['Marriage', '/marriage'],
-				['Mortality', '/mortality'],
-				['Reader', '/reader'],
-				['Resume', '/resume'],
 			]
 		: []
+	const projectLinks = [
+		['Barcoder', '/barcoder'],
+		['Marriage', '/marriage'],
+		['Mortality', '/mortality'],
+		['Reader', '/reader'],
+		['Resume', '/resume'],
+	]
 	const menuItems = [
 		['Home', '/'],
 		session ? ['Logout', '/logout'] : ['Login', '/login'],
@@ -81,6 +83,26 @@ export default function Menu() {
 									</Link>
 								</li>
 							))}
+							{session && (
+								<li className="border-t py-2" role="none">
+									<p className="px-10 py-1 text-sm text-gray-500">
+										Projects
+									</p>
+									<ul>
+										{projectLinks.map(([label, path]) => (
+											<li key={path} role="menuitem">
+												<Link
+													href={path}
+													className="list-item py-1.5 text-cyan-content hover:underline px-10 text-sm"
+													onClick={() => setIsOpen(false)}
+												>
+													{label}
+												</Link>
+											</li>
+										))}
+									</ul>
+								</li>
+							)}
 						</ul>
 					</nav>
 				</Overlay>
