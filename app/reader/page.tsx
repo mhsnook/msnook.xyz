@@ -7,7 +7,6 @@ import {
 	useCallback,
 	type ChangeEvent,
 	type DragEvent,
-	type KeyboardEvent as ReactKeyboardEvent,
 } from 'react'
 
 declare global {
@@ -28,16 +27,39 @@ declare global {
 	}
 }
 
-const FONT_URL =
-	'https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap'
+const FONT_URLS = [
+	'https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap',
+	'https://fonts.cdnfonts.com/css/open-dyslexic',
+]
 
-/**
- * Fixed column width (in ch) for the "before ORP" region.
- * The ORP letter sits at exactly this offset from the left of the word container.
- * Since the container is positioned so offset ORP_FIXED_WIDTH+0.5 ch = viewport center,
- * the ORP character is always dead center.
- */
-const ORP_FIXED_WIDTH = 10
+type FontChoice = 'mono' | 'serif' | 'dyslexic'
+
+const FONT_CONFIG: Record<
+	FontChoice,
+	{ family: string; label: string; orpWidth: number }
+> = {
+	mono: {
+		family: "'Space Mono', monospace",
+		label: 'Monospace',
+		// 1ch = exactly 1 character width in monospace
+		orpWidth: 10,
+	},
+	serif: {
+		family: 'Georgia, Times, serif',
+		label: 'Serif',
+		// ch = width of "0" which is wider than average chars in proportional fonts
+		orpWidth: 6,
+	},
+	dyslexic: {
+		family: "'Open Dyslexic', 'OpenDyslexic', sans-serif",
+		label: 'Dyslexia-friendly',
+		orpWidth: 6,
+	},
+}
+
+const LS_KEY = 'rsvp-reading-positions'
+const LS_THEME_KEY = 'rsvp-theme'
+const LS_FONT_KEY = 'rsvp-font'
 
 type Screen = 'input' | 'read'
 
@@ -46,6 +68,16 @@ interface ORPParts {
 	orp: string
 	after: string
 }
+
+interface SavedPosition {
+	name: string
+	idx: number
+	wpm: number
+	wordCount: number
+	updatedAt: number
+}
+
+type SavedPositions = Record<string, SavedPosition>
 
 function getORP(word: string): ORPParts {
 	if (!word) return { before: '', orp: '', after: '' }
@@ -63,8 +95,117 @@ function getORP(word: string): ORPParts {
 	}
 }
 
-function tokenize(text: string): string[] {
-	return text.split(/\s+/).filter((w) => w.length > 0)
+/** A word is a "long number" if it contains 4+ digit characters total */
+function hasLongNumber(word: string): boolean {
+	const digitCount = (word.match(/\d/g) || []).length
+	return digitCount >= 4
+}
+
+/**
+ * Tokenize text into words with per-word delay multipliers.
+ *
+ * Delays: comma → 1.3x, period/semicolon/!/? → 1.8x, paragraph → 4x,
+ * long numbers (4+ digits, incl. "1,000,000" or "3:00:51.25") → 2x.
+ * Em-dashes are joined to the preceding word.
+ * No paragraph pause if it ends with ':' or next starts with '>'.
+ */
+function tokenize(text: string): { words: string[]; delays: number[] } {
+	const paragraphs = text.split(/\n\s*\n/)
+	const words: string[] = []
+	const delays: number[] = []
+
+	for (let p = 0; p < paragraphs.length; p++) {
+		const rawWords = paragraphs[p].split(/\s+/).filter((w) => w.length > 0)
+		if (rawWords.length === 0) continue
+
+		// Dashes (em-dash, en-dash, double-hyphen) attach to the previous word
+		// as a suffix but never grab the next word.
+		const paraWords: string[] = []
+		const isDash = (s: string) => s === '—' || s === '–' || s === '--'
+		const startsDash = (s: string) =>
+			s.startsWith('—') || s.startsWith('–') || s.startsWith('--')
+		for (let i = 0; i < rawWords.length; i++) {
+			const w = rawWords[i]
+			if (isDash(w) && paraWords.length > 0) {
+				paraWords[paraWords.length - 1] += w
+			} else if (startsDash(w) && paraWords.length > 0) {
+				paraWords[paraWords.length - 1] += w
+			} else {
+				paraWords.push(w)
+			}
+		}
+
+		for (const w of paraWords) {
+			words.push(w)
+
+			let d = 1
+			const stripped = w.replace(/[)}\]"'»]+$/, '')
+			if (/[.!?]$/.test(stripped)) d = 1.8
+			else if (/[,;]$/.test(stripped)) d = 1.3
+			if (hasLongNumber(w)) d = Math.max(d, 2)
+
+			delays.push(d)
+		}
+
+		if (p < paragraphs.length - 1 && words.length > 0) {
+			const lastWord = paraWords[paraWords.length - 1]
+			const nextPara = paragraphs[p + 1]?.trim() || ''
+			const endsWithColon = lastWord.endsWith(':')
+			const nextIsBlockquote = nextPara.startsWith('>')
+
+			if (!endsWithColon && !nextIsBlockquote) {
+				delays[delays.length - 1] = Math.max(delays[delays.length - 1], 4)
+			}
+		}
+	}
+
+	return { words, delays }
+}
+
+function hashText(words: string[]): string {
+	const sample = words.slice(0, 100).join(' ')
+	let h = 0
+	for (let i = 0; i < sample.length; i++) {
+		h = ((h << 5) - h + sample.charCodeAt(i)) | 0
+	}
+	return 'rsvp_' + (h >>> 0).toString(36)
+}
+
+function loadPositions(): SavedPositions {
+	try {
+		return JSON.parse(localStorage.getItem(LS_KEY) || '{}')
+	} catch {
+		return {}
+	}
+}
+
+function savePosition(
+	hash: string,
+	name: string,
+	idx: number,
+	wpm: number,
+	wordCount: number,
+) {
+	const all = loadPositions()
+	all[hash] = { name, idx, wpm, wordCount, updatedAt: Date.now() }
+	localStorage.setItem(LS_KEY, JSON.stringify(all))
+}
+
+function loadTheme(): 'light' | 'dark' {
+	try {
+		const v = localStorage.getItem(LS_THEME_KEY)
+		return v === 'dark' ? 'dark' : 'light'
+	} catch {
+		return 'light'
+	}
+}
+
+function loadFont(): FontChoice {
+	try {
+		const v = localStorage.getItem(LS_FONT_KEY)
+		if (v === 'mono' || v === 'serif' || v === 'dyslexic') return v
+	} catch {}
+	return 'mono'
 }
 
 async function loadPdfJs(): Promise<Window['pdfjsLib']> {
@@ -95,8 +236,64 @@ async function extractPdfText(file: File): Promise<string> {
 	return text
 }
 
+/** Theme color tokens derived from dark/light mode */
+function useThemeColors(dark: boolean) {
+	return dark
+		? {
+				bg: 'bg-gray-950',
+				text: 'text-gray-100',
+				textStrong: 'text-white',
+				textMuted: 'text-gray-400',
+				textFaint: 'text-gray-600',
+				border: 'border-gray-800',
+				controlsBg: 'bg-gray-900',
+				cardBg: 'bg-gray-900',
+				inputBg: 'bg-gray-900',
+				inputBorder: 'border-gray-700',
+				beforeText: 'text-gray-500',
+				afterText: 'text-gray-200',
+				progressBg: 'bg-gray-800',
+				ctxCurrent: 'text-white font-bold',
+				ctxPast: 'text-gray-700',
+				ctxFuture: 'text-gray-500',
+				divider: 'bg-gray-800',
+				btnBorder: 'border-gray-700',
+				btnText: 'text-gray-400',
+				btnHoverBorder: 'hover:border-gray-600',
+				btnHoverText: 'hover:text-gray-300',
+				guideLine: 'rgba(255,255,255,0.07)',
+				orpShadow: '0 0 24px rgba(245,158,11,0.4)',
+			}
+		: {
+				bg: 'bg-sky-50',
+				text: 'text-slate-800',
+				textStrong: 'text-slate-900',
+				textMuted: 'text-slate-400',
+				textFaint: 'text-slate-300',
+				border: 'border-slate-200',
+				controlsBg: 'bg-white',
+				cardBg: 'bg-white',
+				inputBg: 'bg-white',
+				inputBorder: 'border-slate-200',
+				beforeText: 'text-slate-400',
+				afterText: 'text-slate-800',
+				progressBg: 'bg-sky-100',
+				ctxCurrent: 'text-slate-800 font-bold',
+				ctxPast: 'text-slate-300',
+				ctxFuture: 'text-slate-500',
+				divider: 'bg-slate-200',
+				btnBorder: 'border-slate-200',
+				btnText: 'text-slate-400',
+				btnHoverBorder: 'hover:border-slate-300',
+				btnHoverText: 'hover:text-slate-500',
+				guideLine: 'rgba(0,0,0,0.06)',
+				orpShadow: '0 0 20px rgba(245,158,11,0.3)',
+			}
+}
+
 export default function RSVPReader() {
 	const [words, setWords] = useState<string[]>([])
+	const [delays, setDelays] = useState<number[]>([])
 	const [idx, setIdx] = useState(0)
 	const [wpm, setWpm] = useState(300)
 	const [playing, setPlaying] = useState(false)
@@ -104,20 +301,74 @@ export default function RSVPReader() {
 	const [pasteText, setPasteText] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [dragOver, setDragOver] = useState(false)
+	const [showInfo, setShowInfo] = useState(false)
+	const [textName, setTextName] = useState('')
+	const [textHash, setTextHash] = useState('')
+	const [savedTexts, setSavedTexts] = useState<SavedPositions>({})
+	const [dark, setDark] = useState(false)
+	const [font, setFont] = useState<FontChoice>('mono')
+	const [showFontPicker, setShowFontPicker] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const idxRef = useRef(idx)
+	idxRef.current = idx
+	const wpmRef = useRef(wpm)
+	wpmRef.current = wpm
 
-	useEffect(() => {
-		const link = document.createElement('link')
-		link.rel = 'stylesheet'
-		link.href = FONT_URL
-		document.head.appendChild(link)
+	const c = useThemeColors(dark)
+
+	const toggleTheme = useCallback(() => {
+		setDark((d) => {
+			const next = !d
+			localStorage.setItem(LS_THEME_KEY, next ? 'dark' : 'light')
+			return next
+		})
 	}, [])
 
+	const fc = FONT_CONFIG[font]
+
+	const pickFont = useCallback((f: FontChoice) => {
+		setFont(f)
+		localStorage.setItem(LS_FONT_KEY, f)
+		setShowFontPicker(false)
+	}, [])
+
+	useEffect(() => {
+		for (const url of FONT_URLS) {
+			const link = document.createElement('link')
+			link.rel = 'stylesheet'
+			link.href = url
+			document.head.appendChild(link)
+		}
+		setSavedTexts(loadPositions())
+		setDark(loadTheme() === 'dark')
+		setFont(loadFont())
+	}, [])
+
+	useEffect(() => {
+		if (screen !== 'read' || !textHash || words.length === 0) return
+		const id = setInterval(() => {
+			savePosition(
+				textHash,
+				textName,
+				idxRef.current,
+				wpmRef.current,
+				words.length,
+			)
+		}, 3000)
+		return () => clearInterval(id)
+	}, [screen, textHash, textName, words.length])
+
 	const rewind = useCallback(() => {
-		const n = Math.max(1, Math.floor((wpm / 60) * 5))
+		const n = Math.max(1, Math.floor((wpmRef.current / 60) * 5))
 		setIdx((i) => Math.max(0, i - n))
 		setPlaying(false)
-	}, [wpm])
+	}, [])
+
+	const forward = useCallback(() => {
+		const n = Math.max(1, Math.floor((wpmRef.current / 60) * 5))
+		setIdx((i) => Math.min(words.length - 1, i + n))
+		setPlaying(false)
+	}, [words.length])
 
 	useEffect(() => {
 		if (screen !== 'read') return
@@ -130,15 +381,28 @@ export default function RSVPReader() {
 				e.preventDefault()
 				rewind()
 			}
+			if (e.code === 'ArrowRight') {
+				e.preventDefault()
+				forward()
+			}
+			if (e.code === 'ArrowUp') {
+				e.preventDefault()
+				setWpm((w) => Math.min(1000, w + 20))
+			}
+			if (e.code === 'ArrowDown') {
+				e.preventDefault()
+				setWpm((w) => Math.max(80, w - 20))
+			}
 		}
 		window.addEventListener('keydown', handler)
 		return () => window.removeEventListener('keydown', handler)
-	}, [screen, rewind])
+	}, [screen, rewind, forward])
 
 	useEffect(() => {
 		if (!playing || words.length === 0) return
-		const ms = 60000 / wpm
-		const id = setInterval(() => {
+		const baseMs = 60000 / wpm
+		const wordDelay = baseMs * (delays[idx] || 1)
+		const id = setTimeout(() => {
 			setIdx((i) => {
 				if (i >= words.length - 1) {
 					setPlaying(false)
@@ -146,18 +410,36 @@ export default function RSVPReader() {
 				}
 				return i + 1
 			})
-		}, ms)
-		return () => clearInterval(id)
-	}, [playing, wpm, words.length])
+		}, wordDelay)
+		return () => clearTimeout(id)
+	}, [playing, wpm, words.length, idx, delays])
 
-	const startReading = useCallback((text: string) => {
-		const w = tokenize(text)
-		if (w.length === 0) return
-		setWords(w)
-		setIdx(0)
-		setPlaying(false)
-		setScreen('read')
-	}, [])
+	const startReading = useCallback(
+		(text: string, name: string) => {
+			const { words: w, delays: d } = tokenize(text)
+			if (w.length === 0) return
+			const hash = hashText(w)
+			const saved = loadPositions()[hash]
+
+			setWords(w)
+			setDelays(d)
+			setTextName(name)
+			setTextHash(hash)
+			setPlaying(false)
+			setScreen('read')
+
+			if (saved && saved.idx > 0 && saved.idx < w.length) {
+				setIdx(saved.idx)
+				setWpm(saved.wpm)
+			} else {
+				setIdx(0)
+			}
+
+			savePosition(hash, name, saved?.idx || 0, saved?.wpm || wpm, w.length)
+			setSavedTexts(loadPositions())
+		},
+		[wpm],
+	)
 
 	const handleFile = async (file: File | undefined) => {
 		if (!file) return
@@ -167,7 +449,7 @@ export default function RSVPReader() {
 				file.type === 'application/pdf'
 					? await extractPdfText(file)
 					: await file.text()
-			startReading(text)
+			startReading(text, file.name)
 		} catch (e) {
 			alert('Could not read file: ' + (e as Error).message)
 		} finally {
@@ -175,42 +457,191 @@ export default function RSVPReader() {
 		}
 	}
 
+	const handleBack = () => {
+		if (textHash && words.length > 0) {
+			savePosition(textHash, textName, idx, wpm, words.length)
+		}
+		setScreen('input')
+		setPlaying(false)
+		setSavedTexts(loadPositions())
+	}
+
 	const progress = words.length > 1 ? idx / (words.length - 1) : 0
 	const pct = Math.round(progress * 100)
 	const minsLeft = Math.ceil((words.length - idx) / wpm)
 	const { before, orp, after } = getORP(words[idx] || '')
 
-	// Context sidebar words
 	const ctxStart = Math.max(0, idx - 40)
 	const ctxEnd = Math.min(words.length, idx + 80)
 	const ctxWords = words.slice(ctxStart, ctxEnd)
 	const ctxLocal = idx - ctxStart
 
+	const savedList = Object.entries(savedTexts)
+		.map(([hash, data]) => ({ hash, ...data }))
+		.sort((a, b) => b.updatedAt - a.updatedAt)
+
+	const themeToggle = (
+		<button
+			onClick={toggleTheme}
+			className={`${c.btnBorder} ${c.btnText} ${c.btnHoverText} border rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans`}
+		>
+			{dark ? '☀ light' : '● dark'}
+		</button>
+	)
+
+	const fontButton = (
+		<button
+			onClick={() => setShowFontPicker(true)}
+			className={`${c.btnBorder} ${c.btnText} ${c.btnHoverText} border rounded-md px-3 py-1.5 text-xs cursor-pointer`}
+			style={{ fontFamily: fc.family }}
+		>
+			Aa
+		</button>
+	)
+
+	const fontPickerModal = showFontPicker && (
+		<div
+			className="fixed inset-0 z-50 flex items-center justify-center p-4"
+			onClick={() => setShowFontPicker(false)}
+		>
+			<div className="absolute inset-0 bg-black/40" aria-hidden />
+			<div
+				className={`relative ${c.cardBg} ${c.text} rounded-2xl max-w-sm w-full p-6 shadow-xl`}
+				onClick={(e) => e.stopPropagation()}
+			>
+				<button
+					onClick={() => setShowFontPicker(false)}
+					className={`absolute top-4 right-4 ${c.btnText} ${c.btnHoverText} text-lg cursor-pointer`}
+				>
+					×
+				</button>
+				<h2 className={`text-lg font-bold ${c.textStrong} mb-4`}>
+					Reading Font
+				</h2>
+				<div className="flex flex-col gap-3">
+					{(
+						Object.entries(FONT_CONFIG) as [
+							FontChoice,
+							(typeof FONT_CONFIG)[FontChoice],
+						][]
+					).map(([key, cfg]) => (
+						<button
+							key={key}
+							onClick={() => pickFont(key)}
+							className={`text-left rounded-xl px-5 py-4 border cursor-pointer transition-colors ${
+								font === key
+									? 'border-amber-500 bg-amber-500/10'
+									: `${c.inputBorder} ${c.inputBg} ${c.btnHoverBorder}`
+							}`}
+						>
+							<p
+								className={`text-2xl font-bold mb-1 ${font === key ? 'text-amber-600' : c.text}`}
+								style={{ fontFamily: cfg.family }}
+							>
+								The quick brown fox
+							</p>
+							<p className={`text-xs ${c.textMuted}`}>{cfg.label}</p>
+						</button>
+					))}
+				</div>
+			</div>
+		</div>
+	)
+
 	if (screen === 'input') {
 		return (
-			<div className="min-h-screen bg-sky-50 text-slate-800 font-sans flex items-center justify-center p-8">
+			<div
+				className={`min-h-screen ${c.bg} ${c.text} font-sans flex items-center justify-center p-8 transition-colors duration-300`}
+			>
 				<div className="max-w-lg w-full">
-					<div className="mb-10">
-						<p className="text-[10px] tracking-[0.35em] text-amber-600 uppercase mb-3">
-							RSVP · Rapid Serial Visual Presentation
-						</p>
-						<h1 className="text-5xl font-extrabold leading-none text-slate-900 font-display">
-							Read fast.
-							<br />
-							Stay grounded.
-						</h1>
-						<p className="text-slate-500 mt-4 text-sm leading-relaxed">
-							The amber letter is your anchor. Your eyes never move — words come
-							to you. Upload a PDF or paste any text to begin.
-						</p>
+					<div className="mb-8 flex items-center justify-between">
+						<div className="flex items-center gap-3">
+							<h1 className={`text-2xl font-bold ${c.textStrong} font-display`}>
+								RSVP Reader
+							</h1>
+							<button
+								onClick={() => setShowInfo(true)}
+								className={`${c.btnText} ${c.btnHoverText} w-6 h-6 rounded-full border ${c.btnBorder} flex items-center justify-center text-xs cursor-pointer`}
+								title="What is this?"
+							>
+								?
+							</button>
+						</div>
+						<div className="flex items-center gap-2">
+							{fontButton}
+							{themeToggle}
+						</div>
 					</div>
+					{fontPickerModal}
+					<p className={`${c.textMuted} text-sm mb-6 -mt-4`}>
+						Drop in a PDF or text file, or paste below to begin.{' '}
+						<span className={c.textFaint}>
+							(All data stays on your device.)
+						</span>
+					</p>
+
+					{/* Info modal */}
+					{showInfo && (
+						<div
+							className="fixed inset-0 z-50 flex items-center justify-center p-4"
+							onClick={() => setShowInfo(false)}
+						>
+							<div className="absolute inset-0 bg-black/40" aria-hidden />
+							<div
+								className={`relative ${c.cardBg} ${c.text} rounded-2xl max-w-md w-full p-6 shadow-xl`}
+								onClick={(e) => e.stopPropagation()}
+							>
+								<button
+									onClick={() => setShowInfo(false)}
+									className={`absolute top-4 right-4 ${c.btnText} ${c.btnHoverText} text-lg cursor-pointer`}
+								>
+									×
+								</button>
+								<h2 className={`text-lg font-bold ${c.textStrong} mb-3`}>
+									What is RSVP?
+								</h2>
+								<div
+									className={`text-sm ${c.textMuted} leading-relaxed space-y-3`}
+								>
+									<p>
+										<strong className={c.text}>
+											Rapid Serial Visual Presentation
+										</strong>{' '}
+										shows you one word at a time, with a highlighted anchor
+										letter so your eyes stay fixed in one spot. Words come to
+										you instead of you scanning across a page.
+									</p>
+									<p>
+										Most people can comfortably read at 300–500 wpm this way —
+										much faster than normal reading — because your eyes never
+										need to move.
+									</p>
+									<p>
+										This is a free tool — use it as much as you like. Your text
+										never leaves your device. Your reading position is
+										bookmarked in your browser, so you can come back later and
+										pick up where you left off. Just drop the same file in the
+										same browser, and it will resume automatically.
+									</p>
+									<a
+										href="https://www.youtube.com/watch?v=NdKcDPBQ-Lw"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-500 font-medium"
+									>
+										▶ Watch a quick explanation on YouTube
+									</a>
+								</div>
+							</div>
+						</div>
+					)}
 
 					<div className="flex flex-col gap-3.5">
 						<div
 							className={`border rounded-xl px-6 py-5 cursor-pointer flex items-center gap-4 transition-colors ${
 								dragOver
-									? 'border-amber-500 bg-amber-50'
-									: 'border-slate-200 bg-white'
+									? 'border-amber-500 bg-amber-50/10'
+									: `${c.inputBorder} ${c.cardBg}`
 							}`}
 							onDragOver={(e: DragEvent) => {
 								e.preventDefault()
@@ -229,9 +660,9 @@ export default function RSVPReader() {
 								<p className="font-semibold text-sm">
 									{loading
 										? 'Extracting text…'
-										: 'Drop file or click to upload'}
+										: 'Drop file or click to select'}
 								</p>
-								<p className="text-slate-400 text-xs mt-0.5">
+								<p className={`${c.textMuted} text-xs mt-0.5`}>
 									.pdf · .txt · .md
 								</p>
 							</div>
@@ -246,14 +677,14 @@ export default function RSVPReader() {
 							/>
 						</div>
 
-						<div className="flex items-center gap-3 text-slate-300 text-xs">
-							<div className="flex-1 h-px bg-slate-200" />
+						<div className={`flex items-center gap-3 ${c.textFaint} text-xs`}>
+							<div className={`flex-1 h-px ${c.divider}`} />
 							or
-							<div className="flex-1 h-px bg-slate-200" />
+							<div className={`flex-1 h-px ${c.divider}`} />
 						</div>
 
 						<textarea
-							className="bg-white border border-slate-200 rounded-xl text-slate-800 p-4 text-sm resize-y min-h-28 font-sans outline-none leading-relaxed w-full"
+							className={`${c.inputBg} border ${c.inputBorder} rounded-xl ${c.text} p-4 text-sm resize-y min-h-28 font-sans outline-none leading-relaxed w-full`}
 							value={pasteText}
 							onChange={(e) => setPasteText(e.target.value)}
 							placeholder="Paste any text here…"
@@ -263,13 +694,46 @@ export default function RSVPReader() {
 							className={`rounded-xl py-3.5 text-sm font-bold tracking-wide w-full transition-colors ${
 								pasteText.trim()
 									? 'bg-amber-500 text-white cursor-pointer hover:bg-amber-600'
-									: 'bg-slate-100 text-slate-300 cursor-default'
+									: `${c.progressBg} ${c.textFaint} cursor-default`
 							}`}
-							onClick={() => pasteText.trim() && startReading(pasteText)}
+							onClick={() =>
+								pasteText.trim() &&
+								startReading(
+									pasteText,
+									pasteText.trim().split(/\s+/).slice(0, 5).join(' ') + '…',
+								)
+							}
 						>
 							Start Reading →
 						</button>
 					</div>
+
+					{savedList.length > 0 && (
+						<div className="mt-10">
+							<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-3">
+								Continue Reading
+							</p>
+							<div className="flex flex-col gap-2">
+								{savedList.map((s) => (
+									<div
+										key={s.hash}
+										className={`${c.cardBg} border ${c.inputBorder} rounded-lg px-4 py-3 text-sm flex items-center gap-3`}
+									>
+										<div className="flex-1 min-w-0">
+											<p className="font-medium truncate">{s.name}</p>
+											<p className={`${c.textMuted} text-xs`}>
+												{Math.round((s.idx / s.wordCount) * 100)}% ·{' '}
+												{s.wordCount.toLocaleString()} words · {s.wpm} wpm
+											</p>
+										</div>
+										<p className={`${c.textFaint} text-xs shrink-0`}>
+											Re-upload to resume →
+										</p>
+									</div>
+								))}
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 		)
@@ -277,7 +741,7 @@ export default function RSVPReader() {
 
 	return (
 		<div
-			className="bg-sky-50 text-slate-800 font-sans h-screen overflow-hidden"
+			className={`${c.bg} ${c.text} font-sans h-screen overflow-hidden transition-colors duration-300`}
 			style={{
 				display: 'grid',
 				gridTemplateColumns: '160px 1fr 220px',
@@ -285,32 +749,36 @@ export default function RSVPReader() {
 			}}
 		>
 			{/* Left panel: progress */}
-			<div className="border-r border-slate-200 p-5 flex flex-col justify-center">
+			<div className={`border-r ${c.border} p-5 flex flex-col justify-center`}>
 				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-5">
 					Progress
 				</p>
 				<div className="flex-1 flex flex-col max-h-80">
-					<div className="flex-1 bg-sky-100 rounded-md relative overflow-hidden">
+					<div
+						className={`flex-1 ${c.progressBg} rounded-md relative overflow-hidden`}
+					>
 						<div
-							className="absolute bottom-0 left-0 right-0 transition-[height] duration-400 ease-out"
+							className="absolute top-0 left-0 right-0 transition-[height] duration-400 ease-out"
 							style={{
 								height: `${pct}%`,
 								background:
-									'linear-gradient(to top, rgba(245,158,11,0.12), transparent)',
-								borderTop: '1px solid rgba(245,158,11,0.3)',
+									'linear-gradient(to bottom, rgba(245,158,11,0.12), transparent)',
+								borderBottom: '1px solid rgba(245,158,11,0.3)',
 							}}
 						/>
 						<div
-							className="absolute left-0 right-0 h-0.5 bg-amber-500 transition-[bottom] duration-400 ease-out"
+							className="absolute left-0 right-0 h-0.5 bg-amber-500 transition-[top] duration-400 ease-out"
 							style={{
-								bottom: `${pct}%`,
+								top: `${pct}%`,
 								boxShadow: '0 0 8px rgba(245,158,11,0.5)',
 							}}
 						/>
 					</div>
 				</div>
-				<div className="mt-5 text-xs text-slate-400 leading-loose">
-					<p className="text-slate-600 font-semibold">{pct}%</p>
+				<div
+					className={`mt-5 text-xs ${c.textMuted} leading-loose h-20 overflow-hidden`}
+				>
+					<p className={`${c.text} font-semibold`}>{pct}%</p>
 					<p>
 						{idx.toLocaleString()} / {words.length.toLocaleString()} words
 					</p>
@@ -320,72 +788,137 @@ export default function RSVPReader() {
 				</div>
 			</div>
 
-			{/* Center: reader */}
+			{/* Center: reader with focus guides */}
 			<div className="flex flex-col items-center justify-center relative">
-				{/* Subtle vertical guide at center */}
+				{/* Focus guides: horizontal rails + vertical ORP line */}
 				<div
-					className="absolute top-0 pointer-events-none"
+					className="absolute pointer-events-none"
 					style={{
-						bottom: '20%',
-						left: '50%',
-						width: '1px',
-						background:
-							'linear-gradient(to bottom, transparent, rgba(245,158,11,0.08), transparent)',
+						inset: 0,
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
 					}}
-				/>
-
-				{/* Word display — ORP is always at exact center */}
-				<div className="relative w-full" style={{ height: '5rem' }}>
+				>
+					{/* Top horizontal rail */}
 					<div
-						className="absolute top-1/2 flex items-baseline"
+						style={{
+							position: 'absolute',
+							top: 'calc(50% - 3.2rem)',
+							left: 0,
+							right: 0,
+							height: '1px',
+							background: c.guideLine,
+						}}
+					/>
+					{/* Bottom horizontal rail */}
+					<div
+						style={{
+							position: 'absolute',
+							top: 'calc(50% + 3.2rem)',
+							left: 0,
+							right: 0,
+							height: '1px',
+							background: c.guideLine,
+						}}
+					/>
+					{/* Vertical ORP line — above */}
+					<div
+						style={{
+							position: 'absolute',
+							left: '50%',
+							top: 0,
+							bottom: 'calc(50% + 3.2rem)',
+							width: '1px',
+							background: c.guideLine,
+						}}
+					/>
+					{/* Vertical ORP line — below */}
+					<div
+						style={{
+							position: 'absolute',
+							left: '50%',
+							top: 'calc(50% + 3.2rem)',
+							bottom: 0,
+							width: '1px',
+							background: c.guideLine,
+						}}
+					/>
+					{/* Small ticks where vertical meets horizontal */}
+					<div
+						style={{
+							position: 'absolute',
+							left: '50%',
+							top: 'calc(50% - 3.2rem)',
+							width: '1px',
+							height: '8px',
+							background: c.guideLine,
+							transform: 'translateY(-100%)',
+						}}
+					/>
+					<div
+						style={{
+							position: 'absolute',
+							left: '50%',
+							top: 'calc(50% + 3.2rem)',
+							width: '1px',
+							height: '8px',
+							background: c.guideLine,
+						}}
+					/>
+				</div>
+
+				{/*
+				 * Word display — ORP is always at exact horizontal AND vertical center.
+				 * Fixed height + line-height prevents vertical jumping between words.
+				 */}
+				<div
+					className="relative w-full overflow-hidden"
+					style={{ height: '4.5rem' }}
+				>
+					<div
+						className="absolute"
 						style={{
 							left: '50%',
-							/*
-							 * Position so the CENTER of the ORP char = viewport center.
-							 * The "before" region is ORP_FIXED_WIDTH ch wide.
-							 * The ORP char center is at (ORP_FIXED_WIDTH + 0.5) ch from the left of this div.
-							 * Translating left by that amount puts the ORP center at left:50% = viewport center.
-							 */
-							transform: `translate(-${ORP_FIXED_WIDTH + 0.5}ch, -50%)`,
-							fontFamily: "'Space Mono', monospace",
+							top: '50%',
+							transform: `translate(-${fc.orpWidth + 0.5}ch, -50%)`,
+							fontFamily: fc.family,
 							fontSize: 'clamp(2rem, 5vw, 3.5rem)',
 							fontWeight: 700,
-							lineHeight: 1,
+							lineHeight: '4.5rem',
 							whiteSpace: 'pre',
 							userSelect: 'none',
 						}}
 					>
 						<span
-							className="inline-block text-right text-slate-400"
-							style={{ width: `${ORP_FIXED_WIDTH}ch` }}
+							className={`inline-block text-right ${c.beforeText}`}
+							style={{ width: `${fc.orpWidth}ch` }}
 						>
 							{before}
 						</span>
 						<span
 							className="text-amber-500"
-							style={{ textShadow: '0 0 20px rgba(245,158,11,0.3)' }}
+							style={{ textShadow: c.orpShadow }}
 						>
 							{orp}
 						</span>
-						<span className="text-slate-800">{after}</span>
+						<span className={c.afterText}>{after}</span>
 					</div>
 				</div>
 
-				{/* Micro context — surrounding sentence fragment */}
-				<div className="text-xs text-center leading-loose px-6 max-w-md">
-					<span className="text-slate-400">
-						{words.slice(Math.max(0, idx - 6), idx).join(' ')}{' '}
-					</span>
-					<span className="text-slate-600 font-semibold">{words[idx]}</span>
-					<span className="text-slate-300">
-						{' '}
-						{words.slice(idx + 1, idx + 7).join(' ')}
-					</span>
-				</div>
+				{/* Text name */}
+				{textName && (
+					<p
+						className={`absolute bottom-4 text-[11px] ${c.textFaint} truncate max-w-xs`}
+					>
+						{textName}
+					</p>
+				)}
 			</div>
 
 			{/* Right panel: context */}
-			<div className="border-l border-slate-200 p-5 flex flex-col overflow-hidden">
+			<div className={`border-l ${c.border} p-5 flex flex-col overflow-hidden`}>
 				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-5">
 					Context
 				</p>
@@ -395,10 +928,10 @@ export default function RSVPReader() {
 							key={ctxStart + i}
 							className={`mr-1 transition-colors duration-100 ${
 								i === ctxLocal
-									? 'text-slate-800 font-bold'
+									? c.ctxCurrent
 									: i < ctxLocal
-										? 'text-slate-300'
-										: 'text-slate-500'
+										? c.ctxPast
+										: c.ctxFuture
 							}`}
 						>
 							{w}
@@ -409,21 +942,18 @@ export default function RSVPReader() {
 
 			{/* Controls bar */}
 			<div
-				className="flex items-center gap-4 px-6 border-t border-slate-200 bg-white"
+				className={`flex items-center gap-4 px-6 border-t ${c.border} ${c.controlsBg}`}
 				style={{ gridColumn: '1 / -1' }}
 			>
 				<button
-					onClick={() => {
-						setScreen('input')
-						setPlaying(false)
-					}}
-					className="border border-slate-200 text-slate-400 rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans hover:border-slate-300 hover:text-slate-500"
+					onClick={handleBack}
+					className={`border ${c.btnBorder} ${c.btnText} rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans ${c.btnHoverBorder} ${c.btnHoverText}`}
 				>
 					← back
 				</button>
 				<button
 					onClick={rewind}
-					className="border border-slate-200 text-slate-500 rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans hover:border-slate-300 hover:text-slate-600"
+					className={`border ${c.btnBorder} ${c.btnText} rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans ${c.btnHoverBorder} ${c.btnHoverText}`}
 				>
 					↩ 5s
 				</button>
@@ -433,9 +963,15 @@ export default function RSVPReader() {
 				>
 					{playing ? '⏸' : '▶'}
 				</button>
+				<button
+					onClick={forward}
+					className={`border ${c.btnBorder} ${c.btnText} rounded-md px-3 py-1.5 text-xs cursor-pointer font-sans ${c.btnHoverBorder} ${c.btnHoverText}`}
+				>
+					5s ↪
+				</button>
 
 				<div className="flex items-center gap-2.5 flex-1 max-w-72">
-					<span className="text-xs text-slate-400 whitespace-nowrap">
+					<span className={`text-xs ${c.textMuted} whitespace-nowrap`}>
 						{wpm} wpm
 					</span>
 					<input
@@ -449,8 +985,13 @@ export default function RSVPReader() {
 					/>
 				</div>
 
-				<p className="ml-auto text-[11px] text-slate-300 tracking-wide">
-					space · pause &nbsp;·&nbsp; ← rewind
+				{fontButton}
+				{themeToggle}
+
+				{fontPickerModal}
+
+				<p className={`ml-auto text-[11px] ${c.textFaint} tracking-wide`}>
+					space · pause &nbsp;·&nbsp; ←→ skip &nbsp;·&nbsp; ↑↓ speed
 				</p>
 			</div>
 		</div>
