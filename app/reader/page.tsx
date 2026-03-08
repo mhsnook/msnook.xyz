@@ -109,10 +109,16 @@ function hasLongNumber(word: string): boolean {
  * Em-dashes are joined to the preceding word.
  * No paragraph pause if it ends with ':' or next starts with '>'.
  */
-function tokenize(text: string): { words: string[]; delays: number[] } {
+function tokenize(text: string): {
+	words: string[]
+	delays: number[]
+	quoteDepth: number[]
+} {
 	const paragraphs = text.split(/\n\s*\n/)
 	const words: string[] = []
 	const delays: number[] = []
+	const quoteDepth: number[] = []
+	let depth = 0
 
 	for (let p = 0; p < paragraphs.length; p++) {
 		const rawWords = paragraphs[p].split(/\s+/).filter((w) => w.length > 0)
@@ -136,7 +142,15 @@ function tokenize(text: string): { words: string[]; delays: number[] } {
 		}
 
 		for (const w of paraWords) {
+			// Count opening quotes at the start of the word
+			const opens = (w.match(/^[""'«]+/) || [''])[0].length
+			// Count closing quotes at the end of the word
+			const closes = (w.match(/[""'»]+$/) || [''])[0].length
+
+			depth += opens
 			words.push(w)
+			quoteDepth.push(depth)
+			depth = Math.max(0, depth - closes)
 
 			let d = 1
 			const stripped = w.replace(/[)}\]"'»]+$/, '')
@@ -159,7 +173,7 @@ function tokenize(text: string): { words: string[]; delays: number[] } {
 		}
 	}
 
-	return { words, delays }
+	return { words, delays, quoteDepth }
 }
 
 function hashText(words: string[]): string {
@@ -294,6 +308,7 @@ function useThemeColors(dark: boolean) {
 export default function RSVPReader() {
 	const [words, setWords] = useState<string[]>([])
 	const [delays, setDelays] = useState<number[]>([])
+	const [quoteDepths, setQuoteDepths] = useState<number[]>([])
 	const [idx, setIdx] = useState(0)
 	const [wpm, setWpm] = useState(300)
 	const [playing, setPlaying] = useState(false)
@@ -416,13 +431,14 @@ export default function RSVPReader() {
 
 	const startReading = useCallback(
 		(text: string, name: string) => {
-			const { words: w, delays: d } = tokenize(text)
+			const { words: w, delays: d, quoteDepth: q } = tokenize(text)
 			if (w.length === 0) return
 			const hash = hashText(w)
 			const saved = loadPositions()[hash]
 
 			setWords(w)
 			setDelays(d)
+			setQuoteDepths(q)
 			setTextName(name)
 			setTextHash(hash)
 			setPlaying(false)
@@ -470,6 +486,10 @@ export default function RSVPReader() {
 	const pct = Math.round(progress * 100)
 	const minsLeft = Math.ceil((words.length - idx) / wpm)
 	const { before, orp, after } = getORP(words[idx] || '')
+	const currentWord = words[idx] || ''
+	const inQuote = (quoteDepths[idx] || 0) > 0
+	const wordOpensQuote = /^[""'«]/.test(currentWord)
+	const wordClosesQuote = /[""'»]$/.test(currentWord)
 
 	const ctxStart = Math.max(0, idx - 40)
 	const ctxEnd = Math.min(words.length, idx + 80)
@@ -877,6 +897,37 @@ export default function RSVPReader() {
 					className="relative w-full overflow-hidden"
 					style={{ height: '4.5rem' }}
 				>
+					{/* Ghost quotes when inside a quotation */}
+					{inQuote && !wordOpensQuote && (
+						<div
+							className={`absolute ${c.textFaint} pointer-events-none select-none`}
+							style={{
+								left: '1.5rem',
+								top: '50%',
+								transform: 'translateY(-50%)',
+								fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+								fontFamily: fc.family,
+								opacity: 0.3,
+							}}
+						>
+							&ldquo;
+						</div>
+					)}
+					{inQuote && !wordClosesQuote && (
+						<div
+							className={`absolute ${c.textFaint} pointer-events-none select-none`}
+							style={{
+								right: '1.5rem',
+								top: '50%',
+								transform: 'translateY(-50%)',
+								fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+								fontFamily: fc.family,
+								opacity: 0.3,
+							}}
+						>
+							&rdquo;
+						</div>
+					)}
 					<div
 						className="absolute"
 						style={{
