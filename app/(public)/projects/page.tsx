@@ -1,43 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Banner from '@/components/banner'
+import { fetchProjects } from '@/lib/projects'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
 	title: 'Projects – em snook',
 	description: "Things I've built and worked on",
 }
-
-const projects = [
-	{
-		title: 'Sunlo',
-		description:
-			'A social language-learning app where friends and family help you learn. Built with React Router, Supabase, and TailwindCSS; compiles to native iOS and Android with Tauri.',
-		url: 'https://sunlo.app',
-		github: 'https://github.com/michaelsnook/sunlo-app',
-		tags: ['React Router', 'Supabase', 'Tauri', 'TypeScript'],
-	},
-	{
-		title: 'Scenetest',
-		description:
-			'A visual scene-testing tool for exploring and composing color palettes and UI scenes in the browser.',
-		url: 'https://scenetest.msnook.xyz',
-		tags: ['React', 'Color'],
-	},
-	{
-		title: 'tw/oklch',
-		description:
-			'A Tailwind CSS color tool built around the OKLCH color space — browse, compare, and pick colors with perceptually uniform lightness and chroma.',
-		url: 'https://twok.msnook.xyz',
-		tags: ['Tailwind', 'OKLCH', 'Color'],
-	},
-	{
-		title: 'Reader',
-		description:
-			'An RSVP (Rapid Serial Visual Presentation) speed reader. Drop in a PDF or paste text and read one word at a time at 300–1000 wpm. All data stays on your device.',
-		url: '/reader',
-		tags: ['React', 'PDF.js', 'Local-first'],
-	},
-]
 
 function ExternalIcon({ className }: { className?: string }) {
 	return (
@@ -69,7 +40,9 @@ function GithubIcon({ className }: { className?: string }) {
 	)
 }
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+	const projects = await fetchProjects()
+
 	return (
 		<>
 			<Banner
@@ -79,9 +52,9 @@ export default function ProjectsPage() {
 			/>
 			<main className="container py-10">
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-					{projects.map((project) => (
+					{projects?.map((project) => (
 						<div
-							key={project.title}
+							key={project.id}
 							className="border rounded-lg flex flex-col justify-between p-6 hover:shadow-md transition-shadow"
 						>
 							<div>
@@ -101,7 +74,7 @@ export default function ProjectsPage() {
 												<GithubIcon />
 											</a>
 										)}
-										{project.url.startsWith('http') && (
+										{project.url?.startsWith('http') && (
 											<a
 												href={project.url}
 												target="_blank"
@@ -120,7 +93,7 @@ export default function ProjectsPage() {
 							</div>
 							<div className="flex items-center justify-between pt-2">
 								<div className="flex flex-wrap gap-1.5">
-									{project.tags.map((tag) => (
+									{project.tags?.map((tag) => (
 										<span
 											key={tag}
 											className="text-xs px-2 py-0.5 rounded-full bg-cyan-soft/40 text-cyan-content"
@@ -129,7 +102,7 @@ export default function ProjectsPage() {
 										</span>
 									))}
 								</div>
-								{project.url.startsWith('http') ? (
+								{project.url?.startsWith('http') ? (
 									<a
 										href={project.url}
 										target="_blank"
@@ -138,14 +111,14 @@ export default function ProjectsPage() {
 									>
 										Visit website &rarr;
 									</a>
-								) : (
+								) : project.url ? (
 									<Link
 										href={project.url}
 										className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap ml-3"
 									>
 										Try it out &rarr;
 									</Link>
-								)}
+								) : null}
 							</div>
 						</div>
 					))}

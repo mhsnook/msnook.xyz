@@ -81,6 +81,45 @@ export type Database = {
 				}
 				Relationships: []
 			}
+			projects: {
+				Row: {
+					created_at: string
+					description: string | null
+					github: string | null
+					id: string
+					published: boolean
+					sort_order: number
+					tags: string[] | null
+					title: string
+					updated_at: string | null
+					url: string | null
+				}
+				Insert: {
+					created_at?: string
+					description?: string | null
+					github?: string | null
+					id?: string
+					published?: boolean
+					sort_order?: number
+					tags?: string[] | null
+					title: string
+					updated_at?: string | null
+					url?: string | null
+				}
+				Update: {
+					created_at?: string
+					description?: string | null
+					github?: string | null
+					id?: string
+					published?: boolean
+					sort_order?: number
+					tags?: string[] | null
+					title?: string
+					updated_at?: string | null
+					url?: string | null
+				}
+				Relationships: []
+			}
 			posts: {
 				Row: {
 					author_id: string
