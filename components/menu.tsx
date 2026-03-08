@@ -31,6 +31,7 @@ export default function Menu() {
 	]
 	const menuItems = [
 		['Home', '/'],
+		['Projects', '/projects'],
 		session ? null : ['Login', '/login'],
 		...loggedInLinks,
 	].filter(Boolean) as string[][]
