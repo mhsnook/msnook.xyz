@@ -5,7 +5,7 @@ export default function Layout({ children }) {
 	return (
 		<>
 			<Menu />
-			{children}
+			<main className="flex-1">{children}</main>
 			<Footer />
 		</>
 	)
