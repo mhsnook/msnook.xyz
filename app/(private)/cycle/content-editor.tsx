@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
-import { type PhaseNumber, PHASES } from './lib/cycle'
+import { useState } from 'react'
+import { type PhaseNumber, PHASES, WEEKDAYS } from './lib/cycle'
 import type { PhaseTheme } from './lib/cycle-theme'
 import { useCycleContent, type CycleContentEntry } from './lib/cycle-store'
 import { genId } from '@/lib/utils'
@@ -12,68 +12,49 @@ interface Props {
 	onClose: () => void
 }
 
-type Tab = 'mantras' | 'descriptions' | 'daily_titles'
+type Kind = CycleContentEntry['kind']
+
+const TABS: { kind: Kind; label: string }[] = [
+	{ kind: 'mantra', label: 'Mantras' },
+	{ kind: 'description', label: 'Descriptions' },
+	{ kind: 'daily_title', label: 'Daily Titles' },
+]
 
 export default function ContentEditor({ phase, theme, onClose }: Props) {
 	const [entries, setEntries] = useCycleContent()
-	const [activeTab, setActiveTab] = useState<Tab>('mantras')
+	const [kind, setKind] = useState<Kind>('mantra')
 	const [selectedPhase, setSelectedPhase] = useState<PhaseNumber>(phase)
 
-	const kind: CycleContentEntry['kind'] =
-		activeTab === 'mantras'
-			? 'mantra'
-			: activeTab === 'descriptions'
-				? 'description'
-				: 'daily_title'
-
-	const filtered = useMemo(
-		() => entries.filter((e) => e.kind === kind && e.phase === selectedPhase),
-		[entries, kind, selectedPhase],
+	const filtered = entries.filter(
+		(e) => e.kind === kind && e.phase === selectedPhase,
 	)
 
-	const updateEntry = useCallback(
-		(id: string, updates: Partial<CycleContentEntry>) => {
-			setEntries(entries.map((e) => (e.id === id ? { ...e, ...updates } : e)))
-		},
-		[entries, setEntries],
-	)
+	function updateEntry(id: string, updates: Partial<CycleContentEntry>) {
+		setEntries(entries.map((e) => (e.id === id ? { ...e, ...updates } : e)))
+	}
 
-	const removeEntry = useCallback(
-		(id: string) => {
-			setEntries(entries.filter((e) => e.id !== id))
-		},
-		[entries, setEntries],
-	)
+	function removeEntry(id: string) {
+		setEntries(entries.filter((e) => e.id !== id))
+	}
 
-	const addEntry = useCallback(
-		(dayIndex: number | null = null) => {
-			const sameSlot = entries.filter(
-				(e) =>
-					e.kind === kind &&
-					e.phase === selectedPhase &&
-					e.dayIndex === dayIndex,
-			)
+	function addEntry(dayIndex: number | null = null) {
+		const sameSlot = entries.filter(
+			(e) =>
+				e.kind === kind && e.phase === selectedPhase && e.dayIndex === dayIndex,
+		)
 
-			const newEntry: CycleContentEntry = {
-				id: genId(),
-				kind,
-				phase: selectedPhase,
-				dayIndex,
-				content: '',
-				author: kind === 'mantra' ? '' : null,
-				sortOrder: sameSlot.length,
-			}
+		const newEntry: CycleContentEntry = {
+			id: genId(),
+			kind,
+			phase: selectedPhase,
+			dayIndex,
+			content: '',
+			author: kind === 'mantra' ? '' : null,
+			sortOrder: sameSlot.length,
+		}
 
-			setEntries([...entries, newEntry])
-		},
-		[kind, selectedPhase, entries, setEntries],
-	)
-
-	const tabs: { key: Tab; label: string }[] = [
-		{ key: 'mantras', label: 'Mantras' },
-		{ key: 'descriptions', label: 'Descriptions' },
-		{ key: 'daily_titles', label: 'Daily Titles' },
-	]
+		setEntries([...entries, newEntry])
+	}
 
 	return (
 		<div className="fixed inset-0 z-40 flex justify-end">
@@ -128,18 +109,16 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 					className="flex gap-1 mb-6 p-1 rounded-lg"
 					style={{ backgroundColor: theme.colors.bgSoft }}
 				>
-					{tabs.map((tab) => (
+					{TABS.map((tab) => (
 						<button
-							key={tab.key}
-							onClick={() => setActiveTab(tab.key)}
+							key={tab.kind}
+							onClick={() => setKind(tab.kind)}
 							className="flex-1 text-xs py-1.5 rounded-md font-medium transition-colors"
 							style={{
 								backgroundColor:
-									activeTab === tab.key ? theme.colors.bg : 'transparent',
+									kind === tab.kind ? theme.colors.bg : 'transparent',
 								color:
-									activeTab === tab.key
-										? theme.colors.fg
-										: theme.colors.fgMuted,
+									kind === tab.kind ? theme.colors.fg : theme.colors.fgMuted,
 							}}
 						>
 							{tab.label}
@@ -148,10 +127,9 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 				</div>
 
 				{/* Content */}
-				{activeTab === 'daily_titles' ? (
+				{kind === 'daily_title' ? (
 					<DailyTitleEditor
 						entries={filtered}
-						phase={selectedPhase}
 						theme={theme}
 						onUpdate={updateEntry}
 						onRemove={removeEntry}
@@ -160,7 +138,7 @@ export default function ContentEditor({ phase, theme, onClose }: Props) {
 				) : (
 					<GenericEntryEditor
 						entries={filtered}
-						isMantra={activeTab === 'mantras'}
+						isMantra={kind === 'mantra'}
 						theme={theme}
 						onUpdate={updateEntry}
 						onRemove={removeEntry}
@@ -253,26 +231,14 @@ function GenericEntryEditor({
 
 // ── Daily titles editor (7 day slots) ──────────────────────────────
 
-const DAY_LABELS = [
-	'Sunday',
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-]
-
 function DailyTitleEditor({
 	entries,
-	phase,
 	theme,
 	onUpdate,
 	onRemove,
 	onAdd,
 }: {
 	entries: CycleContentEntry[]
-	phase: PhaseNumber
 	theme: PhaseTheme
 	onUpdate: (id: string, updates: Partial<CycleContentEntry>) => void
 	onRemove: (id: string) => void
@@ -280,7 +246,7 @@ function DailyTitleEditor({
 }) {
 	return (
 		<div className="space-y-4">
-			{DAY_LABELS.map((label, dayIndex) => {
+			{WEEKDAYS.map((label, dayIndex) => {
 				const dayEntries = entries
 					.filter((e) => e.dayIndex === dayIndex)
 					.sort((a, b) => a.sortOrder - b.sortOrder)

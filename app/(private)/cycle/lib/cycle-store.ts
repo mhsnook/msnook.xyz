@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback, useMemo } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useStore } from 'zustand'
 import { createStore } from 'zustand/vanilla'
 import { persist, createJSONStorage } from 'zustand/middleware'
@@ -198,53 +198,51 @@ export function useResolvedContent(
 ) {
 	const content = useCycleStore((s) => s.content)
 
-	return useMemo(() => {
-		const matching = content.filter(
-			(e) =>
-				e.kind === kind &&
-				e.phase === phase &&
-				(dayIndex === undefined || e.dayIndex === dayIndex),
-		)
+	const matching = content.filter(
+		(e) =>
+			e.kind === kind &&
+			e.phase === phase &&
+			(dayIndex === undefined || e.dayIndex === dayIndex),
+	)
 
-		if (matching.length > 0) {
-			matching.sort((a, b) => a.sortOrder - b.sortOrder)
-			const index = Math.floor(Date.now() / 86_400_000) % matching.length
-			const entry = matching[index]
+	if (matching.length > 0) {
+		matching.sort((a, b) => a.sortOrder - b.sortOrder)
+		const index = Math.floor(Date.now() / 86_400_000) % matching.length
+		const entry = matching[index]
 
-			if (kind === 'mantra') {
-				return {
-					content: entry.content,
-					author: entry.author,
-					isCustom: true,
-				}
-			}
-			return { content: entry.content, author: null, isCustom: true }
-		}
-
-		// Fallback to hardcoded
-		const theme = getPhaseTheme(phase)
 		if (kind === 'mantra') {
 			return {
-				content: theme.mantra.quote,
-				author: theme.mantra.author,
-				isCustom: false,
+				content: entry.content,
+				author: entry.author,
+				isCustom: true,
 			}
 		}
-		if (kind === 'description') {
-			return { content: theme.description, author: null, isCustom: false }
-		}
-		if (kind === 'daily_title') {
-			const titles = dailyTitles[phase]
-			const di = dayIndex ?? 0
-			return {
-				content: titles[di % titles.length],
-				author: null,
-				isCustom: false,
-			}
-		}
+		return { content: entry.content, author: null, isCustom: true }
+	}
 
-		return { content: '', author: null, isCustom: false }
-	}, [content, kind, phase, dayIndex])
+	// Fallback to hardcoded
+	const theme = getPhaseTheme(phase)
+	if (kind === 'mantra') {
+		return {
+			content: theme.mantra.quote,
+			author: theme.mantra.author,
+			isCustom: false,
+		}
+	}
+	if (kind === 'description') {
+		return { content: theme.description, author: null, isCustom: false }
+	}
+	if (kind === 'daily_title') {
+		const titles = dailyTitles[phase]
+		const di = dayIndex ?? 0
+		return {
+			content: titles[di % titles.length],
+			author: null,
+			isCustom: false,
+		}
+	}
+
+	return { content: '', author: null, isCustom: false }
 }
 
 // ── Todoist hooks (React Query) ────────────────────────────────────

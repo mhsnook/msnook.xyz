@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState, useCallback } from 'react'
+import { useState } from 'react'
 import {
 	getPhaseProgress,
 	getCycleLabel,
 	formatWeekStart,
 	PHASES,
+	WEEKDAYS,
 	phaseRitualKey,
 } from './lib/cycle'
 import {
@@ -23,7 +24,7 @@ import type { PhaseNumber } from './lib/cycle'
 
 export default function CyclePageClient() {
 	const now = new Date()
-	const progress = useMemo(() => getPhaseProgress(now), [])
+	const progress = getPhaseProgress(now)
 
 	const {
 		cycle,
@@ -36,13 +37,14 @@ export default function CyclePageClient() {
 	} = progress
 
 	// Resolve theme — blend if transitioning between phases
-	const theme = useMemo(() => {
-		if (isTransitioning && phase < 4) {
-			const nextPhase: PhaseNumber = (phase + 1) as PhaseNumber
-			return getTransitionTheme(phase, nextPhase, transitionProgress)
-		}
-		return getPhaseTheme(phase)
-	}, [phase, isTransitioning, transitionProgress])
+	const theme =
+		isTransitioning && phase < 4
+			? getTransitionTheme(
+					phase,
+					(phase + 1) as PhaseNumber,
+					transitionProgress,
+				)
+			: getPhaseTheme(phase)
 
 	// Cycle key for localStorage
 	const cycleKey = `${cycle.year}-${String(cycle.month + 1).padStart(2, '0')}`
@@ -74,34 +76,21 @@ export default function CyclePageClient() {
 
 	// Phase transition overlay state
 	const [lastSeen] = useLastSeenPhase()
-	const [showTransition, setShowTransition] = useState(lastSeen !== phaseKey)
-
-	const handleTransitionDismiss = useCallback(() => {
-		setShowTransition(false)
-	}, [])
+	const showTransition = lastSeen !== phaseKey
+	const [transitionDismissed, setTransitionDismissed] = useState(false)
 
 	// Content editor state
 	const [showEditor, setShowEditor] = useState(false)
 
 	// Transition nudge text
-	const nudgeText = useMemo(() => {
-		if (!isTransitioning) return null
-		if (phase === 4) return null
+	const nudgeText = (() => {
+		if (!isTransitioning || phase === 4) return null
 		const nextTheme = getPhaseTheme((phase + 1) as PhaseNumber)
 		const dayWord = daysRemaining === 1 ? 'Tomorrow' : 'In 2 days'
 		return `${nextTheme.season} begins ${dayWord.toLowerCase()}. "${nextTheme.mantra.quote}"`
-	}, [isTransitioning, phase, daysRemaining])
+	})()
 
 	// Format today
-	const WEEKDAYS = [
-		'Sunday',
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-	]
 	const todayWeekday = WEEKDAYS[now.getDay()]
 	const todayStr = now.toLocaleDateString('en-US', {
 		weekday: 'long',
@@ -121,11 +110,11 @@ export default function CyclePageClient() {
 			}
 		>
 			{/* Phase transition overlay */}
-			{showTransition && (
+			{showTransition && !transitionDismissed && (
 				<PhaseTransition
 					currentPhaseKey={phaseKey}
 					currentPhase={phase}
-					onDismiss={handleTransitionDismiss}
+					onDismiss={() => setTransitionDismissed(true)}
 				/>
 			)}
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import type { PhaseNumber } from './lib/cycle'
 import type { PhaseTheme } from './lib/cycle-theme'
 import {
@@ -35,12 +35,12 @@ export default function RitualApproval({ phase, cycleKey, theme }: Props) {
 	const [editingId, setEditingId] = useState<string | null>(null)
 	const [editText, setEditText] = useState('')
 
-	const startEdit = useCallback((id: string, content: string) => {
+	function startEdit(id: string, content: string) {
 		setEditingId(id)
 		setEditText(content)
-	}, [])
+	}
 
-	const saveEdit = useCallback(() => {
+	function saveEdit() {
 		if (!editingId) return
 		setItems((prev) =>
 			prev.map((item) =>
@@ -48,38 +48,38 @@ export default function RitualApproval({ phase, cycleKey, theme }: Props) {
 			),
 		)
 		setEditingId(null)
-	}, [editingId, editText])
+	}
 
-	const removeItem = useCallback((id: string) => {
+	function removeItem(id: string) {
 		setItems((prev) => prev.filter((item) => item.id !== id))
-	}, [])
+	}
 
-	const addItem = useCallback(() => {
+	function addItem() {
 		setItems((prev) => [
 			...prev,
 			{ id: genId(), templateId: null, content: 'New ritual' },
 		])
-	}, [])
+	}
 
-	const moveUp = useCallback((index: number) => {
+	function moveUp(index: number) {
 		if (index === 0) return
 		setItems((prev) => {
 			const next = [...prev]
 			;[next[index - 1], next[index]] = [next[index], next[index - 1]]
 			return next
 		})
-	}, [])
+	}
 
-	const moveDown = useCallback((index: number) => {
+	function moveDown(index: number) {
 		setItems((prev) => {
 			if (index >= prev.length - 1) return prev
 			const next = [...prev]
 			;[next[index], next[index + 1]] = [next[index + 1], next[index]]
 			return next
 		})
-	}, [])
+	}
 
-	const handleApprove = useCallback(async () => {
+	async function handleApprove() {
 		if (!setup?.projectId || items.length === 0) return
 
 		const rituals = items.map((item, i) => ({
@@ -95,7 +95,7 @@ export default function RitualApproval({ phase, cycleKey, theme }: Props) {
 			cycleKey,
 			phase,
 		})
-	}, [setup, items, approve, cycleKey, phase])
+	}
 
 	return (
 		<div

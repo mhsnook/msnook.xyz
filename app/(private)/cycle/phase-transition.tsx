@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import type { PhaseNumber } from './lib/cycle'
 import {
 	getPhaseTheme,
@@ -29,14 +29,13 @@ export default function PhaseTransition({
 	const mantra = useResolvedContent('mantra', currentPhase)
 
 	// Determine previous phase for transition
-	const prevPhase: PhaseNumber = useMemo(() => {
+	const prevPhase: PhaseNumber = (() => {
 		if (lastSeen) {
 			const match = lastSeen.match(/p(\d)$/)
 			if (match) return parseInt(match[1]) as PhaseNumber
 		}
-		// Default: previous phase wrapping around
 		return currentPhase === 1 ? 4 : ((currentPhase - 1) as PhaseNumber)
-	}, [lastSeen, currentPhase])
+	})()
 
 	// Skip if already seen
 	if (lastSeen === currentPhaseKey) return null
