@@ -1,15 +1,24 @@
 'use client'
 
-import { useMemo } from 'react'
-import { getPhaseProgress, getCycleLabel, formatWeekStart } from './lib/cycle'
+import { useMemo, useState, useCallback } from 'react'
+import {
+	getPhaseProgress,
+	getCycleLabel,
+	formatWeekStart,
+	PHASES,
+	phaseRitualKey,
+} from './lib/cycle'
 import {
 	getPhaseTheme,
 	getTransitionTheme,
 	getDailyTitle,
 } from './lib/cycle-theme'
+import { useResolvedContent, useLastSeenPhase } from './lib/cycle-store'
 import MoonArc from './phase-indicator'
 import CycleTimeline from './cycle-timeline'
 import RitualChecklist from './ritual-checklist'
+import PhaseTransition from './phase-transition'
+import ContentEditor from './content-editor'
 import type { PhaseNumber } from './lib/cycle'
 
 export default function CyclePage() {
@@ -38,6 +47,9 @@ export default function CyclePage() {
 	// Cycle key for localStorage
 	const cycleKey = `${cycle.year}-${String(cycle.month + 1).padStart(2, '0')}`
 
+	// Phase key for transition detection
+	const phaseKey = phaseRitualKey(cycleKey, phase)
+
 	// Day offset from cycle start (for timeline marker)
 	const dayOffset = Math.round(
 		(now.getTime() - cycle.cycleStart.getTime()) / 86_400_000,
@@ -46,8 +58,30 @@ export default function CyclePage() {
 	// Overall cycle day (0-indexed, capped at 27)
 	const cycleDay = Math.min(dayOffset, 27)
 
-	// Daily title — day 0 is the first day of period week
-	const dailyTitle = getDailyTitle(phase, dayInPhase)
+	// Resolved content from localStorage or hardcoded fallbacks
+	const mantra = useResolvedContent('mantra', phase)
+	const description = useResolvedContent('description', phase)
+	const dailyTitleResolved = useResolvedContent(
+		'daily_title',
+		phase,
+		dayInPhase,
+	)
+
+	// Use resolved daily title if custom, otherwise hardcoded
+	const dailyTitle = dailyTitleResolved.isCustom
+		? dailyTitleResolved.content
+		: getDailyTitle(phase, dayInPhase)
+
+	// Phase transition overlay state
+	const [lastSeen] = useLastSeenPhase()
+	const [showTransition, setShowTransition] = useState(lastSeen !== phaseKey)
+
+	const handleTransitionDismiss = useCallback(() => {
+		setShowTransition(false)
+	}, [])
+
+	// Content editor state
+	const [showEditor, setShowEditor] = useState(false)
 
 	// Transition nudge text
 	const nudgeText = useMemo(() => {
@@ -76,11 +110,29 @@ export default function CyclePage() {
 				} as React.CSSProperties
 			}
 		>
+			{/* Phase transition overlay */}
+			{showTransition && (
+				<PhaseTransition
+					currentPhaseKey={phaseKey}
+					currentPhase={phase}
+					onDismiss={handleTransitionDismiss}
+				/>
+			)}
+
+			{/* Content editor slide-over */}
+			{showEditor && (
+				<ContentEditor
+					phase={phase}
+					theme={theme}
+					onClose={() => setShowEditor(false)}
+				/>
+			)}
+
 			{/* Full-viewport hero */}
 			<section className="relative w-full h-dvh flex flex-col px-4 py-8 overflow-hidden">
 				{/* Season color bands — vivid at bottom, fast taper */}
 				<div className="absolute inset-0 flex pointer-events-none">
-					{([1, 2, 3, 4] as PhaseNumber[]).map((p) => {
+					{PHASES.map((p) => {
 						const pt = getPhaseTheme(p)
 						return (
 							<div
@@ -119,18 +171,31 @@ export default function CyclePage() {
 
 					{/* Quote overlays on top */}
 					<div className="relative z-10 h-full flex flex-col items-center justify-start pt-28 max-w-3xl mx-auto px-4">
-						<p
-							className="text-2xl sm:text-3xl md:text-4xl font-display italic text-center leading-snug font-semibold"
-							style={{ color: 'oklch(0.62 0.1 70)' }}
-						>
-							&ldquo;{theme.mantra.quote}&rdquo;
-						</p>
-						<p
-							className="text-sm mt-3 font-semibold"
-							style={{ color: 'oklch(0.52 0.08 70)' }}
-						>
-							— {theme.mantra.author}
-						</p>
+						<div className="relative">
+							<p
+								className="text-2xl sm:text-3xl md:text-4xl font-display italic text-center leading-snug font-semibold"
+								style={{ color: 'oklch(0.62 0.1 70)' }}
+							>
+								&ldquo;{mantra.content}&rdquo;
+							</p>
+							{/* Edit pencil */}
+							<button
+								onClick={() => setShowEditor(true)}
+								className="absolute -right-8 top-0 opacity-30 hover:opacity-80 transition-opacity text-sm"
+								style={{ color: theme.colors.fgMuted }}
+								aria-label="Edit content"
+							>
+								&#x270E;
+							</button>
+						</div>
+						{mantra.author && (
+							<p
+								className="text-sm mt-3 font-semibold"
+								style={{ color: 'oklch(0.52 0.08 70)' }}
+							>
+								— {mantra.author}
+							</p>
+						)}
 					</div>
 				</div>
 			</section>
@@ -188,7 +253,7 @@ export default function CyclePage() {
 					</div>
 
 					<p className="text-sm mt-3" style={{ color: theme.colors.fgMuted }}>
-						{theme.description}
+						{description.content}
 					</p>
 				</div>
 
