@@ -37,7 +37,7 @@ export default function Page({ params: { slug } }) {
 			<p>No post exists with the slug &ldquo;{slug}&rdquo;.</p>
 		</div>
 	) : (
-		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4 h-screen max-h-screen overflow-hidden">
 			<Client initialData={data} />
 		</div>
 	)
@@ -203,7 +203,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 
 	return (
 		<>
-			<div className="col-span-2">
+			<div className="col-span-2 overflow-y-auto py-2">
 				<div className="flex justify-between items-center">
 					<h1 className="h3">Edit your post</h1>
 					<OptionsMenu postId={initialData.id} slug={initialData.slug} />
@@ -274,15 +274,8 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					/>
 				</form>
 			</div>
-			<div className="col-span-2 lg:col-span-3 flex flex-col">
-				<div
-					style={{
-						height: '95vh',
-						marginTop: '2.5vh',
-						marginBottom: '2.5vh',
-					}}
-					className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg"
-				>
+			<div className="col-span-2 lg:col-span-3 flex flex-col py-2">
+				<div className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
 					<PostArticle
 						post={thePost}
 						isPending={updatePostMutation.isPending}
