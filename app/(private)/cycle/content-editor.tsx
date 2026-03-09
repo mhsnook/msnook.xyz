@@ -254,13 +254,13 @@ function GenericEntryEditor({
 // ── Daily titles editor (7 day slots) ──────────────────────────────
 
 const DAY_LABELS = [
-	'Day 1',
-	'Day 2',
-	'Day 3',
-	'Day 4',
-	'Day 5',
-	'Day 6',
-	'Day 7',
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
 ]
 
 function DailyTitleEditor({

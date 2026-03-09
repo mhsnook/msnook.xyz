@@ -93,6 +93,16 @@ export default function CyclePage() {
 	}, [isTransitioning, phase, daysRemaining])
 
 	// Format today
+	const WEEKDAYS = [
+		'Sunday',
+		'Monday',
+		'Tuesday',
+		'Wednesday',
+		'Thursday',
+		'Friday',
+		'Saturday',
+	]
+	const todayWeekday = WEEKDAYS[now.getDay()]
 	const todayStr = now.toLocaleDateString('en-US', {
 		weekday: 'long',
 		month: 'long',
@@ -229,12 +239,10 @@ export default function CyclePage() {
 							className="text-sm font-medium"
 							style={{ color: theme.colors.fg }}
 						>
-							Day {dayInPhase}, {theme.label.toLowerCase()}
+							{todayWeekday}, {theme.label.toLowerCase()}
 						</span>
 						<span className="text-sm" style={{ color: theme.colors.fgMuted }}>
-							{daysRemaining === 0
-								? 'Last day'
-								: `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`}
+							{todayWeekday}
 						</span>
 					</div>
 
