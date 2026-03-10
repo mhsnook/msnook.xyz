@@ -1339,6 +1339,17 @@ So I''m going to practice this: just, writing something small, and letting it ou
 
 
 --
+-- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO "public"."projects" ("id", "title", "description", "url", "github", "tags", "sort_order", "published", "created_at") VALUES
+	('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', 'Sunlo', 'A social language-learning app where friends and family help you learn. Built with React Router, Supabase, and TailwindCSS; compiles to native iOS and Android with Tauri.', 'https://sunlo.app', 'https://github.com/michaelsnook/sunlo-app', '{React Router,Supabase,Tauri,TypeScript}', 1, true, '2026-03-08 00:00:00+00'),
+	('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', 'Scenetest', 'A visual scene-testing tool for exploring and composing color palettes and UI scenes in the browser.', 'https://scenetest.msnook.xyz', NULL, '{React,Color}', 2, true, '2026-03-08 00:00:00+00'),
+	('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', 'tw/oklch', 'A Tailwind CSS color tool built around the OKLCH color space — browse, compare, and pick colors with perceptually uniform lightness and chroma.', 'https://twok.msnook.xyz', NULL, '{Tailwind,OKLCH,Color}', 3, true, '2026-03-08 00:00:00+00'),
+	('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80', 'Reader', 'An RSVP (Rapid Serial Visual Presentation) speed reader. Drop in a PDF or paste text and read one word at a time at 300–1000 wpm. All data stays on your device.', '/reader', NULL, '{React,PDF.js,Local-first}', 4, true, '2026-03-08 00:00:00+00');
+
+
+--
 -- PostgreSQL database dump complete
 --
 
