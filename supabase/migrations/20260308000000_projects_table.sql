@@ -4,6 +4,7 @@ create table if not exists
 		"title" "text" not null,
 		"description" "text",
 		"url" "text",
+		"image" character varying,
 		"github" "text",
 		"tags" "text" [],
 		"sort_order" integer default 0 not null,

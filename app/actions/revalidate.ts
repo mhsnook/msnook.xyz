@@ -6,3 +6,7 @@ export async function revalidatePost(slug: string) {
 	revalidatePath(`/posts/${slug}`)
 	revalidatePath('/')
 }
+
+export async function revalidateProjects() {
+	revalidatePath('/projects')
+}

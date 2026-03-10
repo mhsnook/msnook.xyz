@@ -87,6 +87,7 @@ export type Database = {
 					description: string | null
 					github: string | null
 					id: string
+					image: string | null
 					published: boolean
 					sort_order: number
 					tags: string[] | null
@@ -99,6 +100,7 @@ export type Database = {
 					description?: string | null
 					github?: string | null
 					id?: string
+					image?: string | null
 					published?: boolean
 					sort_order?: number
 					tags?: string[] | null
@@ -111,6 +113,7 @@ export type Database = {
 					description?: string | null
 					github?: string | null
 					id?: string
+					image?: string | null
 					published?: boolean
 					sort_order?: number
 					tags?: string[] | null

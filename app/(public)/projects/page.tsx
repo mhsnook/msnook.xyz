@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import Banner from '@/components/banner'
 import { fetchProjects } from '@/lib/projects'
 
@@ -55,70 +56,83 @@ export default async function ProjectsPage() {
 					{projects?.map((project) => (
 						<div
 							key={project.id}
-							className="border rounded-lg flex flex-col justify-between p-6 hover:shadow-md transition-shadow"
+							className="border rounded-lg flex flex-col justify-between overflow-hidden hover:shadow-md transition-shadow"
 						>
-							<div>
-								<div className="flex items-center justify-between mb-3">
-									<h2 className="text-2xl font-display font-bold text-cyan-content">
-										{project.title}
-									</h2>
-									<div className="flex items-center gap-2">
-										{project.github && (
-											<a
-												href={project.github}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-gray-400 hover:text-gray-600 transition-colors"
-												aria-label={`${project.title} on GitHub`}
-											>
-												<GithubIcon />
-											</a>
-										)}
-										{project.url?.startsWith('http') && (
-											<a
-												href={project.url}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="text-gray-400 hover:text-gray-600 transition-colors"
-												aria-label={`Visit ${project.title}`}
-											>
-												<ExternalIcon className="w-5 h-5" />
-											</a>
-										)}
+							{project.image && (
+								<div className="relative w-full h-40">
+									<Image
+										src={project.image}
+										alt={project.title}
+										fill
+										sizes="(min-width: 640px) 50vw, 100vw"
+										style={{ objectFit: 'cover' }}
+									/>
+								</div>
+							)}
+							<div className="p-6 flex flex-col flex-1 justify-between">
+								<div>
+									<div className="flex items-center justify-between mb-3">
+										<h2 className="text-2xl font-display font-bold text-cyan-content">
+											{project.title}
+										</h2>
+										<div className="flex items-center gap-2">
+											{project.github && (
+												<a
+													href={project.github}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-gray-400 hover:text-gray-600 transition-colors"
+													aria-label={`${project.title} on GitHub`}
+												>
+													<GithubIcon />
+												</a>
+											)}
+											{project.url?.startsWith('http') && (
+												<a
+													href={project.url}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-gray-400 hover:text-gray-600 transition-colors"
+													aria-label={`Visit ${project.title}`}
+												>
+													<ExternalIcon className="w-5 h-5" />
+												</a>
+											)}
+										</div>
 									</div>
+									<p className="text-gray-600 leading-relaxed mb-4">
+										{project.description}
+									</p>
 								</div>
-								<p className="text-gray-600 leading-relaxed mb-4">
-									{project.description}
-								</p>
-							</div>
-							<div className="flex items-center justify-between pt-2">
-								<div className="flex flex-wrap gap-1.5">
-									{project.tags?.map((tag) => (
-										<span
-											key={tag}
-											className="text-xs px-2 py-0.5 rounded-full bg-cyan-soft/40 text-cyan-content"
+								<div className="flex items-center justify-between pt-2">
+									<div className="flex flex-wrap gap-1.5">
+										{project.tags?.map((tag) => (
+											<span
+												key={tag}
+												className="text-xs px-2 py-0.5 rounded-full bg-cyan-soft/40 text-cyan-content"
+											>
+												{tag}
+											</span>
+										))}
+									</div>
+									{project.url?.startsWith('http') ? (
+										<a
+											href={project.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap ml-3"
 										>
-											{tag}
-										</span>
-									))}
+											Visit website &rarr;
+										</a>
+									) : project.url ? (
+										<Link
+											href={project.url}
+											className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap ml-3"
+										>
+											Try it out &rarr;
+										</Link>
+									) : null}
 								</div>
-								{project.url?.startsWith('http') ? (
-									<a
-										href={project.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap ml-3"
-									>
-										Visit website &rarr;
-									</a>
-								) : project.url ? (
-									<Link
-										href={project.url}
-										className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap ml-3"
-									>
-										Try it out &rarr;
-									</Link>
-								) : null}
 							</div>
 						</div>
 					))}
