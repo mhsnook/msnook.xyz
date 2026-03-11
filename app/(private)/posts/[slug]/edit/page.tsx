@@ -203,7 +203,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 
 	return (
 		<>
-			<div className="col-span-2 overflow-y-auto py-2">
+			<div className="col-span-2 overflow-y-auto py-2 min-h-0">
 				<div className="flex justify-between items-center">
 					<h1 className="h3">Edit your post</h1>
 					<OptionsMenu postId={initialData.id} slug={initialData.slug} />
@@ -274,7 +274,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					/>
 				</form>
 			</div>
-			<div className="col-span-2 lg:col-span-3 flex flex-col py-2">
+			<div className="col-span-2 lg:col-span-3 flex flex-col py-2 min-h-0 overflow-hidden">
 				<div className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
 					<PostArticle
 						post={thePost}
