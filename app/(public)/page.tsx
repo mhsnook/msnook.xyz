@@ -10,7 +10,7 @@ export const revalidate = 60
 
 export const metadata: Metadata = {
 	title: 'em snook web site',
-	description: 'My personal space to jot things down',
+	description: 'my personal space to jot things down',
 }
 
 export default async function Page() {
