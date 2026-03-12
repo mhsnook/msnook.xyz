@@ -29,7 +29,7 @@ export default function Page({ params: { slug } }) {
 	return error ? (
 		<ErrorList summary="Error loading post" error={error?.message} />
 	) : isPending ? (
-		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-2 lg:px-4">
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 px-2 lg:px-4">
 			loading...
 		</div>
 	) : !data ? (
@@ -38,7 +38,7 @@ export default function Page({ params: { slug } }) {
 			<p>No post exists with the slug &ldquo;{slug}&rdquo;.</p>
 		</div>
 	) : (
-		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-2 lg:px-4 h-screen max-h-screen overflow-hidden">
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 px-2 lg:px-4 h-screen max-h-screen overflow-hidden">
 			<Client initialData={data} />
 		</div>
 	)
@@ -278,7 +278,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					/>
 				</form>
 			</div>
-			<div className="hidden xl:block xl:col-span-1 overflow-y-auto py-2 min-h-0 pr-2">
+			<div className="hidden lg:block lg:col-span-1 overflow-y-auto py-2 min-h-0 pr-2">
 				<div className="sticky top-2">
 					<HeadingsSidebar
 						content={thePost.content || ''}
