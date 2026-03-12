@@ -278,22 +278,28 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					/>
 				</form>
 			</div>
-			<div className="col-span-2 lg:col-span-3 flex flex-row gap-2 py-2 min-h-0 overflow-hidden">
+			<div className="col-span-2 lg:col-span-3 flex flex-col py-2 min-h-0 overflow-hidden">
 				<div
 					ref={previewRef}
-					className="border rounded-lg p-6 pb-16 mx-1 overflow-y-auto shadow-lg flex-1 min-w-0"
+					className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0"
 				>
-					<PostArticle
-						post={thePost}
-						isPending={updatePostMutation.isPending}
-					/>
-				</div>
-				<div className="hidden lg:block w-40 shrink-0 overflow-y-auto pr-1">
-					<HeadingsSidebar
-						content={thePost.content || ''}
-						previewRef={previewRef}
-						textareaRef={textareaRef}
-					/>
+					<div className="flex gap-6">
+						<div className="flex-1 min-w-0">
+							<PostArticle
+								post={thePost}
+								isPending={updatePostMutation.isPending}
+							/>
+						</div>
+						<div className="hidden lg:block w-40 shrink-0">
+							<div className="sticky top-0 pt-2">
+								<HeadingsSidebar
+									content={thePost.content || ''}
+									previewRef={previewRef}
+									textareaRef={textareaRef}
+								/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</>
