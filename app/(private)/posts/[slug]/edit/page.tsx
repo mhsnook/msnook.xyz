@@ -18,6 +18,7 @@ import {
 	InputDatestamp,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
+import HeadingsSidebar from '@/components/headings-sidebar'
 import { postQueryOptions } from '../use-post'
 import { createClient } from '@/lib/supabase/client'
 import { revalidatePost } from '@/app/actions/revalidate'
@@ -28,7 +29,7 @@ export default function Page({ params: { slug } }) {
 	return error ? (
 		<ErrorList summary="Error loading post" error={error?.message} />
 	) : isPending ? (
-		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4">
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-2 lg:px-4">
 			loading...
 		</div>
 	) : !data ? (
@@ -37,7 +38,7 @@ export default function Page({ params: { slug } }) {
 			<p>No post exists with the slug &ldquo;{slug}&rdquo;.</p>
 		</div>
 	) : (
-		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2 lg:px-4 h-screen max-h-screen overflow-hidden">
+		<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 px-2 lg:px-4 h-screen max-h-screen overflow-hidden">
 			<Client initialData={data} />
 		</div>
 	)
@@ -167,6 +168,8 @@ function OptionsMenu({ postId, slug }: { postId: string; slug: string }) {
 
 function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const { session } = useSession()
+	const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+	const previewRef = useRef<HTMLDivElement | null>(null)
 
 	const {
 		register,
@@ -221,6 +224,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 							register={register}
 							setValue={setValue}
 							getValues={getValues}
+							textareaRef={textareaRef}
 						/>
 						<InputImage
 							register={register}
@@ -274,8 +278,20 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					/>
 				</form>
 			</div>
+			<div className="hidden xl:block xl:col-span-1 overflow-y-auto py-2 min-h-0 pr-2">
+				<div className="sticky top-2">
+					<HeadingsSidebar
+						content={thePost.content || ''}
+						previewRef={previewRef}
+						textareaRef={textareaRef}
+					/>
+				</div>
+			</div>
 			<div className="col-span-2 lg:col-span-3 flex flex-col py-2 min-h-0 overflow-hidden">
-				<div className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
+				<div
+					ref={previewRef}
+					className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0"
+				>
 					<PostArticle
 						post={thePost}
 						isPending={updatePostMutation.isPending}
