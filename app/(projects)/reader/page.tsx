@@ -430,16 +430,6 @@ export default function RSVPReader() {
 		return () => clearTimeout(id)
 	}, [playing, wpm, words.length, idx, delays])
 
-	// Auto-scroll sidebar to keep current sentence visible
-	useEffect(() => {
-		const el = sidebarRef.current
-		if (!el) return
-		const active = el.querySelector('[data-active="true"]') as HTMLElement
-		if (active) {
-			active.scrollIntoView({ block: 'center', behavior: 'smooth' })
-		}
-	}, [currentSentenceIdx])
-
 	const startReading = useCallback(
 		(text: string, name: string) => {
 			const { words: w, delays: d, quoteDepth: q } = tokenize(text)
@@ -531,6 +521,16 @@ export default function RSVPReader() {
 	}, [idx, sentences])
 
 	const sidebarRef = useRef<HTMLDivElement>(null)
+
+	// Auto-scroll sidebar to keep current sentence visible
+	useEffect(() => {
+		const el = sidebarRef.current
+		if (!el) return
+		const active = el.querySelector('[data-active="true"]') as HTMLElement
+		if (active) {
+			active.scrollIntoView({ block: 'center', behavior: 'smooth' })
+		}
+	}, [currentSentenceIdx])
 
 	const savedList = Object.entries(savedTexts)
 		.map(([hash, data]) => ({ hash, ...data }))
