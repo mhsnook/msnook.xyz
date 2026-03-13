@@ -143,7 +143,23 @@ function tokenize(text: string): {
 			}
 		}
 
+		// Split on slashes: "amazing/excellent" -> "amazing/" + "/excellent"
+		const slashSplit: string[] = []
 		for (const w of paraWords) {
+			// Only split if slash is between word chars (not URLs like http://)
+			const parts = w.split(/(?<=\w)\/(?=\w)/)
+			if (parts.length > 1) {
+				for (let j = 0; j < parts.length; j++) {
+					const prefix = j > 0 ? '/' : ''
+					const suffix = j < parts.length - 1 ? '/' : ''
+					slashSplit.push(prefix + parts[j] + suffix)
+				}
+			} else {
+				slashSplit.push(w)
+			}
+		}
+
+		for (const w of slashSplit) {
 			// Count opening quotes at the start of the word
 			const opens = (w.match(/^[""'«]+/) || [''])[0].length
 			// Count closing quotes at the end of the word
@@ -983,14 +999,14 @@ export default function RSVPReader() {
 					{/* Ghost quotes when inside a quotation */}
 					{inQuote && !wordOpensQuote && (
 						<div
-							className={`absolute ${c.textFaint} pointer-events-none select-none`}
+							className={`absolute ${c.textMuted} pointer-events-none select-none`}
 							style={{
 								left: '1.5rem',
 								top: '50%',
 								transform: 'translateY(-50%)',
-								fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+								fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
 								fontFamily: fc.family,
-								opacity: 0.3,
+								opacity: 0.5,
 							}}
 						>
 							&ldquo;
@@ -998,14 +1014,14 @@ export default function RSVPReader() {
 					)}
 					{inQuote && !wordClosesQuote && (
 						<div
-							className={`absolute ${c.textFaint} pointer-events-none select-none`}
+							className={`absolute ${c.textMuted} pointer-events-none select-none`}
 							style={{
 								right: '1.5rem',
 								top: '50%',
 								transform: 'translateY(-50%)',
-								fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+								fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
 								fontFamily: fc.family,
-								opacity: 0.3,
+								opacity: 0.5,
 							}}
 						>
 							&rdquo;
