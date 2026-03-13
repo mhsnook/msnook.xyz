@@ -500,13 +500,16 @@ export default function RSVPReader() {
 	// Compute sentence boundaries for sidebar navigation
 	const sentences = useMemo(() => {
 		if (words.length === 0) return []
-		const result: { start: number; preview: string }[] = []
+		const result: { start: number; preview: string; paraStart: boolean }[] = []
 		let sentStart = 0
+		let nextIsParaStart = true // first sentence starts a paragraph
 		for (let i = 0; i < words.length; i++) {
 			// Sentence ends at punctuation (delay >= 1.8) or paragraph break (delay >= 4)
 			if (delays[i] >= 1.8 || i === words.length - 1) {
 				const preview = words.slice(sentStart, Math.min(sentStart + 8, i + 1)).join(' ')
-				result.push({ start: sentStart, preview })
+				result.push({ start: sentStart, preview, paraStart: nextIsParaStart })
+				// If this word ends a paragraph (delay >= 4), the next sentence starts a new one
+				nextIsParaStart = delays[i] >= 4
 				sentStart = i + 1
 			}
 		}
@@ -1025,6 +1028,8 @@ export default function RSVPReader() {
 									setPlaying(false)
 								}}
 								className={`block w-full text-left text-[11px] leading-snug px-2 py-1 rounded truncate transition-colors cursor-pointer ${
+									s.paraStart && i > 0 ? 'mt-3' : ''
+								} ${
 									isCurrent
 										? `${c.ctxCurrent} ${dark ? 'bg-gray-800' : 'bg-sky-100'}`
 										: isPast
