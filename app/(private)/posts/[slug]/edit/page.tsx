@@ -18,6 +18,8 @@ import {
 	InputDatestamp,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
+import HeadingsSidebar from '@/components/headings-sidebar'
+import OutlineView from '@/components/outline-view'
 import { postQueryOptions } from '../use-post'
 import { createClient } from '@/lib/supabase/client'
 import { revalidatePost } from '@/app/actions/revalidate'
@@ -167,6 +169,9 @@ function OptionsMenu({ postId, slug }: { postId: string; slug: string }) {
 
 function Client({ initialData }: { initialData: Tables<'posts'> }) {
 	const { session } = useSession()
+	const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+	const previewRef = useRef<HTMLDivElement | null>(null)
+	const [viewMode, setViewMode] = useState<'preview' | 'outline'>('preview')
 
 	const {
 		register,
@@ -221,6 +226,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 							register={register}
 							setValue={setValue}
 							getValues={getValues}
+							textareaRef={textareaRef}
 						/>
 						<InputImage
 							register={register}
@@ -275,12 +281,95 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 				</form>
 			</div>
 			<div className="col-span-2 lg:col-span-3 flex flex-col py-2 min-h-0 overflow-hidden">
-				<div className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
-					<PostArticle
-						post={thePost}
-						isPending={updatePostMutation.isPending}
-					/>
+				{/* Toggle button */}
+				<div className="flex justify-end px-2 lg:px-6 mb-1">
+					<button
+						type="button"
+						onClick={() =>
+							setViewMode((m) => (m === 'preview' ? 'outline' : 'preview'))
+						}
+						className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-cyan-700 px-2 py-1 rounded border border-gray-200 hover:border-cyan-300 transition-colors"
+						title={
+							viewMode === 'preview'
+								? 'Switch to outline view'
+								: 'Switch to preview'
+						}
+					>
+						{viewMode === 'preview' ? (
+							<>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<line x1="8" y1="6" x2="21" y2="6" />
+									<line x1="8" y1="12" x2="21" y2="12" />
+									<line x1="8" y1="18" x2="21" y2="18" />
+									<line x1="3" y1="6" x2="3.01" y2="6" />
+									<line x1="3" y1="12" x2="3.01" y2="12" />
+									<line x1="3" y1="18" x2="3.01" y2="18" />
+								</svg>
+								Outline
+							</>
+						) : (
+							<>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+									<circle cx="12" cy="12" r="3" />
+								</svg>
+								Preview
+							</>
+						)}
+					</button>
 				</div>
+
+				{viewMode === 'preview' ? (
+					<div
+						ref={previewRef}
+						className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0"
+					>
+						<div className="flex gap-6">
+							<div className="flex-1 min-w-0">
+								<PostArticle
+									post={thePost}
+									isPending={updatePostMutation.isPending}
+								/>
+							</div>
+							<div className="hidden lg:block w-40 shrink-0">
+								<div className="sticky top-0 pt-2">
+									<HeadingsSidebar
+										content={thePost.content || ''}
+										previewRef={previewRef}
+										textareaRef={textareaRef}
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				) : (
+					<div className="border rounded-lg p-4 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
+						<OutlineView
+							content={thePost.content || ''}
+							textareaRef={textareaRef}
+						/>
+					</div>
+				)}
 			</div>
 		</>
 	)
