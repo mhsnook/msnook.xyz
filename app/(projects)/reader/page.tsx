@@ -59,6 +59,7 @@ const FONT_CONFIG: Record<
 }
 
 const LS_KEY = 'rsvp-reading-positions'
+const LS_TEXT_KEY = 'rsvp-texts'
 const LS_THEME_KEY = 'rsvp-theme'
 const LS_FONT_KEY = 'rsvp-font'
 
@@ -204,6 +205,33 @@ function savePosition(
 	const all = loadPositions()
 	all[hash] = { name, idx, wpm, wordCount, updatedAt: Date.now() }
 	localStorage.setItem(LS_KEY, JSON.stringify(all))
+}
+
+function saveText(hash: string, text: string) {
+	try {
+		const all = JSON.parse(localStorage.getItem(LS_TEXT_KEY) || '{}')
+		all[hash] = text
+		localStorage.setItem(LS_TEXT_KEY, JSON.stringify(all))
+	} catch {
+		// Storage full — silently skip
+	}
+}
+
+function loadText(hash: string): string | null {
+	try {
+		const all = JSON.parse(localStorage.getItem(LS_TEXT_KEY) || '{}')
+		return all[hash] || null
+	} catch {
+		return null
+	}
+}
+
+function deleteText(hash: string) {
+	try {
+		const all = JSON.parse(localStorage.getItem(LS_TEXT_KEY) || '{}')
+		delete all[hash]
+		localStorage.setItem(LS_TEXT_KEY, JSON.stringify(all))
+	} catch {}
 }
 
 function loadTheme(): 'light' | 'dark' {
@@ -453,6 +481,7 @@ export default function RSVPReader() {
 			}
 
 			savePosition(hash, name, saved?.idx || 0, saved?.wpm || wpm, w.length)
+			saveText(hash, text)
 			setSavedTexts(loadPositions())
 		},
 		[wpm],
@@ -773,23 +802,38 @@ export default function RSVPReader() {
 								Continue Reading
 							</p>
 							<div className="flex flex-col gap-2">
-								{savedList.map((s) => (
-									<div
-										key={s.hash}
-										className={`${c.cardBg} border ${c.inputBorder} rounded-lg px-4 py-3 text-sm flex items-center gap-3`}
-									>
-										<div className="flex-1 min-w-0">
-											<p className="font-medium truncate">{s.name}</p>
-											<p className={`${c.textMuted} text-xs`}>
-												{Math.round((s.idx / s.wordCount) * 100)}% ·{' '}
-												{s.wordCount.toLocaleString()} words · {s.wpm} wpm
-											</p>
+								{savedList.map((s) => {
+									const hasText = !!loadText(s.hash)
+									return (
+										<div
+											key={s.hash}
+											className={`${c.cardBg} border ${c.inputBorder} rounded-lg px-4 py-3 text-sm flex items-center gap-3`}
+										>
+											<div className="flex-1 min-w-0">
+												<p className="font-medium truncate">{s.name}</p>
+												<p className={`${c.textMuted} text-xs`}>
+													{Math.round((s.idx / s.wordCount) * 100)}% ·{' '}
+													{s.wordCount.toLocaleString()} words · {s.wpm} wpm
+												</p>
+											</div>
+											{hasText ? (
+												<button
+													onClick={() => {
+														const text = loadText(s.hash)
+														if (text) startReading(text, s.name)
+													}}
+													className={`${c.btnText} ${c.btnHoverText} text-xs shrink-0 cursor-pointer`}
+												>
+													Resume →
+												</button>
+											) : (
+												<p className={`${c.textFaint} text-xs shrink-0`}>
+													Re-upload to resume →
+												</p>
+											)}
 										</div>
-										<p className={`${c.textFaint} text-xs shrink-0`}>
-											Re-upload to resume →
-										</p>
-									</div>
-								))}
+									)
+								})}
 							</div>
 						</div>
 					)}
