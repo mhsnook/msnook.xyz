@@ -538,7 +538,7 @@ export default function RSVPReader() {
 	if (screen === 'input') {
 		return (
 			<div
-				className={`min-h-screen ${c.bg} ${c.text} font-sans flex items-center justify-center p-8 transition-colors duration-300`}
+				className={`min-h-screen ${c.bg} ${c.text} font-sans flex items-center justify-center p-4 md:p-8 transition-colors duration-300`}
 			>
 				<div className="max-w-lg w-full">
 					<div className="mb-8 flex items-center justify-between">
@@ -743,19 +743,49 @@ export default function RSVPReader() {
 
 	return (
 		<div
-			className={`${c.bg} ${c.text} font-sans h-screen overflow-hidden transition-colors duration-300`}
-			style={{
-				display: 'grid',
-				gridTemplateColumns: '160px 1fr 220px',
-				gridTemplateRows: '1fr 64px',
-			}}
+			className={`${c.bg} ${c.text} font-sans h-screen overflow-hidden transition-colors duration-300 grid
+				grid-cols-1 grid-rows-[auto_auto_1fr_auto_auto]
+				md:grid-cols-[160px_1fr_220px] md:grid-rows-[1fr_64px]`}
 		>
-			{/* Left panel: progress */}
-			<div className={`border-r ${c.border} p-5 flex flex-col justify-center`}>
-				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-5">
+			{/* Progress panel: horizontal strip on mobile, vertical sidebar on desktop */}
+			<div
+				className={`
+					border-b md:border-b-0 md:border-r ${c.border}
+					px-4 py-2 md:p-5
+					flex md:flex-col
+					items-center md:items-stretch md:justify-center
+					gap-3 md:gap-0
+					order-1 md:order-none
+				`}
+			>
+				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase md:mb-5 shrink-0">
 					Progress
 				</p>
-				<div className="flex-1 flex flex-col max-h-80">
+				{/* Horizontal bar on mobile */}
+				<div className="flex-1 md:hidden h-2 relative">
+					<div
+						className={`${c.progressBg} rounded-md h-full relative overflow-hidden`}
+					>
+						<div
+							className="absolute top-0 left-0 bottom-0 transition-[width] duration-400 ease-out"
+							style={{
+								width: `${pct}%`,
+								background:
+									'linear-gradient(to right, rgba(245,158,11,0.12), transparent)',
+								borderRight: '1px solid rgba(245,158,11,0.3)',
+							}}
+						/>
+						<div
+							className="absolute top-0 bottom-0 w-0.5 bg-amber-500 transition-[left] duration-400 ease-out"
+							style={{
+								left: `${pct}%`,
+								boxShadow: '0 0 8px rgba(245,158,11,0.5)',
+							}}
+						/>
+					</div>
+				</div>
+				{/* Vertical bar on desktop */}
+				<div className="hidden md:flex flex-1 flex-col max-h-80">
 					<div
 						className={`flex-1 ${c.progressBg} rounded-md relative overflow-hidden`}
 					>
@@ -778,20 +808,20 @@ export default function RSVPReader() {
 					</div>
 				</div>
 				<div
-					className={`mt-5 text-xs ${c.textMuted} leading-loose h-20 overflow-hidden`}
+					className={`text-xs ${c.textMuted} leading-loose md:mt-5 md:h-20 overflow-hidden shrink-0`}
 				>
 					<p className={`${c.text} font-semibold`}>{pct}%</p>
-					<p>
+					<p className="hidden md:block">
 						{idx.toLocaleString()} / {words.length.toLocaleString()} words
 					</p>
-					<p>
+					<p className="hidden md:block">
 						~{minsLeft < 1 ? '<1' : minsLeft}m left @ {wpm}wpm
 					</p>
 				</div>
 			</div>
 
 			{/* Center: reader with focus guides */}
-			<div className="flex flex-col items-center justify-center relative">
+			<div className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]">
 				{/* Focus guides: horizontal rails + vertical ORP line */}
 				<div
 					className="absolute pointer-events-none"
@@ -950,14 +980,23 @@ export default function RSVPReader() {
 				)}
 			</div>
 
-			{/* Right panel: sentence navigation */}
-			<div className={`border-l ${c.border} p-3 flex flex-col overflow-hidden`}>
-				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase mb-3">
+			{/* Sentence navigation: horizontal scroll on mobile, vertical sidebar on desktop */}
+			<div
+				className={`
+					border-t md:border-t-0 md:border-l ${c.border}
+					px-3 py-2 md:p-3
+					flex md:flex-col overflow-hidden
+					order-2 md:order-none
+					items-center md:items-stretch
+					gap-2 md:gap-0
+				`}
+			>
+				<p className="text-[9px] tracking-[0.35em] text-amber-600 uppercase md:mb-3 shrink-0 whitespace-nowrap">
 					Sentences
 				</p>
 				<div
 					ref={sidebarRef}
-					className="overflow-y-auto flex-1 space-y-0.5"
+					className="overflow-x-auto md:overflow-x-hidden md:overflow-y-auto flex-1 flex md:block gap-1 md:gap-0 md:space-y-0.5"
 				>
 					{sentences.map((s, i) => {
 						const isCurrent = i === currentSentenceIdx
@@ -970,8 +1009,8 @@ export default function RSVPReader() {
 									setIdx(s.start)
 									setPlaying(false)
 								}}
-								className={`block w-full text-left text-[11px] leading-snug px-2 py-1 rounded truncate transition-colors cursor-pointer ${
-									s.paraStart && i > 0 ? 'mt-3' : ''
+								className={`block whitespace-nowrap md:whitespace-normal md:w-full text-left text-[11px] leading-snug px-2 py-1 rounded md:truncate transition-colors cursor-pointer shrink-0 ${
+									s.paraStart && i > 0 ? 'md:mt-3 ml-3 md:ml-0' : ''
 								} ${
 									isCurrent
 										? `${c.ctxCurrent} ${dark ? 'bg-gray-800' : 'bg-sky-100'}`
@@ -989,8 +1028,7 @@ export default function RSVPReader() {
 
 			{/* Controls bar */}
 			<div
-				className={`flex items-center gap-4 px-6 border-t ${c.border} ${c.controlsBg}`}
-				style={{ gridColumn: '1 / -1' }}
+				className={`flex flex-wrap items-center gap-2 md:gap-4 px-3 md:px-6 py-2 md:py-0 border-t ${c.border} ${c.controlsBg} order-4 md:order-none md:col-span-3`}
 			>
 				<button
 					onClick={handleBack}
@@ -1017,7 +1055,7 @@ export default function RSVPReader() {
 					5s ↪
 				</button>
 
-				<div className="flex items-center gap-2.5 flex-1 max-w-72">
+				<div className="flex items-center gap-2.5 flex-1 min-w-[140px] max-w-72">
 					<span className={`text-xs ${c.textMuted} whitespace-nowrap`}>
 						{wpm} wpm
 					</span>
@@ -1037,7 +1075,7 @@ export default function RSVPReader() {
 
 				{fontPickerModal}
 
-				<p className={`ml-auto text-[11px] ${c.textFaint} tracking-wide`}>
+				<p className={`hidden md:block ml-auto text-[11px] ${c.textFaint} tracking-wide`}>
 					space · pause &nbsp;·&nbsp; ←→ skip &nbsp;·&nbsp; ↑↓ speed
 				</p>
 			</div>
