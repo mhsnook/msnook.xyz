@@ -27,6 +27,48 @@ export function hasLongNumber(word: string): boolean {
 }
 
 /**
+ * Convert straight/ASCII quotes to smart (curly) quotes using
+ * word-position heuristics:
+ *   - " at the start of a word → \u201c (left double)
+ *   - " at the end of a word   → \u201d (right double)
+ *   - ' at the start of a word before a letter → \u2018 (left single)
+ *   - ' elsewhere (contractions, closers) → \u2019 (right single)
+ *
+ * This runs before tokenization so the quote-depth tracker only has to
+ * deal with unambiguous smart-quote characters.
+ */
+export function smartifyQuotes(text: string): string {
+	// Double quotes: " at word boundary
+	// Opening: after whitespace, start of string, or opening paren/bracket
+	text = text.replace(/(^|[\s(\[{])"(?=\S)/gm, '$1\u201c')
+	// Closing: before whitespace, end of string, or punctuation
+	text = text.replace(/"(?=[\s,.;:!?\-)\]}\n]|$)/gm, '\u201d')
+	// Any remaining straight double quotes — guess by toggle parity
+	// within each paragraph
+	text = text.replace(/(^|[\n])([^\n]*)/g, (_match, prefix, line) => {
+		let open = false
+		const result = line.replace(/"/g, () => {
+			open = !open
+			return open ? '\u201c' : '\u201d'
+		})
+		return prefix + result
+	})
+
+	// Single quotes: trickier due to apostrophes
+	// Opening: after whitespace/start before a letter (not mid-word)
+	text = text.replace(/(^|[\s(\[{])'(?=[a-zA-Z])/gm, '$1\u2018')
+	// Closing: after a letter before whitespace/punctuation/end
+	// But NOT contractions like don't, it's, etc.
+	// A closing single quote is typically: letter + ' + (space or punctuation)
+	text = text.replace(/(?<=[a-zA-Z])'(?=[\s,.;:!?\-)\]}\n]|$)/gm, '\u2019')
+	// Any remaining straight single quotes become right single (apostrophe)
+	// since that's by far the most common case (contractions)
+	text = text.replace(/'/g, '\u2019')
+
+	return text
+}
+
+/**
  * Tokenize text into words with per-word delay multipliers.
  *
  * Delays: comma → 1.3x, period/semicolon/!/? → 1.8x, ellipsis → 2.5x,
@@ -35,6 +77,7 @@ export function hasLongNumber(word: string): boolean {
  * Slashes split into two words with the slash visible on both sides.
  * No paragraph pause if it ends with ':' or next starts with '>'.
  *
+ * Straight quotes are converted to smart quotes before parsing.
  * Quote depth resets at paragraph boundaries to avoid false positives
  * from unbalanced quotes in extracted text.
  */
@@ -43,6 +86,9 @@ export function tokenize(text: string): {
 	delays: number[]
 	quoteDepth: number[]
 } {
+	// Pre-process: convert straight quotes to smart quotes
+	text = smartifyQuotes(text)
+
 	const paragraphs = text.split(/\n\s*\n/)
 	const words: string[] = []
 	const delays: number[] = []
@@ -96,10 +142,10 @@ export function tokenize(text: string): {
 		}
 
 		for (const w of slashSplit) {
-			// Count opening quotes at the start of the word
-			const opens = (w.match(/^[\u201c\u201d\u2018\u00ab]+/) || [''])[0].length
-			// Count closing quotes at the end of the word
-			const closes = (w.match(/[\u201c\u201d\u2019\u00bb]+$/) || [''])[0].length
+			// Opening smart quotes: " (U+201C), ' (U+2018), « (U+00AB)
+			const opens = (w.match(/^[\u201c\u2018\u00ab]+/) || [''])[0].length
+			// Closing smart quotes: " (U+201D), ' (U+2019), » (U+00BB)
+			const closes = (w.match(/[\u201d\u2019\u00bb]+$/) || [''])[0].length
 
 			depth += opens
 			words.push(w)
@@ -107,7 +153,7 @@ export function tokenize(text: string): {
 			depth = Math.max(0, depth - closes)
 
 			let d = 1
-			const stripped = w.replace(/[)}\]\u201c\u201d\u2019\u00bb]+$/, '')
+			const stripped = w.replace(/[)}\]\u201d\u2019\u00bb]+$/, '')
 			if (/\.{2,}$/.test(stripped) || /\u2026$/.test(stripped)) d = 2.5
 			else if (/[.!?]$/.test(stripped)) d = 1.8
 			else if (/[,;]$/.test(stripped)) d = 1.3
