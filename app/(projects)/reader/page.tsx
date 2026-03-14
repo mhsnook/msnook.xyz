@@ -128,15 +128,19 @@ function tokenize(text: string): {
 
 		// Dashes (em-dash, en-dash, double-hyphen) attach to the previous word
 		// as a suffix but never grab the next word.
+		// Standalone dots (from spaced ellipsis like ". . .") also attach.
 		const paraWords: string[] = []
 		const isDash = (s: string) => s === '—' || s === '–' || s === '--'
 		const startsDash = (s: string) =>
 			s.startsWith('—') || s.startsWith('–') || s.startsWith('--')
+		const isDot = (s: string) => s === '.' || s === '..'
 		for (let i = 0; i < rawWords.length; i++) {
 			const w = rawWords[i]
 			if (isDash(w) && paraWords.length > 0) {
 				paraWords[paraWords.length - 1] += w
 			} else if (startsDash(w) && paraWords.length > 0) {
+				paraWords[paraWords.length - 1] += w
+			} else if (isDot(w) && paraWords.length > 0) {
 				paraWords[paraWords.length - 1] += w
 			} else {
 				paraWords.push(w)
@@ -172,7 +176,8 @@ function tokenize(text: string): {
 
 			let d = 1
 			const stripped = w.replace(/[)}\]"'»]+$/, '')
-			if (/[.!?]$/.test(stripped)) d = 1.8
+			if (/\.{2,}$/.test(stripped) || /…$/.test(stripped)) d = 2.5
+			else if (/[.!?]$/.test(stripped)) d = 1.8
 			else if (/[,;]$/.test(stripped)) d = 1.3
 			if (hasLongNumber(w)) d = Math.max(d, 2)
 
@@ -180,7 +185,7 @@ function tokenize(text: string): {
 		}
 
 		if (p < paragraphs.length - 1 && words.length > 0) {
-			const lastWord = paraWords[paraWords.length - 1]
+			const lastWord = slashSplit[slashSplit.length - 1]
 			const nextPara = paragraphs[p + 1]?.trim() || ''
 			const endsWithColon = lastWord.endsWith(':')
 			const nextIsBlockquote = nextPara.startsWith('>')
