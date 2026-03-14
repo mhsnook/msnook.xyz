@@ -434,7 +434,9 @@ export default function RSVPReader() {
 		for (let i = 0; i < words.length; i++) {
 			// Sentence ends at punctuation (delay >= 1.8) or paragraph break (delay >= 4)
 			if (delays[i] >= 1.8 || i === words.length - 1) {
-				const preview = words.slice(sentStart, Math.min(sentStart + 8, i + 1)).join(' ')
+				const preview = words
+					.slice(sentStart, Math.min(sentStart + 8, i + 1))
+					.join(' ')
 				result.push({ start: sentStart, preview, paraStart: nextIsParaStart })
 				// If this word ends a paragraph (delay >= 4), the next sentence starts a new one
 				nextIsParaStart = delays[i] >= 4
@@ -1075,7 +1077,9 @@ export default function RSVPReader() {
 
 				{fontPickerModal}
 
-				<p className={`hidden md:block ml-auto text-[11px] ${c.textFaint} tracking-wide`}>
+				<p
+					className={`hidden md:block ml-auto text-[11px] ${c.textFaint} tracking-wide`}
+				>
 					space · pause &nbsp;·&nbsp; ←→ skip &nbsp;·&nbsp; ↑↓ speed
 				</p>
 			</div>
