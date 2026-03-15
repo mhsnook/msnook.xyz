@@ -1,32 +1,30 @@
 import { slugify } from './print-markdown'
 
+export type ContentItem =
+	| { type: 'image'; src: string; alt: string }
+	| { type: 'blockquote'; text: string }
+
 export interface MarkdownSection {
 	level: number
 	text: string
 	slug: string
 	lineIndex: number
-	/** Raw markdown content of just this section (before next heading) */
+	/** Raw markdown for this section (heading through end, before next same-or-higher heading) */
 	rawContent: string
 	wordCount: number
 	/** Total words including all nested sub-sections */
 	totalWordCount: number
-	images: { src: string; alt: string }[]
-	blockquotes: string[]
+	/** Images and blockquotes in document order */
+	contentItems: ContentItem[]
 	children: MarkdownSection[]
 }
 
 export interface StructuralWarning {
 	type: 'imbalanced' | 'empty'
-	sectionText: string
 	sectionSlug: string
 	message: string
 }
 
-/**
- * Parse markdown into a tree of sections with metadata.
- * Each top-level heading (lowest level found) becomes a root node,
- * with deeper headings nested as children.
- */
 export function parseMarkdownStructure(markdown: string): {
 	sections: MarkdownSection[]
 	warnings: StructuralWarning[]
@@ -36,21 +34,17 @@ export function parseMarkdownStructure(markdown: string): {
 		[]
 	let inCodeBlock = false
 
-	// First pass: extract flat list of sections with their content
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i]
 		if (line.trimStart().startsWith('```')) {
 			inCodeBlock = !inCodeBlock
-			// Append to current section's content
-			if (flatSections.length > 0) {
+			if (flatSections.length > 0)
 				flatSections[flatSections.length - 1].rawContent += line + '\n'
-			}
 			continue
 		}
 		if (inCodeBlock) {
-			if (flatSections.length > 0) {
+			if (flatSections.length > 0)
 				flatSections[flatSections.length - 1].rawContent += line + '\n'
-			}
 			continue
 		}
 
@@ -63,60 +57,65 @@ export function parseMarkdownStructure(markdown: string): {
 				lineIndex: i,
 				rawContent: '',
 				wordCount: 0,
-				images: [],
-				blockquotes: [],
+				contentItems: [],
 			})
 		} else if (flatSections.length > 0) {
 			flatSections[flatSections.length - 1].rawContent += line + '\n'
 		}
 	}
 
-	// Second pass: extract metadata from each section's raw content
+	// Extract metadata per section
 	for (const section of flatSections) {
-		// Word count (exclude markdown syntax, count actual words)
+		const sectionLines = section.rawContent.split('\n')
+		let inCode = false
+
+		for (const sl of sectionLines) {
+			if (sl.trimStart().startsWith('```')) {
+				inCode = !inCode
+				continue
+			}
+			if (inCode) continue
+
+			// Images (may be multiple per line)
+			const imgRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
+			let imgMatch
+			while ((imgMatch = imgRegex.exec(sl)) !== null) {
+				section.contentItems.push({
+					type: 'image',
+					alt: imgMatch[1],
+					src: imgMatch[2],
+				})
+			}
+
+			// Blockquote lines
+			if (sl.trimStart().startsWith('>')) {
+				const text = sl.replace(/^>\s*/, '').trim()
+				if (text) {
+					// Merge with previous blockquote item if consecutive
+					const last = section.contentItems[section.contentItems.length - 1]
+					if (last && last.type === 'blockquote') {
+						last.text += ' ' + text
+					} else {
+						section.contentItems.push({ type: 'blockquote', text })
+					}
+				}
+			}
+		}
+
+		// Word count
 		const textOnly = section.rawContent
-			.replace(/```[\s\S]*?```/g, '') // remove code blocks
-			.replace(/!\[.*?\]\(.*?\)/g, '') // remove image syntax
-			.replace(/\[.*?\]\(.*?\)/g, (m) => m.replace(/\[|\]\(.*?\)/g, '')) // keep link text
-			.replace(/[#*_`~>|-]/g, ' ') // remove markdown chars
+			.replace(/```[\s\S]*?```/g, '')
+			.replace(/!\[.*?\]\(.*?\)/g, '')
+			.replace(/\[.*?\]\(.*?\)/g, (m) => m.replace(/\[|\]\(.*?\)/g, ''))
+			.replace(/[#*_`~>|-]/g, ' ')
 			.trim()
 		section.wordCount = textOnly
 			? textOnly.split(/\s+/).filter((w) => w.length > 0).length
 			: 0
-
-		// Images
-		const imgRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
-		let imgMatch
-		while ((imgMatch = imgRegex.exec(section.rawContent)) !== null) {
-			section.images.push({ alt: imgMatch[1], src: imgMatch[2] })
-		}
-
-		// Blockquotes
-		const bqLines = section.rawContent
-			.split('\n')
-			.filter((l) => l.trimStart().startsWith('>'))
-		if (bqLines.length > 0) {
-			// Group consecutive blockquote lines
-			let current = ''
-			for (const line of bqLines) {
-				const text = line.replace(/^>\s*/, '').trim()
-				if (text) {
-					current += (current ? ' ' : '') + text
-				}
-			}
-			if (current) {
-				section.blockquotes.push(current)
-			}
-		}
 	}
 
-	// Third pass: build tree structure
 	const sections = buildTree(flatSections)
-
-	// Fourth pass: compute totalWordCount (bottom-up)
 	computeTotalWordCounts(sections)
-
-	// Generate warnings
 	const warnings = generateWarnings(sections)
 
 	return { sections, warnings }
@@ -135,7 +134,6 @@ function buildTree(
 			totalWordCount: 0,
 		}
 
-		// Pop stack until we find a parent (lower level number = higher heading)
 		while (stack.length > 0 && stack[stack.length - 1].level >= section.level) {
 			stack.pop()
 		}
@@ -164,60 +162,48 @@ function computeTotalWordCounts(sections: MarkdownSection[]): number {
 
 function generateWarnings(sections: MarkdownSection[]): StructuralWarning[] {
 	const warnings: StructuralWarning[] = []
+	const allTopLevel = sections
 
-	// Only look at top-level sections for imbalance
-	if (sections.length >= 2) {
+	if (allTopLevel.length >= 2) {
 		const avgWords =
-			sections.reduce((sum, s) => sum + s.totalWordCount, 0) / sections.length
+			allTopLevel.reduce((sum, s) => sum + s.totalWordCount, 0) /
+			allTopLevel.length
 
-		for (const section of sections) {
-			// Empty section warning
+		for (const section of allTopLevel) {
 			if (section.totalWordCount === 0) {
 				warnings.push({
 					type: 'empty',
-					sectionText: section.text,
 					sectionSlug: section.slug,
-					message: `"${section.text}" has no content yet`,
+					message: `"${section.text}" has no content`,
 				})
-			}
-			// Imbalanced section warning (3x average)
-			else if (avgWords > 0 && section.totalWordCount > avgWords * 3) {
+			} else if (avgWords > 0 && section.totalWordCount > avgWords * 3) {
 				const ratio = Math.round(section.totalWordCount / avgWords)
 				warnings.push({
 					type: 'imbalanced',
-					sectionText: section.text,
 					sectionSlug: section.slug,
-					message: `"${section.text}" is ${ratio}x longer than average (${section.totalWordCount} words vs ~${Math.round(avgWords)} avg)`,
-				})
-			}
-		}
-	} else {
-		// Single section or no sections — just check for empty
-		for (const section of sections) {
-			if (section.totalWordCount === 0) {
-				warnings.push({
-					type: 'empty',
-					sectionText: section.text,
-					sectionSlug: section.slug,
-					message: `"${section.text}" has no content yet`,
+					message: `"${section.text}" is ${ratio}x longer than average`,
 				})
 			}
 		}
 	}
 
-	// Also check children for empty sections
-	for (const section of sections) {
-		for (const child of section.children) {
-			if (child.totalWordCount === 0) {
+	// Check all headings at any depth for empty
+	function checkEmpty(sections: MarkdownSection[]) {
+		for (const s of sections) {
+			if (
+				s.totalWordCount === 0 &&
+				!warnings.some((w) => w.sectionSlug === s.slug)
+			) {
 				warnings.push({
 					type: 'empty',
-					sectionText: child.text,
-					sectionSlug: child.slug,
-					message: `"${child.text}" has no content yet`,
+					sectionSlug: s.slug,
+					message: `"${s.text}" has no content`,
 				})
 			}
+			checkEmpty(s.children)
 		}
 	}
+	checkEmpty(sections)
 
 	return warnings
 }
