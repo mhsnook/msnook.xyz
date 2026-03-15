@@ -90,9 +90,7 @@ export default function Menu() {
 							))}
 							{session && (
 								<li className="border-t py-2" role="none">
-									<p className="px-10 py-1 text-sm text-gray-500">
-										Pages
-									</p>
+									<p className="px-10 py-1 text-sm text-gray-500">Pages</p>
 									<ul>
 										{pageLinks.map(([label, path]) => (
 											<li key={path} role="menuitem">
@@ -110,9 +108,7 @@ export default function Menu() {
 							)}
 							{session && (
 								<li className="border-t py-2" role="none">
-									<p className="px-10 py-1 text-sm text-gray-500">
-										Projects
-									</p>
+									<p className="px-10 py-1 text-sm text-gray-500">Projects</p>
 									<ul>
 										{projectLinks.map(([label, path]) => (
 											<li key={path} role="menuitem">

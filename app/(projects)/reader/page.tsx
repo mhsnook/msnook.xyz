@@ -20,8 +20,12 @@ declare global {
 				promise: Promise<{
 					numPages: number
 					getPage: (n: number) => Promise<{
+						getViewport: (opts: { scale: number }) => {
+							height: number
+							width: number
+						}
 						getTextContent: () => Promise<{
-							items: Array<{ str: string }>
+							items: Array<{ str: string; transform: number[] }>
 						}>
 					}>
 				}>
@@ -169,13 +173,76 @@ async function extractPdfText(file: File): Promise<string> {
 	const lib = await loadPdfJs()
 	const buf = await file.arrayBuffer()
 	const pdf = await lib.getDocument({ data: buf }).promise
-	let text = ''
+
+	// Margin fraction: items in the top/bottom 12% of page height are
+	// candidates for header/footer stripping.
+	const MARGIN = 0.12
+
+	// First pass: collect text items with position info per page, and
+	// gather margin-zone text to detect repeating headers/footers.
+	const pageItems: Array<Array<{ str: string; y: number }>> = []
+	const pageHeights: number[] = []
+	const marginTexts = new Map<string, number>() // text → page count
+
 	for (let i = 1; i <= pdf.numPages; i++) {
 		const page = await pdf.getPage(i)
+		const viewport = page.getViewport({ scale: 1 })
 		const content = await page.getTextContent()
-		text += content.items.map((x) => x.str).join(' ') + '\n'
+		const items = content.items.map((x) => ({
+			str: x.str,
+			// PDF y-coordinates are bottom-up; transform[5] is y position
+			y: x.transform[5],
+		}))
+		pageItems.push(items)
+		pageHeights.push(viewport.height)
+
+		// Collect unique margin-zone strings from this page
+		const h = viewport.height
+		const seen = new Set<string>()
+		for (const item of items) {
+			const trimmed = item.str.trim()
+			if (!trimmed) continue
+			const inTop = item.y > h * (1 - MARGIN)
+			const inBottom = item.y < h * MARGIN
+			if ((inTop || inBottom) && !seen.has(trimmed)) {
+				seen.add(trimmed)
+				marginTexts.set(trimmed, (marginTexts.get(trimmed) || 0) + 1)
+			}
+		}
 	}
-	return text
+
+	// A margin string is a repeating header/footer if it appears on 3+ pages
+	// (or on most pages for short documents).
+	const threshold = Math.min(3, Math.ceil(pdf.numPages * 0.4))
+	const repeating = new Set<string>()
+	for (const [txt, count] of marginTexts) {
+		if (count >= threshold) repeating.add(txt)
+	}
+
+	// Second pass: build clean text, stripping margin items that are
+	// repeating headers/footers or bare page numbers.
+	const pageTexts: string[] = []
+	for (let i = 0; i < pageItems.length; i++) {
+		const items = pageItems[i]
+		const h = pageHeights[i]
+		const kept: string[] = []
+		for (const item of items) {
+			const trimmed = item.str.trim()
+			if (!trimmed) continue
+			const inTop = item.y > h * (1 - MARGIN)
+			const inBottom = item.y < h * MARGIN
+			if (inTop || inBottom) {
+				// Strip repeating header/footer text
+				if (repeating.has(trimmed)) continue
+				// Strip bare page numbers in margins
+				if (/^\d{1,4}$/.test(trimmed)) continue
+			}
+			kept.push(item.str)
+		}
+		pageTexts.push(kept.join(' '))
+	}
+
+	return pageTexts.join('\n')
 }
 
 /** Theme color tokens derived from dark/light mode */
@@ -251,6 +318,7 @@ export default function RSVPReader() {
 	const [dark, setDark] = useState(false)
 	const [font, setFont] = useState<FontChoice>('mono')
 	const [showFontPicker, setShowFontPicker] = useState(false)
+	const [jumpInput, setJumpInput] = useState<string | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const idxRef = useRef(idx)
 	idxRef.current = idx
@@ -434,7 +502,9 @@ export default function RSVPReader() {
 		for (let i = 0; i < words.length; i++) {
 			// Sentence ends at punctuation (delay >= 1.8) or paragraph break (delay >= 4)
 			if (delays[i] >= 1.8 || i === words.length - 1) {
-				const preview = words.slice(sentStart, Math.min(sentStart + 8, i + 1)).join(' ')
+				const preview = words
+					.slice(sentStart, Math.min(sentStart + 8, i + 1))
+					.join(' ')
 				result.push({ start: sentStart, preview, paraStart: nextIsParaStart })
 				// If this word ends a paragraph (delay >= 4), the next sentence starts a new one
 				nextIsParaStart = delays[i] >= 4
@@ -450,6 +520,20 @@ export default function RSVPReader() {
 		}
 		return 0
 	}, [idx, sentences])
+
+	// Full text of the current sentence (for hover/long-press tooltip)
+	const currentSentenceText = useMemo(() => {
+		if (sentences.length === 0 || currentSentenceIdx < 0) return ''
+		const start = sentences[currentSentenceIdx].start
+		const end =
+			currentSentenceIdx + 1 < sentences.length
+				? sentences[currentSentenceIdx + 1].start
+				: words.length
+		return words.slice(start, end).join(' ')
+	}, [sentences, currentSentenceIdx, words])
+
+	const [showSentence, setShowSentence] = useState(false)
+	const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const sidebarRef = useRef<HTMLDivElement>(null)
 
@@ -812,7 +896,39 @@ export default function RSVPReader() {
 				>
 					<p className={`${c.text} font-semibold`}>{pct}%</p>
 					<p className="hidden md:block">
-						{idx.toLocaleString()} / {words.length.toLocaleString()} words
+						{jumpInput !== null ? (
+							<form
+								onSubmit={(e) => {
+									e.preventDefault()
+									const n = parseInt(jumpInput, 10)
+									if (!isNaN(n) && n >= 0 && n < words.length) {
+										setIdx(n)
+										setPlaying(false)
+									}
+									setJumpInput(null)
+								}}
+								className="inline"
+							>
+								<input
+									type="text"
+									inputMode="numeric"
+									autoFocus
+									value={jumpInput}
+									onChange={(e) => setJumpInput(e.target.value)}
+									onBlur={() => setJumpInput(null)}
+									className={`w-16 text-xs px-1 py-0 border rounded ${c.text} bg-transparent border-amber-500 outline-none`}
+								/>{' '}
+								/ {words.length.toLocaleString()}
+							</form>
+						) : (
+							<span
+								onClick={() => setJumpInput(String(idx))}
+								className="cursor-pointer hover:underline"
+								title="Click to jump to index"
+							>
+								{idx.toLocaleString()} / {words.length.toLocaleString()} words
+							</span>
+						)}
 					</p>
 					<p className="hidden md:block">
 						~{minsLeft < 1 ? '<1' : minsLeft}m left @ {wpm}wpm
@@ -821,7 +937,31 @@ export default function RSVPReader() {
 			</div>
 
 			{/* Center: reader with focus guides */}
-			<div className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]">
+			<div
+				className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]"
+				onMouseEnter={() => setShowSentence(true)}
+				onMouseLeave={() => setShowSentence(false)}
+				onTouchStart={() => {
+					longPressTimer.current = setTimeout(() => setShowSentence(true), 400)
+				}}
+				onTouchEnd={() => {
+					if (longPressTimer.current) clearTimeout(longPressTimer.current)
+					setShowSentence(false)
+				}}
+			>
+				{/* Sentence tooltip on hover / long-press */}
+				{showSentence && currentSentenceText && (
+					<div
+						className={`absolute z-10 ${c.bg} ${c.text} border ${c.border} rounded-lg px-4 py-3 text-sm max-w-md shadow-lg pointer-events-none`}
+						style={{
+							top: 'calc(50% + 3.5rem)',
+							left: '50%',
+							transform: 'translateX(-50%)',
+						}}
+					>
+						{currentSentenceText}
+					</div>
+				)}
 				{/* Focus guides: horizontal rails + vertical ORP line */}
 				<div
 					className="absolute pointer-events-none"
@@ -1075,7 +1215,30 @@ export default function RSVPReader() {
 
 				{fontPickerModal}
 
-				<p className={`hidden md:block ml-auto text-[11px] ${c.textFaint} tracking-wide`}>
+				{/* Mobile: clickable index for jump-to */}
+				<span
+					onClick={() => {
+						const input = window.prompt(
+							`Jump to word index (0–${words.length - 1}):`,
+							String(idx),
+						)
+						if (input !== null) {
+							const n = parseInt(input, 10)
+							if (!isNaN(n) && n >= 0 && n < words.length) {
+								setIdx(n)
+								setPlaying(false)
+							}
+						}
+					}}
+					className={`md:hidden text-[11px] ${c.textMuted} cursor-pointer hover:underline ml-auto`}
+					title="Tap to jump to index"
+				>
+					#{idx.toLocaleString()}
+				</span>
+
+				<p
+					className={`hidden md:block ml-auto text-[11px] ${c.textFaint} tracking-wide`}
+				>
 					space · pause &nbsp;·&nbsp; ←→ skip &nbsp;·&nbsp; ↑↓ speed
 				</p>
 			</div>
