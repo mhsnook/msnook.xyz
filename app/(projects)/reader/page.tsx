@@ -521,6 +521,20 @@ export default function RSVPReader() {
 		return 0
 	}, [idx, sentences])
 
+	// Full text of the current sentence (for hover/long-press tooltip)
+	const currentSentenceText = useMemo(() => {
+		if (sentences.length === 0 || currentSentenceIdx < 0) return ''
+		const start = sentences[currentSentenceIdx].start
+		const end =
+			currentSentenceIdx + 1 < sentences.length
+				? sentences[currentSentenceIdx + 1].start
+				: words.length
+		return words.slice(start, end).join(' ')
+	}, [sentences, currentSentenceIdx, words])
+
+	const [showSentence, setShowSentence] = useState(false)
+	const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
 	const sidebarRef = useRef<HTMLDivElement>(null)
 
 	// Auto-scroll sidebar to keep current sentence visible
@@ -923,7 +937,31 @@ export default function RSVPReader() {
 			</div>
 
 			{/* Center: reader with focus guides */}
-			<div className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]">
+			<div
+				className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]"
+				onMouseEnter={() => setShowSentence(true)}
+				onMouseLeave={() => setShowSentence(false)}
+				onTouchStart={() => {
+					longPressTimer.current = setTimeout(() => setShowSentence(true), 400)
+				}}
+				onTouchEnd={() => {
+					if (longPressTimer.current) clearTimeout(longPressTimer.current)
+					setShowSentence(false)
+				}}
+			>
+				{/* Sentence tooltip on hover / long-press */}
+				{showSentence && currentSentenceText && (
+					<div
+						className={`absolute z-10 ${c.bg} ${c.text} border ${c.border} rounded-lg px-4 py-3 text-sm max-w-md shadow-lg pointer-events-none`}
+						style={{
+							top: 'calc(50% + 3.5rem)',
+							left: '50%',
+							transform: 'translateX(-50%)',
+						}}
+					>
+						{currentSentenceText}
+					</div>
+				)}
 				{/* Focus guides: horizontal rails + vertical ORP line */}
 				<div
 					className="absolute pointer-events-none"
