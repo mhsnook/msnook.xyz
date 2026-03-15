@@ -3,10 +3,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Task, Project } from '@doist/todoist-api-typescript'
 import { createClient } from '@/lib/supabase/client'
+import type { SetupResult } from '@/lib/todoist'
+import { fetchJson } from '@/lib/utils'
 
 // ── Types ──
-
-type SetupResult = { projectId: string }
 
 export type InboxItem = {
 	id: string
@@ -14,17 +14,6 @@ export type InboxItem = {
 	raw_text: string
 	source: 'voice' | 'typed'
 	created_at: string
-}
-
-// ── Helpers ──
-
-async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-	const res = await fetch(url, init)
-	if (!res.ok) {
-		const err = await res.json().catch(() => ({ error: res.statusText }))
-		throw new Error(err.error || 'Request failed')
-	}
-	return res.json()
 }
 
 // ── Setup ──

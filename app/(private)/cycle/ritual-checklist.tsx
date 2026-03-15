@@ -1,44 +1,54 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import type { PhaseNumber } from './lib/cycle'
 import type { PhaseTheme } from './lib/cycle-theme'
-import { phaseRituals } from './lib/cycle-theme'
+import {
+	usePhaseRituals,
+	useToggleRitual,
+	useCycleSetup,
+	useSyncRitualStatus,
+} from './lib/cycle-store'
+import RitualApproval from './ritual-approval'
 
 interface Props {
 	phase: PhaseNumber
-	cycleKey: string // e.g. "2026-02" — used as localStorage key
+	cycleKey: string
 	theme: PhaseTheme
 }
 
-function getStorageKey(cycleKey: string, phase: PhaseNumber) {
-	return `cycle-rituals-${cycleKey}-p${phase}`
-}
-
 export default function RitualChecklist({ phase, cycleKey, theme }: Props) {
-	const items = phaseRituals[phase]
-	const storageKey = getStorageKey(cycleKey, phase)
+	const [rituals, setRituals] = usePhaseRituals(cycleKey, phase)
+	const { data: setup } = useCycleSetup()
+	const toggle = useToggleRitual()
 
-	const [checked, setChecked] = useState<boolean[]>(() => {
-		if (typeof window === 'undefined') return items.map(() => false)
+	// Sync completion status from Todoist on mount
+	useSyncRitualStatus(cycleKey, phase, setup?.projectId)
+
+	async function handleToggle(index: number) {
+		if (!rituals) return
+		const ritual = rituals[index]
+
+		// Optimistic update
+		const updated = rituals.map((r, i) =>
+			i === index ? { ...r, isCompleted: !r.isCompleted } : r,
+		)
+		setRituals(updated)
+
 		try {
-			const stored = localStorage.getItem(storageKey)
-			if (stored) return JSON.parse(stored)
-		} catch {}
-		return items.map(() => false)
-	})
-
-	useEffect(() => {
-		try {
-			localStorage.setItem(storageKey, JSON.stringify(checked))
-		} catch {}
-	}, [checked, storageKey])
-
-	const toggle = (index: number) => {
-		setChecked((prev) => prev.map((v, i) => (i === index ? !v : v)))
+			await toggle.mutateAsync({ ritual, cycleKey, phase })
+		} catch {
+			// Revert on error
+			setRituals(rituals)
+		}
 	}
 
-	const doneCount = checked.filter(Boolean).length
+	// Before approval: show the approval UI
+	if (!rituals || rituals.length === 0) {
+		return <RitualApproval phase={phase} cycleKey={cycleKey} theme={theme} />
+	}
+
+	// After approval: show synced checklist
+	const doneCount = rituals.filter((r) => r.isCompleted).length
 
 	return (
 		<div
@@ -57,7 +67,7 @@ export default function RitualChecklist({ phase, cycleKey, theme }: Props) {
 					Phase {phase} Rituals
 				</h3>
 				<span className="text-sm" style={{ color: theme.colors.fgMuted }}>
-					{doneCount}/{items.length}
+					{doneCount}/{rituals.length}
 				</span>
 			</div>
 
@@ -69,32 +79,34 @@ export default function RitualChecklist({ phase, cycleKey, theme }: Props) {
 				<div
 					className="h-full rounded-full transition-all duration-500"
 					style={{
-						width: `${(doneCount / items.length) * 100}%`,
+						width: `${(doneCount / rituals.length) * 100}%`,
 						backgroundColor: theme.colors.accent,
 					}}
 				/>
 			</div>
 
 			<ul className="space-y-2">
-				{items.map((item, i) => (
-					<li key={i}>
+				{rituals.map((ritual, i) => (
+					<li key={ritual.id}>
 						<label className="flex items-start gap-3 cursor-pointer group py-1">
 							<input
 								type="checkbox"
-								checked={checked[i] ?? false}
-								onChange={() => toggle(i)}
+								checked={ritual.isCompleted}
+								onChange={() => handleToggle(i)}
 								className="mt-0.5 h-4 w-4 rounded cursor-pointer accent-current"
 								style={{ accentColor: theme.colors.accent }}
 							/>
 							<span
 								className="text-sm leading-snug transition-opacity duration-300"
 								style={{
-									color: checked[i] ? theme.colors.fgMuted : theme.colors.fg,
-									textDecoration: checked[i] ? 'line-through' : 'none',
-									opacity: checked[i] ? 0.6 : 1,
+									color: ritual.isCompleted
+										? theme.colors.fgMuted
+										: theme.colors.fg,
+									textDecoration: ritual.isCompleted ? 'line-through' : 'none',
+									opacity: ritual.isCompleted ? 0.6 : 1,
 								}}
 							>
-								{item}
+								{ritual.content}
 							</span>
 						</label>
 					</li>

@@ -27,6 +27,22 @@ export function mapArray<T extends Record<string, any>, K extends keyof T>(
 	)
 }
 
+export function genId(): string {
+	return crypto.randomUUID().slice(0, 12)
+}
+
+export async function fetchJson<T>(
+	url: string,
+	init?: RequestInit,
+): Promise<T> {
+	const res = await fetch(url, init)
+	if (!res.ok) {
+		const err = await res.json().catch(() => ({ error: res.statusText }))
+		throw new Error(err.error || 'Request failed')
+	}
+	return res.json()
+}
+
 export function imageUrlify(path: string | null): string {
 	if (!path) return ''
 	return `${process.env.NEXT_PUBLIC_SUPABASE_API_URL}/storage/v1/object/public/images/${path}`
