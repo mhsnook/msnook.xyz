@@ -219,30 +219,55 @@ async function extractPdfText(file: File): Promise<string> {
 		if (count >= threshold) repeating.add(txt)
 	}
 
-	// Second pass: build clean text, stripping margin items that are
-	// repeating headers/footers or bare page numbers.
+	// Second pass: build clean text, stripping margin items and
+	// detecting paragraph breaks from y-coordinate gaps.
 	const pageTexts: string[] = []
 	for (let i = 0; i < pageItems.length; i++) {
 		const items = pageItems[i]
 		const h = pageHeights[i]
-		const kept: string[] = []
+
+		// Filter out headers/footers first
+		const kept: Array<{ str: string; y: number }> = []
 		for (const item of items) {
 			const trimmed = item.str.trim()
 			if (!trimmed) continue
 			const inTop = item.y > h * (1 - MARGIN)
 			const inBottom = item.y < h * MARGIN
 			if (inTop || inBottom) {
-				// Strip repeating header/footer text
 				if (repeating.has(trimmed)) continue
-				// Strip bare page numbers in margins
 				if (/^\d{1,4}$/.test(trimmed)) continue
 			}
-			kept.push(item.str)
+			kept.push(item)
 		}
-		pageTexts.push(kept.join(' '))
+
+		if (kept.length === 0) continue
+
+		// Detect paragraph breaks: when consecutive items have a y-gap
+		// larger than ~1.5x the typical line spacing, insert a blank line.
+		// PDF y is bottom-up, so text flows with decreasing y values.
+		const gaps: number[] = []
+		for (let j = 1; j < kept.length; j++) {
+			const gap = Math.abs(kept[j - 1].y - kept[j].y)
+			if (gap > 0) gaps.push(gap)
+		}
+		// Median gap ≈ normal line spacing; paragraph break if > 1.5x that
+		const sorted = [...gaps].sort((a, b) => a - b)
+		const median = sorted.length > 0 ? sorted[Math.floor(sorted.length / 2)] : 0
+		const paraThreshold = median * 1.5
+
+		let text = kept[0].str
+		for (let j = 1; j < kept.length; j++) {
+			const gap = Math.abs(kept[j - 1].y - kept[j].y)
+			if (paraThreshold > 0 && gap > paraThreshold) {
+				text += '\n\n' + kept[j].str
+			} else {
+				text += ' ' + kept[j].str
+			}
+		}
+		pageTexts.push(text)
 	}
 
-	return pageTexts.join('\n')
+	return pageTexts.join('\n\n')
 }
 
 /** Theme color tokens derived from dark/light mode */
@@ -937,31 +962,7 @@ export default function RSVPReader() {
 			</div>
 
 			{/* Center: reader with focus guides */}
-			<div
-				className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]"
-				onMouseEnter={() => setShowSentence(true)}
-				onMouseLeave={() => setShowSentence(false)}
-				onTouchStart={() => {
-					longPressTimer.current = setTimeout(() => setShowSentence(true), 400)
-				}}
-				onTouchEnd={() => {
-					if (longPressTimer.current) clearTimeout(longPressTimer.current)
-					setShowSentence(false)
-				}}
-			>
-				{/* Sentence tooltip on hover / long-press */}
-				{showSentence && currentSentenceText && (
-					<div
-						className={`absolute z-10 ${c.bg} ${c.text} border ${c.border} rounded-lg px-4 py-3 text-sm max-w-md shadow-lg pointer-events-none`}
-						style={{
-							top: 'calc(50% + 3.5rem)',
-							left: '50%',
-							transform: 'translateX(-50%)',
-						}}
-					>
-						{currentSentenceText}
-					</div>
-				)}
+			<div className="flex flex-col items-center justify-center relative order-3 md:order-none min-h-[200px]">
 				{/* Focus guides: horizontal rails + vertical ORP line */}
 				<div
 					className="absolute pointer-events-none"
@@ -1044,11 +1045,38 @@ export default function RSVPReader() {
 				{/*
 				 * Word display — ORP is always at exact horizontal AND vertical center.
 				 * Fixed height + line-height prevents vertical jumping between words.
+				 * Hover/long-press shows the full current sentence as a tooltip.
 				 */}
 				<div
-					className="relative w-full overflow-hidden"
+					className="relative w-full"
 					style={{ height: '4.5rem' }}
+					onMouseEnter={() => setShowSentence(true)}
+					onMouseLeave={() => setShowSentence(false)}
+					onTouchStart={() => {
+						longPressTimer.current = setTimeout(
+							() => setShowSentence(true),
+							400,
+						)
+					}}
+					onTouchEnd={() => {
+						if (longPressTimer.current) clearTimeout(longPressTimer.current)
+						setShowSentence(false)
+					}}
 				>
+					{/* Sentence tooltip */}
+					{showSentence && currentSentenceText && (
+						<div
+							className={`absolute z-10 ${c.bg} ${c.text} border ${c.border} rounded-lg px-4 py-3 text-sm max-w-md shadow-lg pointer-events-none`}
+							style={{
+								top: '100%',
+								left: '50%',
+								transform: 'translateX(-50%)',
+								marginTop: '0.5rem',
+							}}
+						>
+							{currentSentenceText}
+						</div>
+					)}
 					{/* Ghost quotes when inside a quotation */}
 					{inQuote && !wordOpensQuote && (
 						<div
