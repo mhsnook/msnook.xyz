@@ -546,19 +546,22 @@ export default function RSVPReader() {
 		return 0
 	}, [idx, sentences])
 
-	// Full text of the current sentence (for hover/long-press tooltip)
-	const currentSentenceText = useMemo(() => {
-		if (sentences.length === 0 || currentSentenceIdx < 0) return ''
-		const start = sentences[currentSentenceIdx].start
-		const end =
-			currentSentenceIdx + 1 < sentences.length
-				? sentences[currentSentenceIdx + 1].start
-				: words.length
-		return words.slice(start, end).join(' ')
-	}, [sentences, currentSentenceIdx, words])
-
-	const [showSentence, setShowSentence] = useState(false)
+	// Hovered sentence index for tooltip (null = no tooltip)
+	const [hoveredSentence, setHoveredSentence] = useState<number | null>(null)
 	const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+	const getSentenceText = useCallback(
+		(sentIdx: number) => {
+			if (sentences.length === 0 || sentIdx < 0) return ''
+			const start = sentences[sentIdx].start
+			const end =
+				sentIdx + 1 < sentences.length
+					? sentences[sentIdx + 1].start
+					: words.length
+			return words.slice(start, end).join(' ')
+		},
+		[sentences, words],
+	)
 
 	const sidebarRef = useRef<HTMLDivElement>(null)
 
@@ -1045,38 +1048,8 @@ export default function RSVPReader() {
 				{/*
 				 * Word display — ORP is always at exact horizontal AND vertical center.
 				 * Fixed height + line-height prevents vertical jumping between words.
-				 * Hover/long-press shows the full current sentence as a tooltip.
 				 */}
-				<div
-					className="relative w-full"
-					style={{ height: '4.5rem' }}
-					onMouseEnter={() => setShowSentence(true)}
-					onMouseLeave={() => setShowSentence(false)}
-					onTouchStart={() => {
-						longPressTimer.current = setTimeout(
-							() => setShowSentence(true),
-							400,
-						)
-					}}
-					onTouchEnd={() => {
-						if (longPressTimer.current) clearTimeout(longPressTimer.current)
-						setShowSentence(false)
-					}}
-				>
-					{/* Sentence tooltip */}
-					{showSentence && currentSentenceText && (
-						<div
-							className={`absolute z-10 ${c.bg} ${c.text} border ${c.border} rounded-lg px-4 py-3 text-sm max-w-md shadow-lg pointer-events-none`}
-							style={{
-								top: '100%',
-								left: '50%',
-								transform: 'translateX(-50%)',
-								marginTop: '0.5rem',
-							}}
-						>
-							{currentSentenceText}
-						</div>
-					)}
+				<div className="relative w-full" style={{ height: '4.5rem' }}>
 					{/* Ghost quotes when inside a quotation */}
 					{inQuote && !wordOpensQuote && (
 						<div
@@ -1170,25 +1143,52 @@ export default function RSVPReader() {
 						const isCurrent = i === currentSentenceIdx
 						const isPast = i < currentSentenceIdx
 						return (
-							<button
-								key={s.start}
-								data-active={isCurrent}
-								onClick={() => {
-									setIdx(s.start)
-									setPlaying(false)
-								}}
-								className={`block whitespace-nowrap md:whitespace-normal md:w-full text-left text-[11px] leading-snug px-2 py-1 rounded md:truncate transition-colors cursor-pointer shrink-0 ${
-									s.paraStart && i > 0 ? 'md:mt-3 ml-3 md:ml-0' : ''
-								} ${
-									isCurrent
-										? `${c.ctxCurrent} ${dark ? 'bg-gray-800' : 'bg-sky-100'}`
-										: isPast
-											? c.ctxPast
-											: c.ctxFuture
-								} ${dark ? 'hover:bg-gray-800' : 'hover:bg-sky-100'}`}
-							>
-								{s.preview}
-							</button>
+							<div key={s.start} className="relative">
+								<button
+									data-active={isCurrent}
+									onClick={() => {
+										setIdx(s.start)
+										setPlaying(false)
+									}}
+									onMouseEnter={() => setHoveredSentence(i)}
+									onMouseLeave={() => setHoveredSentence(null)}
+									onTouchStart={() => {
+										longPressTimer.current = setTimeout(
+											() => setHoveredSentence(i),
+											400,
+										)
+									}}
+									onTouchEnd={() => {
+										if (longPressTimer.current)
+											clearTimeout(longPressTimer.current)
+										setHoveredSentence(null)
+									}}
+									className={`block whitespace-nowrap md:whitespace-normal md:w-full text-left text-[11px] leading-snug px-2 py-1 rounded md:truncate transition-colors cursor-pointer shrink-0 ${
+										s.paraStart && i > 0 ? 'md:mt-3 ml-3 md:ml-0' : ''
+									} ${
+										isCurrent
+											? `${c.ctxCurrent} ${dark ? 'bg-gray-800' : 'bg-sky-100'}`
+											: isPast
+												? c.ctxPast
+												: c.ctxFuture
+									} ${dark ? 'hover:bg-gray-800' : 'hover:bg-sky-100'}`}
+								>
+									{s.preview}
+								</button>
+								{hoveredSentence === i && (
+									<div
+										className={`absolute z-20 ${c.bg} ${c.text} border ${c.border} rounded-lg px-3 py-2 text-xs max-w-xs shadow-lg pointer-events-none`}
+										style={{
+											bottom: '100%',
+											left: 0,
+											marginBottom: '0.25rem',
+											whiteSpace: 'normal',
+										}}
+									>
+										{getSentenceText(i)}
+									</div>
+								)}
+							</div>
 						)
 					})}
 				</div>
