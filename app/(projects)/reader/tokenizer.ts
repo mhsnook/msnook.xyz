@@ -142,9 +142,9 @@ export function tokenize(text: string): {
 		}
 
 		for (const w of slashSplit) {
-			// Opening smart quotes: " (U+201C), ' (U+2018), « (U+00AB)
+			// Opening smart quotes: \u201c ("), \u2018 ('), \u00ab («)
 			const opens = (w.match(/^[\u201c\u2018\u00ab]+/) || [''])[0].length
-			// Closing smart quotes: " (U+201D), ' (U+2019), » (U+00BB)
+			// Closing smart quotes: \u201d ("), \u2019 ('), \u00bb (»)
 			const closes = (w.match(/[\u201d\u2019\u00bb]+$/) || [''])[0].length
 
 			depth += opens
@@ -160,6 +160,11 @@ export function tokenize(text: string): {
 			if (hasLongNumber(w)) d = Math.max(d, 2)
 
 			delays.push(d)
+
+			// Reset quote depth at sentence boundaries too — unbalanced quotes
+			// from OCR/extraction within a paragraph would otherwise taint all
+			// subsequent sentences. Multi-sentence quotes are rare in practice.
+			if (d >= 1.8) depth = 0
 		}
 
 		if (p < paragraphs.length - 1 && words.length > 0) {
