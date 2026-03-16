@@ -261,5 +261,22 @@ describe('tokenize', () => {
 			// she=0 said=0 "hi"=1 and=0 "bye"=1 ok=0
 			expect(quoteDepth).toEqual([0, 0, 1, 0, 1, 0])
 		})
+
+		it('resets quote depth at sentence boundaries', () => {
+			// Unbalanced opening quote in first sentence should not leak
+			// into the next sentence within the same paragraph.
+			const { quoteDepth } = tokenize(
+				'\u201cunclosed quote here. next sentence is clean',
+			)
+			// First sentence: depth 1 throughout
+			expect(quoteDepth[0]).toBe(1) // \u201cunclosed
+			expect(quoteDepth[1]).toBe(1) // quote
+			expect(quoteDepth[2]).toBe(1) // here.
+			// After sentence boundary (period), depth resets
+			expect(quoteDepth[3]).toBe(0) // next
+			expect(quoteDepth[4]).toBe(0) // sentence
+			expect(quoteDepth[5]).toBe(0) // is
+			expect(quoteDepth[6]).toBe(0) // clean
+		})
 	})
 })
