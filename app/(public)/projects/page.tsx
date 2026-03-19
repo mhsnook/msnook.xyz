@@ -54,23 +54,25 @@ export default async function ProjectsPage() {
 							key={project.id}
 							className="border rounded-lg flex flex-col justify-between overflow-hidden hover:shadow-md transition-shadow"
 						>
-							{project.image && (
-								<div className="relative w-full h-40">
-									<Image
-										src={project.image}
-										alt={project.title}
-										fill
-										sizes="(min-width: 640px) 50vw, 100vw"
-										style={{ objectFit: 'cover' }}
-									/>
-								</div>
-							)}
 							<div className="p-6 flex flex-col flex-1 justify-between">
 								<div>
 									<div className="flex items-center justify-between mb-3">
-										<h2 className="text-2xl font-display font-bold text-cyan-content">
-											{project.title}
-										</h2>
+										<div className="flex items-center gap-3">
+											{project.image && (
+												<div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden border bg-white">
+													<Image
+														src={project.image}
+														alt={project.title}
+														fill
+														sizes="48px"
+														style={{ objectFit: 'contain' }}
+													/>
+												</div>
+											)}
+											<h2 className="text-2xl font-display font-bold text-cyan-content">
+												{project.title}
+											</h2>
+										</div>
 										<div className="flex items-center gap-2">
 											{project.github && (
 												<a
