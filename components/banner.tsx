@@ -153,7 +153,7 @@ export default function Banner({
 	return (
 		<header
 			className={`bg-gray-900 w-full ${
-				small ? 'min-h-[30vh]' : medium ? 'min-h-[45vh]' : 'h-[75vh]'
+				small ? 'min-h-[30vh]' : medium ? 'min-h-[45vh]' : 'h-[50vh]'
 			} grid relative overflow-hidden`}
 			style={{ textShadow: '2px 2px 6px black' }}
 		>
