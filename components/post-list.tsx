@@ -3,40 +3,52 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'timeago.js'
 
-const PostCard = ({
+const PostRow = ({
 	slug,
-	image,
 	title,
+	image,
 	excerpt,
 	published,
 	published_at,
+	updated_at,
 }: Tables<'posts'>) => (
 	<Link
 		href={`/posts/${slug}${published ? '' : '/edit'}`}
 		role="listitem"
-		className="border rounded-sm flex flex-col items-stretch"
+		className="block group border-t first:border-t-0 rounded-xl transition-colors duration-200 hover:bg-stone-50/80 py-8 -mx-4 px-4"
 	>
-		{image ? (
-			<div className="relative min-h-[16rem] sm:min-h-[10rem]">
+		{image && (
+			<div className="relative w-full h-52 sm:h-64 rounded-t-xl overflow-hidden mb-5">
+				{/* Blurred cover layer — fills the space, breathes on hover */}
 				<Image
-					className="rounded-t"
 					src={image}
 					alt=""
 					fill
-					sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-					style={{ objectFit: 'cover' }}
+					sizes="(min-width: 768px) 800px, 100vw"
+					style={{ objectFit: 'cover', filter: 'blur(18px)', transform: 'scale(1.15)' }}
+					className="transition-transform duration-700 ease-out group-hover:scale-[1.25]"
+				/>
+				{/* Sharp contained image on top */}
+				<Image
+					src={image}
+					alt=""
+					fill
+					sizes="(min-width: 768px) 800px, 100vw"
+					style={{ objectFit: 'contain' }}
 				/>
 			</div>
-		) : (
-			<p className="py-2" />
 		)}
-		<div className="flex flex-col justify-between h-full">
-			<p className="text-2xl font-display p-4 text-cyan-content hover:underline">
-				{title}
+		<p className="text-3xl sm:text-4xl font-display font-bold text-cyan-content group-hover:underline leading-tight mb-3">
+			{title}
+		</p>
+		{excerpt && (
+			<p className="text-base text-gray-600 leading-relaxed mb-4">
+				{excerpt}
 			</p>
-			{!image && excerpt ? <p className="p-4">{excerpt}</p> : null}
-			<p className="px-4 py-2 text-gray-600">{format(published_at)}</p>
-		</div>
+		)}
+		<p className="text-sm text-gray-400 uppercase tracking-widest transition-colors duration-200 group-hover:text-gray-500">
+			{format(published_at ?? updated_at)}
+		</p>
 	</Link>
 )
 
@@ -55,12 +67,9 @@ export default function PostList({ posts, isLoading }: PostListProps) {
 	}
 
 	return (
-		<div
-			role="list"
-			className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 place-content-stretch"
-		>
+		<div role="list">
 			{posts.map((post) => (
-				<PostCard key={`${post.id}-${post.slug}`} {...post} />
+				<PostRow key={`${post.id}-${post.slug}`} {...post} />
 			))}
 		</div>
 	)
