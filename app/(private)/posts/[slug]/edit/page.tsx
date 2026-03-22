@@ -16,6 +16,7 @@ import {
 	InputImage,
 	InputPublish,
 	InputDatestamp,
+	InputCategory,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
 import { postQueryOptions } from '../use-post'
@@ -44,6 +45,7 @@ export default function Page({ params: { slug } }) {
 }
 
 const PostEditSchema = z.object({
+	category: z.string().optional().nullable(),
 	content: z.string().min(1, 'Content is required'),
 	excerpt: z.string().optional().nullable(),
 	id: z.string(),
@@ -217,6 +219,7 @@ function Client({ initialData }: { initialData: Tables<'posts'> }) {
 					<fieldset disabled={!session || updatePostMutation.isPending}>
 						<InputTitle register={register} error={errors.title} />
 						<InputExcerpt register={register} />
+						<InputCategory register={register} />
 						<InputContent
 							register={register}
 							setValue={setValue}

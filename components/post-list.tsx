@@ -11,6 +11,7 @@ const PostRow = ({
 	published,
 	published_at,
 	updated_at,
+	category,
 }: Tables<'posts'>) => (
 	<Link
 		href={`/posts/${slug}${published ? '' : '/edit'}`}
@@ -46,9 +47,16 @@ const PostRow = ({
 				{excerpt}
 			</p>
 		)}
-		<p className="text-sm text-gray-400 uppercase tracking-widest transition-colors duration-200 group-hover:text-gray-500">
-			{format(published_at ?? updated_at)}
-		</p>
+		<div className="flex items-center gap-3 mt-3">
+			<p className="text-sm text-gray-400 uppercase tracking-widest transition-colors duration-200 group-hover:text-gray-500">
+				{format(published_at ?? updated_at)}
+			</p>
+			{category && (
+				<span className="text-xs font-medium px-2.5 py-0.5 rounded-full border border-stone-300 text-stone-500">
+					{category}
+				</span>
+			)}
+		</div>
 	</Link>
 )
 

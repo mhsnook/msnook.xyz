@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import Banner from '@/components/banner'
-import PostList from '@/components/post-list'
+import PostsSection from '@/components/posts-section'
 import IffLoggedIn from '../iff-logged-in'
 import { fetchPostList } from '@/lib/posts'
 import { fetchProjects } from '@/lib/projects'
@@ -168,7 +168,7 @@ export default async function Page() {
 							</Link>
 						</IffLoggedIn>
 					</div>
-					<PostList posts={posts} />
+					<PostsSection posts={posts ?? []} />
 				</section>
 			</main>
 		</>
