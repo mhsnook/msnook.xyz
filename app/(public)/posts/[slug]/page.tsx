@@ -31,6 +31,14 @@ const PostSidebar = ({ post }: { post: Tables<'posts'> }) => {
 					<p>
 						Published <DateSpan dateText={post.published_at} />
 					</p>
+					{post.category && (
+						<Link
+							href={`/?category=${post.category}`}
+							className="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full border border-cyan-content text-cyan-content hover:bg-cyan-content hover:text-white transition-colors"
+						>
+							{post.category}
+						</Link>
+					)}
 				</div>
 			</div>
 			<IffLoggedIn>

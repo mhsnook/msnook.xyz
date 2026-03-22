@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client'
 import { imageUrlify, filenameFromFile } from '@/lib/utils'
 import ImageForm from './image-form'
 import { Label, ErrorList } from '@/components/lib'
+import { CATEGORIES } from './post-sidebar'
 
 export function InputTitle({ register, error }) {
 	return (
@@ -204,6 +205,30 @@ export function InputImage({
 			<span className={error ? '' : 'invisible'} role="alert">
 				This image URL isn&rsquo;t working
 			</span>
+		</div>
+	)
+}
+
+export function InputCategory({ register }) {
+	return (
+		<div className="my-2">
+			<Label>Category</Label>
+			<div className="flex flex-wrap gap-2 mt-2">
+				<label className="cursor-pointer">
+					<input type="radio" value="" {...register('category')} className="sr-only peer" />
+					<span className="peer-checked:bg-cyan-content peer-checked:text-white peer-checked:border-cyan-content inline-block px-4 py-2 rounded-full border border-stone-300 text-sm font-medium text-stone-500 hover:border-stone-400 transition-colors">
+						None
+					</span>
+				</label>
+				{CATEGORIES.map((cat) => (
+					<label key={cat} className="cursor-pointer">
+						<input type="radio" value={cat} {...register('category')} className="sr-only peer" />
+						<span className="peer-checked:bg-cyan-content peer-checked:text-white peer-checked:border-cyan-content inline-block px-4 py-2 rounded-full border border-stone-300 text-sm font-medium text-stone-500 hover:border-stone-400 transition-colors">
+							{cat}
+						</span>
+					</label>
+				))}
+			</div>
 		</div>
 	)
 }
