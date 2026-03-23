@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { PrintMarkdown } from './lib'
 import { Tables } from '@/types/supabase'
 
@@ -30,6 +31,17 @@ export const PostArticle = ({ post, isPending = false }: PostArticleProps) => (
 		) : (
 			<>
 				<h1 className="h1">{post.title}</h1>
+				{post.category && (
+					<p className="text-sm text-stone-500">
+						Category:{' '}
+						<Link
+							href={`/?category=${post.category}`}
+							className="text-cyan-content hover:underline"
+						>
+							{post.category}
+						</Link>
+					</p>
+				)}
 				{post.image && (
 					<div className="h-64 w-full relative">
 						<Image
