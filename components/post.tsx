@@ -35,7 +35,7 @@ export const PostArticle = ({ post, isPending = false }: PostArticleProps) => (
 					<p className="text-sm text-stone-500">
 						Category:{' '}
 						<Link
-							href={`/?category=${post.category}`}
+							href={`/?category=${post.category}#posts`}
 							className="text-cyan-content hover:underline"
 						>
 							{post.category}

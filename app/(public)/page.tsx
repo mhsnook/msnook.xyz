@@ -156,9 +156,9 @@ export default async function Page() {
 				</section>
 
 				{/* Posts section */}
-				<section>
+				<section id="posts">
 					<div className="flex flex-row justify-between items-center mb-2">
-						<h2 className="h2">All Posts</h2>
+						<h2 className="h2">Blog Posts</h2>
 						<IffLoggedIn>
 							<Link
 								href="/posts/drafts"

@@ -2,18 +2,16 @@
 
 import { Tables } from '@/types/supabase'
 
-export const CATEGORIES = ['Tech', 'Creative', 'Politics', 'Other'] as const
-export type Category = (typeof CATEGORIES)[number]
-
 interface PostSidebarProps {
+	categories: string[]
 	selectedCategory: string | null
 	onSelect: (category: string | null) => void
 }
 
-export default function PostSidebar({ selectedCategory, onSelect }: PostSidebarProps) {
+export default function PostSidebar({ categories, selectedCategory, onSelect }: PostSidebarProps) {
 	return (
 		<nav className="flex flex-col gap-1">
-			{CATEGORIES.map((cat) => (
+			{categories.map((cat) => (
 				<button
 					key={cat}
 					type="button"
@@ -47,4 +45,8 @@ export function filterPostsByCategory<T extends Pick<Tables<'posts'>, 'category'
 ): T[] {
 	if (!category) return posts
 	return posts.filter((p) => p.category === category)
+}
+
+export function deriveCategories<T extends Pick<Tables<'posts'>, 'category'>>(posts: T[]): string[] {
+	return [...new Set(posts.map((p) => p.category).filter((c): c is string => !!c))].sort()
 }
