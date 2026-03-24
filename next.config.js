@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+	async redirects() {
+		return [
+			{
+				source: '/reader',
+				destination: 'https://reader.msnook.xyz',
+				permanent: true,
+			},
+		]
+	},
 	reactStrictMode: true,
 	transpilePackages: ['react-markdown', 'remark-gfm', 'rehype-raw', 'shiki'],
 	eslint: {
