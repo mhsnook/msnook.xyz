@@ -13,6 +13,21 @@
  */
 
 export type PhaseNumber = 1 | 2 | 3 | 4
+export const PHASES: readonly PhaseNumber[] = [1, 2, 3, 4]
+
+export const WEEKDAYS = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+] as const
+
+export function phaseRitualKey(cycleKey: string, phase: PhaseNumber): string {
+	return `${cycleKey}-p${phase}`
+}
 export interface PhaseRange {
 	phase: PhaseNumber
 	start: Date
