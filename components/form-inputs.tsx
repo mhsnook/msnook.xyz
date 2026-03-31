@@ -64,8 +64,19 @@ export function InputSlug({ register, error }) {
 	)
 }
 
-export function InputContent({ register, setValue, getValues }) {
-	const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+export function InputContent({
+	register,
+	setValue,
+	getValues,
+	textareaRef: externalRef,
+}: {
+	register: any
+	setValue: any
+	getValues: any
+	textareaRef?: React.RefObject<HTMLTextAreaElement | null>
+}) {
+	const internalRef = useRef<HTMLTextAreaElement | null>(null)
+	const textareaRef = externalRef || internalRef
 	const { ref: rhfRef, ...registerRest } = register('content')
 
 	const uploadImage = useMutation({
