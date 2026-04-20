@@ -1,47 +1,124 @@
-SET session_replication_role = replica;
+set
+	session_replication_role = replica;
 
 --
 -- PostgreSQL database dump
 --
-
 -- Dumped from database version 15.6
 -- Dumped by pg_dump version 15.6
+set
+	statement_timeout = 0;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+set
+	lock_timeout = 0;
+
+set
+	idle_in_transaction_session_timeout = 0;
+
+set
+	client_encoding = 'UTF8';
+
+set
+	standard_conforming_strings = on;
+
+select
+	pg_catalog.set_config ('search_path', '', false);
+
+set
+	check_function_bodies = false;
+
+set
+	xmloption = content;
+
+set
+	client_min_messages = warning;
+
+set
+	row_security = off;
 
 --
 -- Data for Name: media; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-
-
 --
 -- Data for Name: media_meta; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-INSERT INTO "public"."media_meta" ("id", "path", "description", "tags", "center_box", "created_at", "updated_at") VALUES
-	('d8c0e7a9-d7a4-470e-86ad-48523c49af0a', 'hyrax-197033.jpeg', 'A cute hurax', '{cute,animal}', '{"x": 0.23789849865748966, "y": 0.08588340883836221, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:12.239745+00', NULL),
-	('cb6af364-8bd5-42f3-a92d-5c4ce2b0e31c', 'garlic-broccoli-friends-1a82b1.png', 'A yellow garlic and a green broccoli (friends)', '{sunlo,logo}', NULL, '2025-08-21 11:04:17.835577+00', NULL),
-	('d3cd5e80-e9b7-4e30-9dc8-1ec0d68ee181', 'GwpeSZ_XkAEA6IJ-1ac167.jpeg', 'a tumblr post: "grabs your hand. you''ve had enough plot and exposition and character development lately i''m taking you to the beach episode"', '{tumblr,motivation}', NULL, '2025-08-21 11:03:36.675869+00', '2025-08-21 11:05:25.895744+00'),
-	('28f86cd7-0e1b-493a-82d8-bf91e1a2afe6', 'girlboss-desktop-background-1abbac.jpeg', '', '{stock,motivation}', '{"x": 0.25, "y": 0.25, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:25.077981+00', '2025-08-21 11:05:46.911547+00'),
-	('8234d48d-ed5b-43bf-8dd7-47acddf46017', 'IMG_20240927_151942735_HDR-1ac0af.jpg', 'it''s a my face', '{face,serving}', '{"x": 0.2742030026850204, "y": 0.20404904961644568, "width": 0.5, "height": 0.5}', '2025-08-21 11:03:54.781625+00', '2025-08-21 11:06:01.843362+00');
-
+insert into
+	"public"."media_meta" (
+		"id",
+		"path",
+		"description",
+		"tags",
+		"center_box",
+		"created_at",
+		"updated_at"
+	)
+values
+	(
+		'd8c0e7a9-d7a4-470e-86ad-48523c49af0a',
+		'hyrax-197033.jpeg',
+		'A cute hurax',
+		'{cute,animal}',
+		'{"x": 0.23789849865748966, "y": 0.08588340883836221, "width": 0.5, "height": 0.5}',
+		'2025-08-21 11:03:12.239745+00',
+		null
+	),
+	(
+		'cb6af364-8bd5-42f3-a92d-5c4ce2b0e31c',
+		'garlic-broccoli-friends-1a82b1.png',
+		'A yellow garlic and a green broccoli (friends)',
+		'{sunlo,logo}',
+		null,
+		'2025-08-21 11:04:17.835577+00',
+		null
+	),
+	(
+		'd3cd5e80-e9b7-4e30-9dc8-1ec0d68ee181',
+		'GwpeSZ_XkAEA6IJ-1ac167.jpeg',
+		'a tumblr post: "grabs your hand. you''ve had enough plot and exposition and character development lately i''m taking you to the beach episode"',
+		'{tumblr,motivation}',
+		null,
+		'2025-08-21 11:03:36.675869+00',
+		'2025-08-21 11:05:25.895744+00'
+	),
+	(
+		'28f86cd7-0e1b-493a-82d8-bf91e1a2afe6',
+		'girlboss-desktop-background-1abbac.jpeg',
+		'',
+		'{stock,motivation}',
+		'{"x": 0.25, "y": 0.25, "width": 0.5, "height": 0.5}',
+		'2025-08-21 11:03:25.077981+00',
+		'2025-08-21 11:05:46.911547+00'
+	),
+	(
+		'8234d48d-ed5b-43bf-8dd7-47acddf46017',
+		'IMG_20240927_151942735_HDR-1ac0af.jpg',
+		'it''s a my face',
+		'{face,serving}',
+		'{"x": 0.2742030026850204, "y": 0.20404904961644568, "width": 0.5, "height": 0.5}',
+		'2025-08-21 11:03:54.781625+00',
+		'2025-08-21 11:06:01.843362+00'
+	);
 
 --
 -- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-INSERT INTO "public"."posts" ("content", "created_at", "excerpt", "image", "published", "slug", "title", "updated_at", "id", "author_id", "published_at") VALUES
-	('**I suppose the point** of this post is to speak on a commonly accepted contradiction, say, about people who think with their head or their heart, people who are analytical and those who are empathic.
+insert into
+	"public"."posts" (
+		"content",
+		"created_at",
+		"excerpt",
+		"image",
+		"published",
+		"slug",
+		"title",
+		"updated_at",
+		"id",
+		"author_id",
+		"published_at"
+	)
+values
+	(
+		'**I suppose the point** of this post is to speak on a commonly accepted contradiction, say, about people who think with their head or their heart, people who are analytical and those who are empathic.
 
 Recently we''ve recently had Discourse about this thing, _Long Termism_, which you might say relies on numbers to say ~ "If we want to bring the most benefit to the most humans, we should ______" and then proceed to fill in the blank with something that sounds a lot like eugenics or ecofascism draped in the smug magnanimity that only Silicon Valley can really muster.
 
@@ -70,11 +147,35 @@ Maybe this sounds obvious and uncontroversial – Michael, why are you even both
 
 So this is why I''m writing. I think questions like these two – which in some way defy numerics – are essential for consideration, and I propose to kind of just mash them together.
 
-', '2023-05-17 13:41:27.384189+00', NULL, '', false, 'moral-worth-of-numbers', 'The Moral Worth of Numbers', '2023-05-17 18:16:29.240507+00', 'd2f169e6-b64d-4f2d-8d32-01c349f95f9a', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('Last year I decided to stop freelancing and focus on building my long-time side project into something more, perhaps a business, but at the very least, a more complete version of itself. It''s called Sunlo; it''s a social language learning app, and [you''re welcome to try it out if you like](https://sunlo.app).
+',
+		'2023-05-17 13:41:27.384189+00',
+		null,
+		'',
+		false,
+		'moral-worth-of-numbers',
+		'The Moral Worth of Numbers',
+		'2023-05-17 18:16:29.240507+00',
+		'd2f169e6-b64d-4f2d-8d32-01c349f95f9a',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'Last year I decided to stop freelancing and focus on building my long-time side project into something more, perhaps a business, but at the very least, a more complete version of itself. It''s called Sunlo; it''s a social language learning app, and [you''re welcome to try it out if you like](https://sunlo.app).
 
-At the time it was a NextJS app with Supabase for the back-end and Tauri compiling to native apps for Android and iOS. But I was running into problems: most notably, NextJS''s server-first approach doesn''t include client-side routing, so if I want people to be able to create a flash card and then ', '2025-06-06 17:55:49.061172+00', NULL, '', false, 'write-it-three-times', 'The "Write It Three Times" approach', NULL, 'b46c597a-f9a1-4435-ab89-88b962757a7e', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('My ADHD makes more sense to me when I think of it as an addiction response. My biggest medical concern is that someday I''ll develop diabetes, which I''ll get because I''m addicted to sugar. I spend my life in a constant low-gravity tug with my somewhat casual but still very real relationship with a caffeine addiction. I have rendered it with some sort of bourgeois craft consciousness but it is just an addiction I made friends with.
+At the time it was a NextJS app with Supabase for the back-end and Tauri compiling to native apps for Android and iOS. But I was running into problems: most notably, NextJS''s server-first approach doesn''t include client-side routing, so if I want people to be able to create a flash card and then ',
+		'2025-06-06 17:55:49.061172+00',
+		null,
+		'',
+		false,
+		'write-it-three-times',
+		'The "Write It Three Times" approach',
+		null,
+		'b46c597a-f9a1-4435-ab89-88b962757a7e',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'My ADHD makes more sense to me when I think of it as an addiction response. My biggest medical concern is that someday I''ll develop diabetes, which I''ll get because I''m addicted to sugar. I spend my life in a constant low-gravity tug with my somewhat casual but still very real relationship with a caffeine addiction. I have rendered it with some sort of bourgeois craft consciousness but it is just an addiction I made friends with.
 
 So I sit at my desk and I turn on my machine and I open up work. Staring at the blank page, or the code un-edited, somewhere deep in my brain a metronome clicks over,
 
@@ -87,10 +188,46 @@ So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have 
 
 * _Mindful Exceptions_ are a beautiful thing. I basically am a hard "no" on plenty of different things like animal meat or cake icing, just for example. But if it''s you''re birthday and your partner made this cake for us all to eat together I''m not going to scrape it off. Likewise if a dear friend wants to make me some special dish, and it has meat in it, I''m going to eat it and love it because I love them and want to experience the thingh they''re sharing with me. So my "down-to-zero" approach is never actually zero; it''s more like... 2%... or 10% even (like with sugar). Being confident to make mindful exceptions makes it possible to still be pretty extreme in how I cut out my addictions, without feeling like I''m throwing out the good things in life along with the bad.
 
-', '2024-01-27 09:49:08.17101+00', NULL, '', false, 'lens-of-addiction', 'The Lens of Addiction', '2024-01-28 06:49:50.896689+00', 'ea99c482-f176-45c4-aef2-eca1ed88589b', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('&lt;iframe src="https://urgewald.org/weltspartag" frameBorder="0" style="min-height: 95vh; width: 100%;" /&gt;', '2021-10-13 16:18:53.985097+00', NULL, '', false, 'just-testing', 'just testing ', '2021-10-20 21:06:43.718536+00', 'a61a34eb-8124-4d29-8d9a-158155c82b99', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('content', '2024-05-04 14:35:22.625448+00', NULL, '', false, 'sample-testing-js', 'sample testing sb js 2', NULL, '8519dd5c-1afd-459a-b0bc-47ace7f52694', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('I had a manager once who said, "When in doubt, write it three times. Then you''ll know." Know what, exactly? They didn''t say. But time and again this has proven true for me, and the most recent is no exception, when I started by giving myself "2 days" to try writing my app in SvelteKit, and kicked off a 3-month process that taught me more about the web and the underlying technologies that power the web than I could ever have asked for.
+',
+		'2024-01-27 09:49:08.17101+00',
+		null,
+		'',
+		false,
+		'lens-of-addiction',
+		'The Lens of Addiction',
+		'2024-01-28 06:49:50.896689+00',
+		'ea99c482-f176-45c4-aef2-eca1ed88589b',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'&lt;iframe src="https://urgewald.org/weltspartag" frameBorder="0" style="min-height: 95vh; width: 100%;" /&gt;',
+		'2021-10-13 16:18:53.985097+00',
+		null,
+		'',
+		false,
+		'just-testing',
+		'just testing ',
+		'2021-10-20 21:06:43.718536+00',
+		'a61a34eb-8124-4d29-8d9a-158155c82b99',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'content',
+		'2024-05-04 14:35:22.625448+00',
+		null,
+		'',
+		false,
+		'sample-testing-js',
+		'sample testing sb js 2',
+		null,
+		'8519dd5c-1afd-459a-b0bc-47ace7f52694',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'I had a manager once who said, "When in doubt, write it three times. Then you''ll know." Know what, exactly? They didn''t say. But time and again this has proven true for me, and the most recent is no exception, when I started by giving myself "2 days" to try writing my app in SvelteKit, and kicked off a 3-month process that taught me more about the web and the underlying technologies that power the web than I could ever have asked for.
 
 ## June 2024: Svelte
 
@@ -133,9 +270,33 @@ in other news I think I am abandoning my THIRD rewrite of sunlo!! I have now tri
 So after all this... I think I''m going back to the Tanstack Router approach 🙈 . I can use the benefits of the huge React ecosystem but not with NextJS and not with Webpack and with client work as the default -- these guys are speaking my language more than any of the other approaches. So my stack will just be Supabase for the database and auth/storage/API, and React/Tanstack Router which serves a teeny tiny html shell with some metadata and the app''s client entry point.
 
 Before I do this I have one more experiment to try -- switching NextJS to full SPA mode...
-', '2024-09-11 12:27:38.020433+00', NULL, '', false, 'rewriting-sunlo-three-times', 'Rewriting Sunlo.app Three Times', '2025-07-12 18:48:10.196543+00', '7da5e849-4458-4166-a2cb-56e7e3504e43', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('', '2021-10-30 14:07:18.483097+00', NULL, NULL, false, 'aaaaaa', 'aaa', NULL, 'c5cbdeeb-88d8-4359-895c-08f5ec45fd45', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('In April 2021, while much of the world was starting to see a light at the end of the COVID-19 tunnel, India was in the middle of a health crisis of nearly unimaginable proportions. During the last week in April, the country averaged over 300,000 cases per day, and that number is likely a massive under-count.
+',
+		'2024-09-11 12:27:38.020433+00',
+		null,
+		'',
+		false,
+		'rewriting-sunlo-three-times',
+		'Rewriting Sunlo.app Three Times',
+		'2025-07-12 18:48:10.196543+00',
+		'7da5e849-4458-4166-a2cb-56e7e3504e43',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'',
+		'2021-10-30 14:07:18.483097+00',
+		null,
+		null,
+		false,
+		'aaaaaa',
+		'aaa',
+		null,
+		'c5cbdeeb-88d8-4359-895c-08f5ec45fd45',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'In April 2021, while much of the world was starting to see a light at the end of the COVID-19 tunnel, India was in the middle of a health crisis of nearly unimaginable proportions. During the last week in April, the country averaged over 300,000 cases per day, and that number is likely a massive under-count.
 
 There were shortages of just about everything – especially O2 beds in hospitals – and many wage labourers losing most or all of their income. For family health reasons, my household was on near-complete isolation, but you couldn''t avoid reality. My timeline was flooded with requests, friends retweeting leads for supplies; some tech companies stopped their work to build directory apps to help supply meet demand; municipal government hotlines were flooded with calls asking for the right place to go to get the help people desperately needed; heroic efforts from volunteers and self-organising collectives to respond to the pleas for help and call every hospital in town on behalf of patients with more limited time and resources.
 
@@ -292,13 +453,37 @@ We got the site off the ground in less than a week, while the second wave was st
 
 We got to show, and practice, a new way – actually, a much older way – of helping others. We didn''t ask them to send us receipts of their purchases or make poverty-porn videos to post on social media, and we attracted enough notoriety to help them tell their stories to the press, and to explain why supporting mutual aid is important for everyone to do. We treated everyone with dignity and respect, like full human beings with a right to live, to survive and so much more.
 
-I learned so much from this project – not only about making websites but about myself and the people around me. I made friends I respect and admire, who built a community out of the darkness and the thorniest pieces of our shared feelings of isolation, disability, and despair, and whom I hope to stay close with for a long time. Here in India, the pandemic continues, though the media-and-influencer attention has moved on to other things. But I am proud of our work, our team, and the help we were able to provide. 10 out of 10, would build it all again.', '2021-07-08 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/mutual-aid-india-screengrab-18f581.png', true, 'mutual-aid-india', 'Building MutualAidIndia.com with Gatsby, Airtable & Tailwind', '2024-05-08 08:37:39.560608+00', 'c5caddb5-cb8b-4166-ba19-717c017098d7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-08-18'),
-	('My feature idea: conditional formatting rules in Google Docs -- not spreadsheets, text documents. Useful for highlighting names of colleagues who are owning certain tasks in a project document, or for highlighting tags like "critical" or "completed".
+I learned so much from this project – not only about making websites but about myself and the people around me. I made friends I respect and admire, who built a community out of the darkness and the thorniest pieces of our shared feelings of isolation, disability, and despair, and whom I hope to stay close with for a long time. Here in India, the pandemic continues, though the media-and-influencer attention has moved on to other things. But I am proud of our work, our team, and the help we were able to provide. 10 out of 10, would build it all again.',
+		'2021-07-08 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/mutual-aid-india-screengrab-18f581.png',
+		true,
+		'mutual-aid-india',
+		'Building MutualAidIndia.com with Gatsby, Airtable & Tailwind',
+		'2024-05-08 08:37:39.560608+00',
+		'c5caddb5-cb8b-4166-ba19-717c017098d7',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2021-08-18'
+	),
+	(
+		'My feature idea: conditional formatting rules in Google Docs -- not spreadsheets, text documents. Useful for highlighting names of colleagues who are owning certain tasks in a project document, or for highlighting tags like "critical" or "completed".
 
 Right now it''s surprisingly difficult to tell the application, "find every line that starts with ''DONE'' and format that line as strikethrough", or "Find every time my boss''s name is mentioned and highlight it with bright colors." -- I can turn it into "==!!== NAME ==!!==" with Find & Replace, but I can\''t set its font size or background color and I can''t enforce consistency of that rule throughout the document, which is a problem if other people are editing it and shouldn''t be troubled to follow my crazy formatting whims.
 
-[The original musing about it on Facebook](https://www.facebook.com/michael.snook/posts/10102094430057186)', '2015-05-05 00:00:00+00', NULL, NULL, true, 'conditional-formatting-docs', 'Wanted: Conditional Formatting in Collaborative Text', '2020-04-07 13:06:21.905+00', '1783e6a1-3a79-4f2e-b5fe-d9965c0c7647', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-05-05'),
-	('Long ago I "managed a team" and I wanted to keep managing teams, and bigger ones with more people and bigger budgets. But the anarchist in me hated this vision of success, and I left for more of an IC/freelancer approach. Recently I had the opportunity to work with a team who was without a direct manager for some time, and I was there to help maintain some leadership continuity, but didn''t have nearly the time to provide line management to a team of this size on my limited hours. But in that scarcity of time, I was forced to say, okay, I can''t be your boss or your manager; I don''t have the time to wield that kind of power well, so I''m just going to _suggest_ a bunch of things and _describe_ a bunch of things. It worked kind of beautifully in some ways I''d like to write about.
+[The original musing about it on Facebook](https://www.facebook.com/michael.snook/posts/10102094430057186)',
+		'2015-05-05 00:00:00+00',
+		null,
+		null,
+		true,
+		'conditional-formatting-docs',
+		'Wanted: Conditional Formatting in Collaborative Text',
+		'2020-04-07 13:06:21.905+00',
+		'1783e6a1-3a79-4f2e-b5fe-d9965c0c7647',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-05-05'
+	),
+	(
+		'Long ago I "managed a team" and I wanted to keep managing teams, and bigger ones with more people and bigger budgets. But the anarchist in me hated this vision of success, and I left for more of an IC/freelancer approach. Recently I had the opportunity to work with a team who was without a direct manager for some time, and I was there to help maintain some leadership continuity, but didn''t have nearly the time to provide line management to a team of this size on my limited hours. But in that scarcity of time, I was forced to say, okay, I can''t be your boss or your manager; I don''t have the time to wield that kind of power well, so I''m just going to _suggest_ a bunch of things and _describe_ a bunch of things. It worked kind of beautifully in some ways I''d like to write about.
 
 First I should say, I went into this job being very explicit, that I was there as a "coach and analyst". Ultimately, everything the team members do is up to them; they''re responsible for the outcome. But as an technical or product analyst, one of the first things I''m going to do is look for the diagram of the system, read the documentation, or (as is often the case) make my own diagram. Or I''m going to ask to see the roadmap, and I''ll look over it and ask people if their section is up-to-date; if some past project should be marked as done, or overdue; etc.
 
@@ -311,16 +496,40 @@ By the end of it, it turned out that nearly everyone on the team had _some_ proj
 It was great! I feel like the mood lifted a bit and people had a better sense of what was on and what was off the burner at that moment. And when you have this, and you can depend on its accuracy, it''s easier to see what projects are coming up, and it can motivate you to _finish_ the one you''re working on now so you don''t get behind on the next. This is the kind of _self-management_ that motivated professionals will do if they are seeing their work clearly like this, so I don''t have to pressure them to finish up a project; they already understand _why_ they need to be a bit ruthless about putting a bow on this piece of work, because they want to start fresh next week without feeling distracted.
 
 ## Part 2: Equal Coaching
-', '2022-09-08 16:20:02.605352+00', NULL, '', false, 'management-from-my-inner-anarchist', 'A Management Lesson From The Anarchist In Me', NULL, '7a0e52a6-713a-48ce-976e-a00fee1d61bd', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('A radical socialist libertarian pacifist futurist party, dedicated to the peaceful exploration of space in the name of all humankind.
+',
+		'2022-09-08 16:20:02.605352+00',
+		null,
+		'',
+		false,
+		'management-from-my-inner-anarchist',
+		'A Management Lesson From The Anarchist In Me',
+		null,
+		'7a0e52a6-713a-48ce-976e-a00fee1d61bd',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'A radical socialist libertarian pacifist futurist party, dedicated to the peaceful exploration of space in the name of all humankind.
 
 So far The Space Party mostly exists as:
 
 * Members of [a project](http://coactivate.org/projects/spaceparty/) on CoActivate.org. The coactivate project has about 8 members and a wiki.
 * There is some sort of website happening at [TheSpaceParty.org](http://thespaceparty.org).
 * The [Facebook page](https://facebook.com/SpacePartyUSA) has over 4,000 people on it!
-* And there''s a fun but sporadic Twitter feed, [@SpacePartyUSA](https://twitter.com/SpacePartyUSA).', '2014-05-25 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/space-228-1980ce.png', true, 'The-Space-Party', 'The Space Party', '2022-12-18 14:31:50.92552+00', 'e96799c4-a714-4489-a3da-23b3eae64c97', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2014-05-25'),
-	('In March of 2020 I decided it was time to rebuild my personal website using some new things I had learned.
+* And there''s a fun but sporadic Twitter feed, [@SpacePartyUSA](https://twitter.com/SpacePartyUSA).',
+		'2014-05-25 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/space-228-1980ce.png',
+		true,
+		'The-Space-Party',
+		'The Space Party',
+		'2022-12-18 14:31:50.92552+00',
+		'e96799c4-a714-4489-a3da-23b3eae64c97',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2014-05-25'
+	),
+	(
+		'In March of 2020 I decided it was time to rebuild my personal website using some new things I had learned.
 
 I have had a personal website since I finally got a real footing in website building with Jekyll and Foundation, using Markdown pushed to my GitHub repo for posts. My work is more Product than Code, but there''s a fair amount in the realm of the actual coding, _building things_ that I can do, and it brings me a lot of joy and makes me more effective in my professional and activist life. And it''s fun. I love learning and I love the idea that I can conceive of a thing and _then build it_ and not be held back by all the little parts of the "full stack" that I can''t do up to my own standards of excellence.
 
@@ -419,8 +628,20 @@ And I''m interested in [Svelte](https://svelte.dev/) – it almost seems too goo
 
 The point is I feel like I should be able to use the site as a bit of a playground for different front-end approaches, while keeping the Rails app, the database, and even the branding/styling pretty consistent and stable. This fits with my overall philosophy toward developing stable but innovative software in small teams and medium-sized networks.
 
-For the networks of activist groups I''ve spent most of my career working with, their data is the key to their membership and their donor base – so it has to stay stable, and any security breach could tank the organization overnight. But when it comes to providing rich and creative experiences for users, engaging with online content, consuming news and information, sharing on social media and messaging apps, engaging with and creating and remixing and submitting video, photos and audio... we have to be able to be creative with the sites we build! If we don''t, we''ll lose out to all the other things fighting for people''s attention, or to activism businesses like Change dot org and corporate marketing campaigns. But if are able to keep our apps fresh and dynamic, and keep our dev teams limber, so to speak, we can keep innovating and be responsive to great ideas, even when our scale is big and our teams are small.', '2021-07-02 00:00:00+00', 'A quick run-down of how this site is built', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/logos-for-rails-react-heroku-1980ce.jpg', true, 'under-the-hood-2', 'Under the Hood 2.0: Rails, React', '2022-12-18 14:50:41.777391+00', '81dc168f-b84c-40e1-bd27-79493e58da76', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-07-02'),
-	('Go on, I dare you
+For the networks of activist groups I''ve spent most of my career working with, their data is the key to their membership and their donor base – so it has to stay stable, and any security breach could tank the organization overnight. But when it comes to providing rich and creative experiences for users, engaging with online content, consuming news and information, sharing on social media and messaging apps, engaging with and creating and remixing and submitting video, photos and audio... we have to be able to be creative with the sites we build! If we don''t, we''ll lose out to all the other things fighting for people''s attention, or to activism businesses like Change dot org and corporate marketing campaigns. But if are able to keep our apps fresh and dynamic, and keep our dev teams limber, so to speak, we can keep innovating and be responsive to great ideas, even when our scale is big and our teams are small.',
+		'2021-07-02 00:00:00+00',
+		'A quick run-down of how this site is built',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/logos-for-rails-react-heroku-1980ce.jpg',
+		true,
+		'under-the-hood-2',
+		'Under the Hood 2.0: Rails, React',
+		'2022-12-18 14:50:41.777391+00',
+		'81dc168f-b84c-40e1-bd27-79493e58da76',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2021-07-02'
+	),
+	(
+		'Go on, I dare you
 I could hurt you
 
 Then what''s stopping you?
@@ -440,16 +661,52 @@ I won''t let that happen
 
 I''d murder you if you did
 Go on then, I dare you
-', '2023-05-26 16:29:15.984426+00', NULL, '', false, 'free-hand-26-05-2023', 'Free hand 26 May', '2023-05-26 16:43:00.567204+00', 'a61833a8-72cb-4d74-92de-175fad91bfa0', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('', '2021-10-31 18:39:47.783+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'asasas', 'asasas', '2021-10-31 22:33:28.824705+00', '2e3edfa6-8f4f-45d9-86c3-cb0e684eacc6', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('App idea: CanvassStarter. Pick the neighborhoods your progressive organization wants to canvass; enter a question or two, and a bid for price per door.
+',
+		'2023-05-26 16:29:15.984426+00',
+		null,
+		'',
+		false,
+		'free-hand-26-05-2023',
+		'Free hand 26 May',
+		'2023-05-26 16:43:00.567204+00',
+		'a61833a8-72cb-4d74-92de-175fad91bfa0',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'',
+		'2021-10-31 18:39:47.783+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
+		false,
+		'asasas',
+		'asasas',
+		'2021-10-31 22:33:28.824705+00',
+		'2e3edfa6-8f4f-45d9-86c3-cb0e684eacc6',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'App idea: CanvassStarter. Pick the neighborhoods your progressive organization wants to canvass; enter a question or two, and a bid for price per door.
 
 Three or four organizations all want to canvass in the same place? Great – now we can all afford to do it! Not all their target voters are the same? fine by us! We''ll use different scripts for those voters, and the increased target density will still make the canvasses cheaper for all involved. This leverages not just economy of scale, but economy of density.
 
 **CanvassStarter is especially geared towards relatively low-budget organizations looking to build a bridge between online and field** (such as by building up a local organizing chapter around a high-energy moment or event), and for organizations who have a loose sense of others they\''d want to partner up with, but **who find it unwieldy to assemble coalition efforts due to the logistics field organizing and the complexity of ad-hoc coalition-building across different target geos and demos.** So in this sense, it''s like KickStarter for canvassing a neighborhood. And if you''re one of the funders, your question(s) get asked.
 
-We''d want to partner up with proven canvass-managing organizations, and there''d be some work to figure out what options are needed for neighborhood-based and voter-based bid options (like rolling our own Google Adwords bidding system, but not in a competition model, but then sometimes on a script-level basis in a competition-for-placement model). So the technical and logistical challenges are real, but mostly the service would attempt to stay lean and solve a lot of financial, political, and networking problems for highly aligned but distinct progressive advocacy organizations.', '2015-05-24 00:00:00+00', 'An app idea/concept, like KickStarter, but for your canvassing campaigns', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/canvasser-holding-some-lit-1980ce.jpg', true, 'canvass-starter', 'CanvassStarter', '2022-12-18 14:39:20.545204+00', '7035f715-29cb-40c8-9bb1-d947f73a2cf9', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-05-24'),
-	('_roof shingles
+We''d want to partner up with proven canvass-managing organizations, and there''d be some work to figure out what options are needed for neighborhood-based and voter-based bid options (like rolling our own Google Adwords bidding system, but not in a competition model, but then sometimes on a script-level basis in a competition-for-placement model). So the technical and logistical challenges are real, but mostly the service would attempt to stay lean and solve a lot of financial, political, and networking problems for highly aligned but distinct progressive advocacy organizations.',
+		'2015-05-24 00:00:00+00',
+		'An app idea/concept, like KickStarter, but for your canvassing campaigns',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/canvasser-holding-some-lit-1980ce.jpg',
+		true,
+		'canvass-starter',
+		'CanvassStarter',
+		'2022-12-18 14:39:20.545204+00',
+		'7035f715-29cb-40c8-9bb1-d947f73a2cf9',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-05-24'
+	),
+	(
+		'_roof shingles
 not mine
 but Someone''s
 home and comfort
@@ -480,8 +737,20 @@ another or for the stepping out we have
 chosen not to take, chosen not
 to See the textures, the wrinkled
 faces and cracked shingles of
-brothers and sisters We forgot_', '2015-09-17 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/notepad-and-pen-1980ce.jpg', false, 'unnamed-poem', 'Unnamed Poem Written Far From Home', '2022-12-18 14:44:37.785406+00', 'b980f435-8394-46aa-80df-33200fd3574d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-09-17'),
-	('This frustration has been bubbling up for a while, and it''s almost difficult to write about because there are so so many examples of Democrats, Liberals and Leftists getting this wrong. And not just a little wrong but Wrong with a capital "W" and a great deal of certainty. But I guess this is somewhere to begin, so I''ll jump right in.
+brothers and sisters We forgot_',
+		'2015-09-17 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/notepad-and-pen-1980ce.jpg',
+		false,
+		'unnamed-poem',
+		'Unnamed Poem Written Far From Home',
+		'2022-12-18 14:44:37.785406+00',
+		'b980f435-8394-46aa-80df-33200fd3574d',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-09-17'
+	),
+	(
+		'This frustration has been bubbling up for a while, and it''s almost difficult to write about because there are so so many examples of Democrats, Liberals and Leftists getting this wrong. And not just a little wrong but Wrong with a capital "W" and a great deal of certainty. But I guess this is somewhere to begin, so I''ll jump right in.
 
 When the right does things that seem hypocritical, lefties and liberals love to point out the hypocrisy. Love it. Just absolutely in love with the hypocrisy attack.
 
@@ -493,8 +762,20 @@ This is silly for a number of reasons, but I''ll lead with two: 1) it doesn''t p
 
 &gt; ## Hypocrisy isn''t the takedown you think it is
 
-', '2021-08-27 14:18:54.973+00', NULL, NULL, false, 'no-such-thing-as-hypocrisy', 'Don''t Call Bad People Hypocrites When You Can Call Them Bad People', '2021-08-27 14:18:54.973+00', '171c8683-87aa-4408-88de-2fbe599dd6b3', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('It is making my stomach turn to have to say this, but:
+',
+		'2021-08-27 14:18:54.973+00',
+		null,
+		null,
+		false,
+		'no-such-thing-as-hypocrisy',
+		'Don''t Call Bad People Hypocrites When You Can Call Them Bad People',
+		'2021-08-27 14:18:54.973+00',
+		'171c8683-87aa-4408-88de-2fbe599dd6b3',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'It is making my stomach turn to have to say this, but:
 
 &gt; I absolutely cannot support the idea of using the terrorist watch list as our way of regulating access to guns.
 
@@ -510,8 +791,20 @@ But that feeling quickly wore off when I read what was actually happening. Even 
 I''m not against compromise, but compromise means you put up a bill to ban *a lot of guns* and eventually say yes to a deal that just bans *some guns* plus high-capacity mags. It doesn''t mean that you pick an approach that appeals in one part to your base and in another part to the worst instincts that feed and strengthen your opponents over the long-term.
 
 This seems to be the Democratic way of doing things – validate the bad worldview to get the good result. (And it''s seen as a virtue! a sign that one knows how to Get Things Done™.) But it''s a recipe for a generational backslide like the one we''ve been experiencing all my life, and it does nothing to build the kind of political culture and meaningful narratives that will help us when the next Iraq War comes up for a vote, or the next Welfare Reform, or the next Crime Bill. The GOP is a huge and active driver of culture in their own way; on the left, social media and hollywood and pride parades and #BlackLivesMatter drive culture – and Democrats just keep sucking.
-', '2016-06-16 00:00:00+00', 'It is making my stomach turn to have to say this, but I can''t support using the terrorist watch list as our way of regulating guns. It''s not just a little off, it''s downright wrong.', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/watchlist-1980cf.jpg', true, 'gun-regulation', 'How Democrats Managed to Fuck Up the Gun Control Filibuster', '2022-12-18 14:45:53.619019+00', '01a57c3a-c461-4ef8-b459-cd66a0181fd7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2016-06-16'),
-	('Today I finally got around to trying out a new technique I heard about a couple
+',
+		'2016-06-16 00:00:00+00',
+		'It is making my stomach turn to have to say this, but I can''t support using the terrorist watch list as our way of regulating guns. It''s not just a little off, it''s downright wrong.',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/watchlist-1980cf.jpg',
+		true,
+		'gun-regulation',
+		'How Democrats Managed to Fuck Up the Gun Control Filibuster',
+		'2022-12-18 14:45:53.619019+00',
+		'01a57c3a-c461-4ef8-b459-cd66a0181fd7',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2016-06-16'
+	),
+	(
+		'Today I finally got around to trying out a new technique I heard about a couple
 weeks ago -- and wow, I wish I had known about this earlier. By placing a simple
 link on your website, you can give your mobile and tablet visitors the ability to instantly share your page with friends using the popular WhatsApp messaging service.
 
@@ -533,9 +826,33 @@ Perhaps even more promising, this approach has the potential to spark ***real co
 
 For something so easy to deploy, it''s worth a test, right?
 
-**[Love this idea? Click here to share it with your WhatsApp friends.](whatsapp://send?text=Check%20out%20this%20fast%20easy%20way%20to%20get%20people%20sharing%20your%20page%20on%20WhatsApp!%20http%3A%2F%2Fsnook.pub%2Fposts%2F2015%2F06%2F05%2FEasy-WhatsApp-Shares.html)**', '2015-06-05 00:00:00+00', 'A quick how-to on easy WhatsApp sharing links', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/whatsapp-logo-with-two-silhouettes-1980ce.jpg', true, 'easy-whatsapp-shares', 'Easy WhatsApp Shares', '2024-05-03 10:17:51.830038+00', 'dd2cc05f-5101-4108-8200-289e8ecc9401', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-06-05'),
-	('content', '2024-05-07 18:26:15.993654+00', NULL, '', false, 'test-title', 'mmm a title', NULL, '931e6853-2199-4da3-ab8b-1c1c224b9dc7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('I was procrastinating the other day, and went Googling for a better ID. I''ve been using UUIDv4 for years, but I was reading about how their randomness can cause the database to do a bunch of extra work rebalancing your index trees when you''re doing a lot of inserts all over the tree.
+**[Love this idea? Click here to share it with your WhatsApp friends.](whatsapp://send?text=Check%20out%20this%20fast%20easy%20way%20to%20get%20people%20sharing%20your%20page%20on%20WhatsApp!%20http%3A%2F%2Fsnook.pub%2Fposts%2F2015%2F06%2F05%2FEasy-WhatsApp-Shares.html)**',
+		'2015-06-05 00:00:00+00',
+		'A quick how-to on easy WhatsApp sharing links',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/whatsapp-logo-with-two-silhouettes-1980ce.jpg',
+		true,
+		'easy-whatsapp-shares',
+		'Easy WhatsApp Shares',
+		'2024-05-03 10:17:51.830038+00',
+		'dd2cc05f-5101-4108-8200-289e8ecc9401',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-06-05'
+	),
+	(
+		'content',
+		'2024-05-07 18:26:15.993654+00',
+		null,
+		'',
+		false,
+		'test-title',
+		'mmm a title',
+		null,
+		'931e6853-2199-4da3-ab8b-1c1c224b9dc7',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'I was procrastinating the other day, and went Googling for a better ID. I''ve been using UUIDv4 for years, but I was reading about how their randomness can cause the database to do a bunch of extra work rebalancing your index trees when you''re doing a lot of inserts all over the tree.
 
 And to be honest, I kind of hate how they look: `11bf5b37-e0b8-42e0-8dcf-dc8c4aefc000`. ("Help, they''re plugging me into the matrix!" vibes. Strings like this are how I imagine I might express my desires after my consciousness is uploaded to the cloud.)
 
@@ -682,9 +999,33 @@ This means that before 1970 we don''t have "double-click" precision on events (g
 
 This is good. I am pretty happy with this solution. I want to be able to put timestamps for past things, but we simply don''t need the same precision for these things because nothing was recorded so quickly in the first place. Nothing was so immediate. The idea of a "time stamp" actually has an interesting kind of immediacy and moment-ness to it which makes me wonder if folks pre-modernity would find it silly from the start.
 
-And, again, if you really need precision, use a datetime field; don''t ask the ID to do everything.', '2024-09-19 18:54:36.488146+00', '2zwt79n5-kbr3i5', '', false, 'a-good-id', 'In Search of a Good ID', '2024-10-11 09:58:15.177996+00', '76dc2ac9-288f-4274-b3e4-905a635d6e46', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('a', '2021-10-29 21:39:46.667268+00', NULL, '', false, 'aaaa', 'a', NULL, '5283ae62-1ac4-4a4d-a158-07528f9588fb', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('I''m learning to breathe backwards. Why? I don''t know, but it feels important.
+And, again, if you really need precision, use a datetime field; don''t ask the ID to do everything.',
+		'2024-09-19 18:54:36.488146+00',
+		'2zwt79n5-kbr3i5',
+		'',
+		false,
+		'a-good-id',
+		'In Search of a Good ID',
+		'2024-10-11 09:58:15.177996+00',
+		'76dc2ac9-288f-4274-b3e4-905a635d6e46',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'a',
+		'2021-10-29 21:39:46.667268+00',
+		null,
+		'',
+		false,
+		'aaaa',
+		'a',
+		null,
+		'5283ae62-1ac4-4a4d-a158-07528f9588fb',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'I''m learning to breathe backwards. Why? I don''t know, but it feels important.
 
 When you think of "a breath", a single complete unit of breathingness of a person, how do you think of it? You might say it''s "an inhale and an exhale," or you breath in and then you breath out. If you''ve ever tried a technique like _box breathing_, you''ll have learned it the same way "inhale 4 seconds, hold 4, exhale 4, hold 4, repeat."
 
@@ -706,8 +1047,20 @@ I''m serious though. Why does the time-off come at the _end_ and not the beginni
 
 This is such a terrible notion, and I think maybe we could do something about it, if we got better at just switching things around a little bit. Don''t you think we all carry too much of this lie, that work is required to _earn_ our life, and wouldn''t we be a bit better off if we practiced chipping away at it? What if we center the knowledge that humans were free long before their land was taken by feudal lords, and before they were forced into the cities to work in factories, that the _natural_ state for a person to be in is not working a 60-hour-a-week job for someone who hates you, that the time we spend not-working is our birthright, and the 5 days that come after that represent what we must do to survive the system the bad guys built when they stole the commons from us and replaced it with factory farms and commodity capitalism and insurance companies and fintech startups.
 
-At this point in the post, I don''t know if you''re with me, but in any case, even if you don''t get why it''s important, have you ever tried to seriously learn box breathing? It''s a simple technique used by ', '2025-07-15 11:32:43.125737+00', 'We tend to think of a breath as starting from the inhale and ending with an exhale...', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/soft-but-1ac2b7.jpeg', false, 'learning-to-breathe-backwards', 'Learning to Breathe Backwards', '2025-08-20 16:23:13.975619+00', '2531d6f2-c8aa-47d0-9db2-77332629c8ef', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('Many eons ago, in a land near the crossroads of civilisation, a child was born. Divine messengers spoke of their coming and called them a great builder, a leader and humble servant of the people, a light of justice for all to see. When the child was born the emperor sent agents to kill the child, but the angels protected them and they were disappeared into the hills to live with the people there.
+At this point in the post, I don''t know if you''re with me, but in any case, even if you don''t get why it''s important, have you ever tried to seriously learn box breathing? It''s a simple technique used by ',
+		'2025-07-15 11:32:43.125737+00',
+		'We tend to think of a breath as starting from the inhale and ending with an exhale...',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/soft-but-1ac2b7.jpeg',
+		false,
+		'learning-to-breathe-backwards',
+		'Learning to Breathe Backwards',
+		'2025-08-20 16:23:13.975619+00',
+		'2531d6f2-c8aa-47d0-9db2-77332629c8ef',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'Many eons ago, in a land near the crossroads of civilisation, a child was born. Divine messengers spoke of their coming and called them a great builder, a leader and humble servant of the people, a light of justice for all to see. When the child was born the emperor sent agents to kill the child, but the angels protected them and they were disappeared into the hills to live with the people there.
 
 The child grew strong and learned fast. They wanted for nothing and never cried. They were never sick and never fell. In time the angels came and told the child, "You are the child of god and your life is without limit. Make your life whatever you wish, and show the people of this land that they may do the same. No one can harm you and you will accomplish anything you set your will to."
 
@@ -761,8 +1114,20 @@ When the war came to an end, they moved on to another province, to find a new hi
 
 They carved musical instruments and found the best fruit in the forest. When a new baby was born the village people would bring them before the child of god, and they would draw a circle and lay out fish or barley and carved idols, and the child would give some of their will to the newborn to bless them for a healthy childhood and long life.
 
-As the child of god grew older, their power dwindled. They aged like anyone would age. Alongside their beloved, their life became quieter and more secluded. Children, students, distinguished scholars of medicine and engineering would come up into the hills to learn whatever the child and their partner were teaching, and they would all sit in a circle together and eat food and share some story about their life, and lift up their hearts, and share a bit of their lives with one another.', '2022-01-17 12:07:48.046105+00', 'A short fiction; a re-imagining of the christ story, trying to avoid its moral traps', '', false, 'child-of-god', 'Child of God', '2022-02-04 12:03:42.110469+00', '863b3d60-c033-42b6-9b29-bd31636d9e3f', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2022-01-17'),
-	('This is a repost of Pramila Jayapal''s statement on the Black Lives Matter protest at Bernie Sanders''s campaign event yesterday in Seattle. [You can read, like or share the original here](https://www.facebook.com/pramila.jayapal/posts/10153194606313621).
+As the child of god grew older, their power dwindled. They aged like anyone would age. Alongside their beloved, their life became quieter and more secluded. Children, students, distinguished scholars of medicine and engineering would come up into the hills to learn whatever the child and their partner were teaching, and they would all sit in a circle together and eat food and share some story about their life, and lift up their hearts, and share a bit of their lives with one another.',
+		'2022-01-17 12:07:48.046105+00',
+		'A short fiction; a re-imagining of the christ story, trying to avoid its moral traps',
+		'',
+		false,
+		'child-of-god',
+		'Child of God',
+		'2022-02-04 12:03:42.110469+00',
+		'863b3d60-c033-42b6-9b29-bd31636d9e3f',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2022-01-17'
+	),
+	(
+		'This is a repost of Pramila Jayapal''s statement on the Black Lives Matter protest at Bernie Sanders''s campaign event yesterday in Seattle. [You can read, like or share the original here](https://www.facebook.com/pramila.jayapal/posts/10153194606313621).
 
 &gt; Many people have been emailing and asking me for how I am thinking about what happened yesterday at the event on social security and medicare, when some protestors identifying as Black Lives Matter got up on stage to challenge Bernie Sanders on race and racism, and ended up shutting down the event so Bernie could not speak. I''m struggling but in the spirit of community, here''s what comes to mind. First, I want to give a huge shout out to the amazing leaders who worked for months and months to organize the event: Robby Stern and PSARA, Social Security Works Washington, Washington CAN, Burke Stansbury, and so many more. This was a huge event to put together, and their determination is what ultimately got Senator Bernie Sanders to Seattle in the first place. The rally was also packed--maybe around 5,000 people--and people stood in the hot sun for a couple of hours, engaging actively and cheering on the incredibly wide range of speakers the coalition had put together. I was proud to be the speaker just before Bernie was supposed to speak. Watching what unfolded made me heartbroken. I have so many somewhat jumbled thoughts--here are just a few.
 &gt;
@@ -775,8 +1140,20 @@ As the child of god grew older, their power dwindled. They aged like anyone woul
 &gt; 4) I had not yet endorsed Bernie Sanders (and still have not), although I was incredibly excited about his candidacy. One of the primary reasons is because I wanted to know more about his stands on race and racism. I asked the campaign for some time to discuss this with him, and he did very graciously make some time for me to have a short conversation with him. What I got from the conversation is that he knows he comes from a very white state and he''s a 70+ year old white guy. He knows that running for President, he must now speak to voters who are very different from those in his state. He IS deeply committed to equality on all counts but his primary lens for all of his work--and a HUGELY necessary and not-often-enough-acknowledged lens--is economic. He is a truth-teller on economic issues in a way that no other candidate is. he gets the connection between large corporations, elections, and income inequality. He does understand the problems of the criminal justice system and I fully believe he will work to change that if elected. But the deeper comfort with talking about race and racism is harder. As Mayor of Burlington, early on, he endorsed Jesse Jackson for President and Jackson went on to win the state. He was active in the civil rights movement. But more than that, he is someone who has fought for so many of the threads that connect our movements. He has to learn to talk about racism in that way, to connect his ideas on education, economics, incarceration, and race. As I said when I had the honor of introducing him at his evening rally, he is in a unique position to do so. And we are in a unique moment where we crave that leadership in a Presidential campaign. I told him in my conversation with him that he needed to talk head on about institutional racism--he said he agreed and he would do it in the evening. And he did--to an enormous, cheering crowd of 15,000 people. That''s a huge platform for our messages. There''s more to do and learn for sure, but is any one of us perfect? The most we can ask for is for someone who listens and cares deeply, who is trustworthy, and who will do what he says. I know I learned a lot in my campaign and I will continue to grow from listening to people''s voices. I believe Bernie Sanders is growing too--and I hope (and yes, believe) that we''ll look back on this and see his emergence as a leader who brings our movements for economic, racial and social justice together in a powerful way.
 &gt;
 &gt; 5) Here''s what I am trying to deeply think about: How do we call people in even as we call them out? As a brown woman, the only woman of color in the state senate, often the only person of color in many rooms, I am constantly thinking about this. To build a movement, we have to be smarter than those who are trying to divide us. We have to take our anger and rage and channel it into building, growing, loving, holding each other up. We need our outlets too, our places of safety where we can say what we think without worrying about how it''s going to land, where we can call out even our white loved ones, friends, allies for what they are not doing. But in the end, if we want to win for ALL of us on racial, economic and social justice issues, we need multiple sets of tactics, working together. Some are disruptive tactics. Some are loving tactics. Some are truth-telling tactics. Some can only be taken on by white people. Some can only be taken on by people of color. Sometimes we need someone from the other strand to step in and hold us up. Other times, we have to step out and hold them up. Each of us has a different role to play but we all have to hold the collective space for movement building together. That''s what I hope we all keep in mind and work on together. It''s the only way we move forward.
-', '2015-08-09 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/pramila-jayapal-john-lewis-judy-chu-protest-1980ce.jpg', true, 'pramila-jayapal-on-seattle-bml-sanders-event', 'Pramila Jayapal on Seattle''s BLM protest at Bernie Sanders Campaign Event', '2022-12-18 14:43:25.14335+00', '26a73f34-229f-49e2-8609-de983cd71fa3', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-08-09'),
-	('Before Obamacare, lack of health insurance killed 44,000 Americans per year.
+',
+		'2015-08-09 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/pramila-jayapal-john-lewis-judy-chu-protest-1980ce.jpg',
+		true,
+		'pramila-jayapal-on-seattle-bml-sanders-event',
+		'Pramila Jayapal on Seattle''s BLM protest at Bernie Sanders Campaign Event',
+		'2022-12-18 14:43:25.14335+00',
+		'26a73f34-229f-49e2-8609-de983cd71fa3',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-08-09'
+	),
+	(
+		'Before Obamacare, lack of health insurance killed 44,000 Americans per year.
 
 I know some people feel personally aggrieved by the Affordable Care Act; they feel that their situation, or that of their loved ones, got worse because of Obamacare. They have a right to be hurt and upset about that. And it is impossible for me to look any one of them in the eye and say, "The struggle your family went through was necessary to save those other people," however much I wish I could make them believe it.
 
@@ -787,8 +1164,20 @@ But before Obamacare came into effect, roughly a half a million Americans lost t
 Think about the great lengths we have gone to since the War On Terror began, the enormous sums of money we have devoted to this cause. And then think about a problem 100 times as deadly whose solution cost half as much – a solution found in healing not killing, in solidarity and support for our American family.
 
 If we treated health as an integral part of security and allocated resources to match the enormity of the threat, we would have enough money for Obamacare, and a lot more. We could even lower the premiums and the copays – to zero, actually, which is what the fight should have been about from the start.
-', '2017-01-05 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/gallup-uninsured-1980cf.png', true, 'obamacare', 'On Obamacare, and Priorities', '2022-12-18 14:47:08.598327+00', 'bc1bb043-1550-41c5-8359-caa9361e4732', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2017-01-05'),
-	('I''ve been slowly noodling, more and more on the "they/them" singular pronoun, grappling with my thoughts a bit, and I feel like I''ve reached a point of being able to say "okay, I''m comfortable here, I can see how things develop" -- and they are developing!
+',
+		'2017-01-05 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/gallup-uninsured-1980cf.png',
+		true,
+		'obamacare',
+		'On Obamacare, and Priorities',
+		'2022-12-18 14:47:08.598327+00',
+		'bc1bb043-1550-41c5-8359-caa9361e4732',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2017-01-05'
+	),
+	(
+		'I''ve been slowly noodling, more and more on the "they/them" singular pronoun, grappling with my thoughts a bit, and I feel like I''ve reached a point of being able to say "okay, I''m comfortable here, I can see how things develop" -- and they are developing!
 
 Mostly English is not a super gendered language, but gender still shows up a lot, and a big part of this comes from our gendered pronouns; "she/he" "her/him" "hers/his" "herself/himself". We also apply gender to lots of job or role category nouns, like "actor/actress"), and use "woman/man" and "girl/boy" in parts of other words, like chairwoman and boyfriend.
 
@@ -815,8 +1204,20 @@ My understanding is that Spanish and Italian and many romance-style languages ha
 
 Germanic languages also gender lots of things, but typically they include an explicitly gender-neutral form for these things, which from the perspective of language evolution, seems really helpful! If you want to just drop the gender-fication of all adjectives, for example, you can do that by using the neuter form, without having to wonder whether you are centering some gender by consolidating into one word.
 
-And Swedish (a germanic language mostly) has developed an excellent pronoun, "hen" which is a gender-neutral version of the gendered "han/hon" singular personal pronouns. Similarly, French (another close neighbor to English) has combined the pronouns "il" and "elle" into just, "iel". To speak it, you just kind of elide the "i" and "eh" sounds and it just comes out kind of... in between! It''s quite lovely to say and hear.', '2023-01-16 10:13:16.436524+00', NULL, '', false, 'evolution-of-pronouns-and-gendered-language', 'All the pronouns feel silly', '2024-05-07 23:00:22.166776+00', '5ccd691c-aaf0-4d13-b775-6c252ffbd3c0', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('what is it to fly\
+And Swedish (a germanic language mostly) has developed an excellent pronoun, "hen" which is a gender-neutral version of the gendered "han/hon" singular personal pronouns. Similarly, French (another close neighbor to English) has combined the pronouns "il" and "elle" into just, "iel". To speak it, you just kind of elide the "i" and "eh" sounds and it just comes out kind of... in between! It''s quite lovely to say and hear.',
+		'2023-01-16 10:13:16.436524+00',
+		null,
+		'',
+		false,
+		'evolution-of-pronouns-and-gendered-language',
+		'All the pronouns feel silly',
+		'2024-05-07 23:00:22.166776+00',
+		'5ccd691c-aaf0-4d13-b775-6c252ffbd3c0',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'what is it to fly\
 do you need air under beating wings\
 or can you feel it in your chest\
 head back, hair swept\
@@ -829,10 +1230,46 @@ laughter over crackled lips\
 life given, taken, freely exchanged\
 for a chance to live
 
-', '2023-07-24 08:14:37.3612+00', 'A poem written 24th July 2023', '', true, 'what-is-it-to-fly', 'what it is to fly', '2024-06-14 20:03:58.596316+00', '24632c3d-76e8-4246-bcdb-462a3aa00eed', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-07-24'),
-	('', '2021-10-30 09:59:47.254+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'lll', 'l', '2021-10-31 22:33:21.430696+00', '842753cc-5356-43c7-a577-352be1dbddbf', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('', '2022-01-23 08:03:40.877365+00', NULL, '', false, 'hear-me-out-video-games-counterstrike', 'Hear me out: Video Games', NULL, '7e352afc-0d81-4ebc-ad95-27eb935586a1', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('Mm one of my friends said I do this thing
+',
+		'2023-07-24 08:14:37.3612+00',
+		'A poem written 24th July 2023',
+		'',
+		true,
+		'what-is-it-to-fly',
+		'what it is to fly',
+		'2024-06-14 20:03:58.596316+00',
+		'24632c3d-76e8-4246-bcdb-462a3aa00eed',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2023-07-24'
+	),
+	(
+		'',
+		'2021-10-30 09:59:47.254+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
+		false,
+		'lll',
+		'l',
+		'2021-10-31 22:33:21.430696+00',
+		'842753cc-5356-43c7-a577-352be1dbddbf',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'',
+		'2022-01-23 08:03:40.877365+00',
+		null,
+		'',
+		false,
+		'hear-me-out-video-games-counterstrike',
+		'Hear me out: Video Games',
+		null,
+		'7e352afc-0d81-4ebc-ad95-27eb935586a1',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'Mm one of my friends said I do this thing
 
 I remember my dad doing this thing w the Encyclopedia at dinner
 
@@ -840,8 +1277,20 @@ Discuss why, yes it''s a good thing
 
 ![https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/272669794_10209603569242500_1573035680893231454_n-19135e.jpg](https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/272669794_10209603569242500_1573035680893231454_n-19135e.jpg)
 
-Caveats and obligations and changing of times but it''s a good thing to carry on', '2021-09-09 18:21:09.02+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/272669794_10209603569242500_1573035680893231454_n-19135e.jpg', false, 'looking-it-up', 'The Joy of Looking It Up', '2022-04-08 12:03:18.925187+00', '57a05e36-1efc-4a39-8e64-5d6347a2c5cf', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('**Update 2020:** This is how the old version of the site was built. The new one is Rails 6 + React.
+Caveats and obligations and changing of times but it''s a good thing to carry on',
+		'2021-09-09 18:21:09.02+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/272669794_10209603569242500_1573035680893231454_n-19135e.jpg',
+		false,
+		'looking-it-up',
+		'The Joy of Looking It Up',
+		'2022-04-08 12:03:18.925187+00',
+		'57a05e36-1efc-4a39-8e64-5d6347a2c5cf',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'**Update 2020:** This is how the old version of the site was built. The new one is Rails 6 + React.
 
 ----
 
@@ -889,8 +1338,20 @@ If you have a problem with that, I''d like you to read one of my favorite tweets
 
 ## More To Do
 
-This is definitely my favorite stack to build a website on, so far. As I build out the "projects" section, I may end up with project pages that really want to be more like "apps" than "pages", in which case I''ll have to re-examine my priorities and the reasons that make this the ideal stack for me, for this site, for now. But for the time being, this is working just fine -- it''s fast, it''s free, and it''s fun!', '2014-05-26 00:00:00+00', 'From the Archives: How the Jekyll site was built', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/monitor-keyboard-tablet-clipart-1980ce.webp', true, '2014-05-26-Under-the-Hood', 'Under the Hood', '2022-12-18 14:37:31.167673+00', 'f0db7867-a587-469c-a075-4871234e624d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2014-05-26'),
-	(' If your beloved friend is a bird
+This is definitely my favorite stack to build a website on, so far. As I build out the "projects" section, I may end up with project pages that really want to be more like "apps" than "pages", in which case I''ll have to re-examine my priorities and the reasons that make this the ideal stack for me, for this site, for now. But for the time being, this is working just fine -- it''s fast, it''s free, and it''s fun!',
+		'2014-05-26 00:00:00+00',
+		'From the Archives: How the Jekyll site was built',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/monitor-keyboard-tablet-clipart-1980ce.webp',
+		true,
+		'2014-05-26-Under-the-Hood',
+		'Under the Hood',
+		'2022-12-18 14:37:31.167673+00',
+		'f0db7867-a587-469c-a075-4871234e624d',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2014-05-26'
+	),
+	(
+		' If your beloved friend is a bird
  And she sings
  not for you but for all of creation
  not in your song but in hers
@@ -901,9 +1362,33 @@ This is definitely my favorite stack to build a website on, so far. As I build o
    with their hellos and good afternoons to their beloved friends
  Will you be angry that the song she sings is her own?
 
-_29th Jan 2023_', '2023-01-31 17:10:41.577398+00', '(A poem from 29th Jan 2023)', '', true, 'poem-song', 'The song of a friend', '2023-02-01 07:16:28.378134+00', '3fb75203-45d4-4f26-b1de-426fadd679dd', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-01-31'),
-	('Want to go exploring?', '2015-07-30 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/spelunking-1980ce.jpg', true, 'spelunking', 'Spelunking', '2022-12-18 14:42:07.583126+00', '528d58d2-24d5-49a1-b1c2-56503015aa48', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-07-30'),
-	('The Blue Dawn is a volunteer collective that connects Bahujan people with
+_29th Jan 2023_',
+		'2023-01-31 17:10:41.577398+00',
+		'(A poem from 29th Jan 2023)',
+		'',
+		true,
+		'poem-song',
+		'The song of a friend',
+		'2023-02-01 07:16:28.378134+00',
+		'3fb75203-45d4-4f26-b1de-426fadd679dd',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2023-01-31'
+	),
+	(
+		'Want to go exploring?',
+		'2015-07-30 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/spelunking-1980ce.jpg',
+		true,
+		'spelunking',
+		'Spelunking',
+		'2022-12-18 14:42:07.583126+00',
+		'528d58d2-24d5-49a1-b1c2-56503015aa48',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-07-30'
+	),
+	(
+		'The Blue Dawn is a volunteer collective that connects Bahujan people with
 cast-aware mental health therapists, and sometimes with supporters who will
 sponsor sessions directly. I recently built them a WordPress site using
 Roots''s Bedrock and Timber/Twig templating.
@@ -949,8 +1434,20 @@ Left to do:
 * WP Admin control over the content on the Home page or in the Banner. Right now it''s just an index of recent posts, with a lot of hard-coded content before it, which means it''s only a good solution as long as I remain actively involved and available to make updates.
 * Figure out how to better control plugins and mu-plugins.
 * Establish some proper seed data to make the site easier for others to develop on.
-', '2019-06-08 00:00:00+00', 'The Blue Dawn is a volunteer collective that connects Bahujan people with cast-aware mental health therapists.', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/thebluedawn-banner-1980cf.png', true, 'blue-dawn-website', 'Volunteer Project: The Blue Dawn Website', '2022-12-18 14:49:53.048935+00', '5e11b123-019a-4a15-b888-9dbb9ad3c1f9', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2019-06-08'),
-	('Snoogle™ is a search engine that indexes all the hypothetical stuff you''ve ever hypothetical invented and tells you (and your annoying friend who won''t believe you) whether you totally came up with that thing first that someone else just brought to market.
+',
+		'2019-06-08 00:00:00+00',
+		'The Blue Dawn is a volunteer collective that connects Bahujan people with cast-aware mental health therapists.',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/thebluedawn-banner-1980cf.png',
+		true,
+		'blue-dawn-website',
+		'Volunteer Project: The Blue Dawn Website',
+		'2022-12-18 14:49:53.048935+00',
+		'5e11b123-019a-4a15-b888-9dbb9ad3c1f9',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2019-06-08'
+	),
+	(
+		'Snoogle™ is a search engine that indexes all the hypothetical stuff you''ve ever hypothetical invented and tells you (and your annoying friend who won''t believe you) whether you totally came up with that thing first that someone else just brought to market.
 
 Snoogle searches your chat/Facebook/Twitter/email history and notifies you when it detects "inventions" you mention in conversation or in public places. If the invention was only discussed in private, Snoogle prompts you to share your idea in public with a nice official-looking "copyright" symbol so no one can scoop you. Then whenever you''re trying to convince people you came up with something first, you''ll have sources.
 
@@ -959,8 +1456,20 @@ The idea was inspired by [the time I invented Snapcash](https://www.facebook.com
 I''m not looking for royalties or anything, I just think it''d be nice if other people knew me as the guy who came up with SecondLife and Snapcash. That''s all I''m saying. In fact, this is an important rule of Snoogle: Snoogle is only for use in arguments with friends or as a source for stories; if we catch you using it to sue anyone, we''ll take your account away and steal all your ideas.
 
 Comment below and I''ll let you know when it''s ready for beta testing.
-', '2015-05-06 00:00:00+00', NULL, NULL, true, 'snoogle', 'Snoogle: For When You Totally Came Up With That First', '2020-04-07 13:18:29.662+00', 'f2f00fcb-ba1b-4d5f-a6bd-877ed5e53a45', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-05-06'),
-	('**Update from 2020:** This is a post from the old website, copied over from the archives, but no longer entirely accurate!
+',
+		'2015-05-06 00:00:00+00',
+		null,
+		null,
+		true,
+		'snoogle',
+		'Snoogle: For When You Totally Came Up With That First',
+		'2020-04-07 13:18:29.662+00',
+		'f2f00fcb-ba1b-4d5f-a6bd-877ed5e53a45',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-05-06'
+	),
+	(
+		'**Update from 2020:** This is a post from the old website, copied over from the archives, but no longer entirely accurate!
 
 ---
 
@@ -972,8 +1481,20 @@ I''m building this site for a few reasons. First is that I am a web developer (s
 
 It''s with that in mind that I''ve set up my site, with this sidebar on the left here, to show the categories, "Posts" and "Projects". Posts will likely be much more numerous than projects, and some posts will be associated with a project. Right now there are no projects to list, but I suppose I will throw up a page about the Space Party, which is a free-time project of mine, and then I will show you all what I mean.
 
-**Edit:** Now you can see what I mean.', '2014-05-23 00:00:00+00', 'From the Archives: How I built my first personal website with Jekyll and GitHub Pages', NULL, true, '2014-05-23-Hello-World', 'Hello World', '2020-04-12 07:21:50.72+00', '5249967f-1319-4d05-9882-093f603d7038', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2014-05-23'),
-	('I loved how the new Star Wars defied old tropes, weaved new themes about the Jedi and the Force, and had important character arcs that weren''t the sort of typical (white dude, with a couple tokens) cast that most movies present to us. My problem was that I just didn''t think it was a very good movie in terms of telling a well-constructed story that moved us along, made sense, and created character interactions and character development that track to the developments in the plot.
+**Edit:** Now you can see what I mean.',
+		'2014-05-23 00:00:00+00',
+		'From the Archives: How I built my first personal website with Jekyll and GitHub Pages',
+		null,
+		true,
+		'2014-05-23-Hello-World',
+		'Hello World',
+		'2020-04-12 07:21:50.72+00',
+		'5249967f-1319-4d05-9882-093f603d7038',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2014-05-23'
+	),
+	(
+		'I loved how the new Star Wars defied old tropes, weaved new themes about the Jedi and the Force, and had important character arcs that weren''t the sort of typical (white dude, with a couple tokens) cast that most movies present to us. My problem was that I just didn''t think it was a very good movie in terms of telling a well-constructed story that moved us along, made sense, and created character interactions and character development that track to the developments in the plot.
 
 When you look back at the movie, you find that major chunks of the action could have been cut out entirely without affecting the plotline, which kind of cheapened whatever character development happened during those parts. Much like my issue with _Rogue One_, a lot of the drama was about uncertainty between protagonists – which can be great if done well, and if it heightens the tension as you lead up to some climactic moment – but seemed too often to lead to some kind of anticlimax. When two opposing forces bring us to edge-of-your-seat suspense and the real fear about what might happen if something goes wrong, that''s drama! When two opposing forces just kind of cancel each other out and negate whatever has been happening for the last few minutes (or last hour), that''s not good filmmaking.
 
@@ -993,9 +1514,33 @@ All in all, I finished the the movie pretty bored. I''m happy that we have some 
 1. It''s a great illustration of this idea that diversity and representation in casting and storytelling isn''t _just_ about some kind of quest for political correctness. In this case, we get to see an _interesting character_ who is not quite what we expect, and not quite what one of our heroes expects either, contributing to their character development arc. "Diversity" is really just good storytelling.
 2. The piece of the story here actually kind of speaks to one of the concerns I have with the film: I like the thematic thing, but I thought the _craft_ was off. I didn''t love the acting; I didn''t think the relationships this character apparently had with other characters in the film were shown or explained in a way that was compelling on an emotional level, and so the way this person''s story worked out didn''t hit home for me as much as I wish it had.
 3. One critique on the film that has been nagging at me more and more since I first wrote this piece is on display here: There actually _is_ a deep, emotional story to be told, but they didn''t _tell it_. The story was great but the screenplay left a lot on the table. The way this article describes friendships and emotions and the characteristics of the different players in the film is far more compelling than what actually played out of the silver screen.
-', '2017-12-21 00:00:00+00', 'I loved how the new Star Wars defied old tropes, weaved new themes about the Jedi and the Force, and had important, atypical character arcs, but I had some reservations...', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/rey-and-kylo-ren-fighting-1980ce.jpg', true, 'the-last-jedi-critique', 'My mixed feelings about Star Wars: The Last Jedi', '2022-12-18 14:47:36.922797+00', 'b9a2fcb7-6a8b-4587-8790-dfe5bef42a27', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2017-12-21'),
-	('', '2021-10-30 10:13:45.276+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'title-goes-here', 'Title', '2021-10-31 22:33:16.868682+00', 'a7db0f6a-927d-4bf5-848f-ba6020ddd77d', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('I never felt at home with my assigned gender. I grew up as a boy and at some point I grew into a man, but there were a lot of things that just didn''t feel good about it.
+',
+		'2017-12-21 00:00:00+00',
+		'I loved how the new Star Wars defied old tropes, weaved new themes about the Jedi and the Force, and had important, atypical character arcs, but I had some reservations...',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/rey-and-kylo-ren-fighting-1980ce.jpg',
+		true,
+		'the-last-jedi-critique',
+		'My mixed feelings about Star Wars: The Last Jedi',
+		'2022-12-18 14:47:36.922797+00',
+		'b9a2fcb7-6a8b-4587-8790-dfe5bef42a27',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2017-12-21'
+	),
+	(
+		'',
+		'2021-10-30 10:13:45.276+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
+		false,
+		'title-goes-here',
+		'Title',
+		'2021-10-31 22:33:16.868682+00',
+		'a7db0f6a-927d-4bf5-848f-ba6020ddd77d',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'I never felt at home with my assigned gender. I grew up as a boy and at some point I grew into a man, but there were a lot of things that just didn''t feel good about it.
 
 Last year, while everything around me seemed to be falling apart, something about my gender just clicked. I sort of "tried on" the notion that I might be non-binary and... it fit.
 
@@ -1020,8 +1565,20 @@ I''ve already written about my journey to identifying as Queer and then later as
 
 As I got more fully in touch with my bisexuality, and the fluidity I found in everyday relationships, gender seemed like a less and less helpful way of understanding people, particularly myself. And after months of lockdown, changing jobs and social situations, changing continents and being separated from my partner for months, living with my sister and her partner who love and support me...
 
-Well at some point in mid-2020 I think a lot of people realized that a lot of things are bullshit. We were seeing en masse that money is made up and bullshit, that we could always have given out free school lunches and protect people from eviction, if we wanted to. That most of our jobs aren''t essential and we can often do them from home. We were realizing that a lot of the things that construct our', '2021-08-01 00:00:00+00', NULL, 'https://i.imgur.com/M6KNEUM.jpg', false, 'shedding-a-gender-binary', 'Shedding a gender binary', '2021-10-22 08:56:53.021653+00', '70665d37-c3dc-4afa-9289-375a19f0bc23', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('
+Well at some point in mid-2020 I think a lot of people realized that a lot of things are bullshit. We were seeing en masse that money is made up and bullshit, that we could always have given out free school lunches and protect people from eviction, if we wanted to. That most of our jobs aren''t essential and we can often do them from home. We were realizing that a lot of the things that construct our',
+		'2021-08-01 00:00:00+00',
+		null,
+		'https://i.imgur.com/M6KNEUM.jpg',
+		false,
+		'shedding-a-gender-binary',
+		'Shedding a gender binary',
+		'2021-10-22 08:56:53.021653+00',
+		'70665d37-c3dc-4afa-9289-375a19f0bc23',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'
 It was National Coming Out Day yesterday, so I''m coming out... again. And here''s why.
 
 I used to call myself "queer" because I thought bisexual implied a binary, but after studying my history a bit more I''ve come to feel that the spectrum of bisexuality has always been diverse, with people identifying that way who love men, women, nonbinary and intersex people, drag queens and crossdressers, gender-questioning and fluid, and agender people alike.
@@ -1042,8 +1599,20 @@ and let me tell you: it has been _really nice_. I''ve been able to relax and fee
 So here I am. Happy National Coming Out Day everyone, I''m bi.
 
 ![Bisexual Pride Flag](//snook.pub/static/images/bisexual-flag.png)
-', '2018-10-12 00:00:00+00', 'It was National Coming Out Day yesterday, so I''m coming out... again. And here''s why.', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/bisexual-flag-1980cf.png', true, 'coming-out-again-bisexual', 'Coming Out Again: Bisexual Edition', '2022-12-18 14:48:15.054618+00', '6e79dbbf-57cf-4125-a6e6-d44200d8a0d5', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2018-10-12'),
-	('It''s an app, like Google Reader morphs into the morning news hour on the Radio.
+',
+		'2018-10-12 00:00:00+00',
+		'It was National Coming Out Day yesterday, so I''m coming out... again. And here''s why.',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/bisexual-flag-1980cf.png',
+		true,
+		'coming-out-again-bisexual',
+		'Coming Out Again: Bisexual Edition',
+		'2022-12-18 14:48:15.054618+00',
+		'6e79dbbf-57cf-4125-a6e6-d44200d8a0d5',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2018-10-12'
+	),
+	(
+		'It''s an app, like Google Reader morphs into the morning news hour on the Radio.
 Take RSS feeds, your Medium follows, and any podcasts you like. Run text-to-speech on the
 stories (or on platforms like Medium where
 sometimes there''s an audio accompaniment built in, just grab that). And play the morning news
@@ -1052,9 +1621,33 @@ listen while getting ready for the day or getting on the subway.
 
 Does this exist? An RSS-feed-TTS-morning-news-app? If we were coming up with one today...
 I would call it... Radiyr.
-', '2018-12-17 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/old-timey-radio-1980ce.png', true, 'radiyr', 'Radiyr: If an RSS Reader Had a Baby with the Radio', '2022-12-18 14:49:13.652302+00', 'a07ce821-3402-4e9e-95be-4471196e9b1f', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2018-12-17'),
-	('', '2023-05-15 08:30:27.299411+00', NULL, '', false, 'not-trapped-in-my-body', '"Trapped in a man''s body" Is a Violent Metaphor', NULL, '53c80afa-ea18-4f6d-a51b-8a385c8d7dad', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('***Note: This is a semi-technical post, best suited for techies or tech managers, about the web architecture behind this website, or, "How I got my site to be zero-maintenance, super fast and infinitely scalable"***
+',
+		'2018-12-17 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/old-timey-radio-1980ce.png',
+		true,
+		'radiyr',
+		'Radiyr: If an RSS Reader Had a Baby with the Radio',
+		'2022-12-18 14:49:13.652302+00',
+		'a07ce821-3402-4e9e-95be-4471196e9b1f',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2018-12-17'
+	),
+	(
+		'',
+		'2023-05-15 08:30:27.299411+00',
+		null,
+		'',
+		false,
+		'not-trapped-in-my-body',
+		'"Trapped in a man''s body" Is a Violent Metaphor',
+		null,
+		'53c80afa-ea18-4f6d-a51b-8a385c8d7dad',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'***Note: This is a semi-technical post, best suited for techies or tech managers, about the web architecture behind this website, or, "How I got my site to be zero-maintenance, super fast and infinitely scalable"***
 
 In early 2020 I rebuilt my old Jekyll site as a Rails + React, which [I wrote about previously, here](https://michaelsnook.com/posts/under-the-hood-2).
 
@@ -1246,9 +1839,33 @@ I don''t like vendor lock-in, and it makes me uncomfortable to think I''d build 
 
 It looks like actually a Remix port would be pretty easy to do, and would still work with Supabase and react-hook-form and Tailwind and all the rest of the tooling I''ve got now. I''d have to change some folder names and the way I define my data fetching functions (or maybe just what I call them). But there could be some benefits too -- in Remix, for example, you can define data fetching for, and then pre-generate individual components, not just pages, whereas I am not sure how gracefully NextJS will integrate server-side components when they are finally ready to be added into the framework.
 
-But I am happy for now; no plans for another rewrite any time soon. What I''m looking forward to next is just _using_ this nice, modern, lightweight, low-lift stack to build more things; maybe take another crack at writing [Sunlo](http://sunlo.co), the language learning app I have been dreaming and scheming about for 5+ years; or maybe just keep working on new features for this site like a media library and auto-save backups and the like. Right now though, I am so happy it''s done, and I''m ready to put the code away for a little while and finish up some of the posts in my drafts folder. Wish me luck!', '2021-07-08 00:00:00+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/XbL5Ljs-18fd68.png', true, 'trying-nextjs-supabase', 'Trying something new: NextJS + Supabase', '2021-11-27 10:25:56.242745+00', '4ed1a651-55ca-41b9-8898-7ccb5d7afc54', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-11-24'),
-	('', '2022-01-23 09:59:59.978651+00', NULL, '', false, 'working-on-sunlo', 'Working on: Sunlo, a social language learning app', NULL, 'fc08137f-6585-4fb0-a3ad-89f34a177815', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('**This is just a test post.**
+But I am happy for now; no plans for another rewrite any time soon. What I''m looking forward to next is just _using_ this nice, modern, lightweight, low-lift stack to build more things; maybe take another crack at writing [Sunlo](http://sunlo.co), the language learning app I have been dreaming and scheming about for 5+ years; or maybe just keep working on new features for this site like a media library and auto-save backups and the like. Right now though, I am so happy it''s done, and I''m ready to put the code away for a little while and finish up some of the posts in my drafts folder. Wish me luck!',
+		'2021-07-08 00:00:00+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/XbL5Ljs-18fd68.png',
+		true,
+		'trying-nextjs-supabase',
+		'Trying something new: NextJS + Supabase',
+		'2021-11-27 10:25:56.242745+00',
+		'4ed1a651-55ca-41b9-8898-7ccb5d7afc54',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2021-11-24'
+	),
+	(
+		'',
+		'2022-01-23 09:59:59.978651+00',
+		null,
+		'',
+		false,
+		'working-on-sunlo',
+		'Working on: Sunlo, a social language learning app',
+		null,
+		'fc08137f-6585-4fb0-a3ad-89f34a177815',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'**This is just a test post.**
 
 Each time the markdown re-renders, the image below will change. but the markdown renderer is pretty smart so it only re-renders what it needs to.
 
@@ -1258,9 +1875,33 @@ Each time the markdown re-renders, the image below will change. but the markdown
 some cod
 ```
 
-![](https://picsum.photos/600/300)', '2021-10-05 07:06:34.256+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'testing-1234567', 'Test Post 1234', '2021-10-31 22:29:49.642111+00', '401530f3-442c-4b0e-a416-4c87e8fefdc6', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2021-10-11'),
-	('', '2021-10-30 10:16:28.163+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg', false, 'aaaaa', 'a', '2021-10-31 22:33:12.02848+00', 'c118dfe4-fc18-42c2-8c5d-5d70d229563c', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('When you''re working on a project, especially with a team, it''s great to have good process in place, followed routinely and without too much interference. So I''m here to make a (limited) case for some ways to use "No process", suggesting an order of preference that goes:
+![](https://picsum.photos/600/300)',
+		'2021-10-05 07:06:34.256+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
+		false,
+		'testing-1234567',
+		'Test Post 1234',
+		'2021-10-31 22:29:49.642111+00',
+		'401530f3-442c-4b0e-a416-4c87e8fefdc6',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2021-10-11'
+	),
+	(
+		'',
+		'2021-10-30 10:16:28.163+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
+		false,
+		'aaaaa',
+		'a',
+		'2021-10-31 22:33:12.02848+00',
+		'c118dfe4-fc18-42c2-8c5d-5d70d229563c',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'When you''re working on a project, especially with a team, it''s great to have good process in place, followed routinely and without too much interference. So I''m here to make a (limited) case for some ways to use "No process", suggesting an order of preference that goes:
 
 1. Good process
 2. No process*
@@ -1268,19 +1909,55 @@ some cod
 
 What I mean by "Bad Process"
 
-This is only an easy claim to make because of the big giant "*" – where "No Process" actually means a finding very low-interference ways of advancing projects, coming up with creative solutions and reaching consensus. There are plenty of situations where processes can go wrong', '2021-08-16 17:43:32.739+00', NULL, NULL, false, 'bad-process-no-process', 'Bad Process is the Worst Process', '2021-08-16 17:43:32.739+00', 'f649db52-c1d3-4191-ace8-b7f16395b336', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('1. Identify actual enemies, and make them good ones. [here is a great example.](https://twitter.com/WaywardWinifred/status/1430555879993184262) Erik Prince is an objectively terrible person and this question is supremely relevant to what kinds of people we are and what kind of countrywide sense of identity we want to have. And for all the traction of hating on Elon Musk, you''d think we could make this guy radioactive outside of just political circles, eh?
+This is only an easy claim to make because of the big giant "*" – where "No Process" actually means a finding very low-interference ways of advancing projects, coming up with creative solutions and reaching consensus. There are plenty of situations where processes can go wrong',
+		'2021-08-16 17:43:32.739+00',
+		null,
+		null,
+		false,
+		'bad-process-no-process',
+		'Bad Process is the Worst Process',
+		'2021-08-16 17:43:32.739+00',
+		'f649db52-c1d3-4191-ace8-b7f16395b336',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'1. Identify actual enemies, and make them good ones. [here is a great example.](https://twitter.com/WaywardWinifred/status/1430555879993184262) Erik Prince is an objectively terrible person and this question is supremely relevant to what kinds of people we are and what kind of countrywide sense of identity we want to have. And for all the traction of hating on Elon Musk, you''d think we could make this guy radioactive outside of just political circles, eh?
 2. Imbalance coalitions, e.g. if you can make Erik Prince radioactive, can you then force out blackwater? And if you hammer on that, does it become a strained relationship for Members of Congress? We typically think of Reps being "beholden" to interests like the military industrial complex, but imagine they have weak spots, that they can be separated, and take your shot.
-3. Think ahead, looking back on now. The right does this all the time in destructive ways by saying "soon they''ll have storm troopers confiscate your bibles", but we can do it in a different way like, "we can have nice things and this can be a turning point and gee won''t that be nice looking back." We can use this to give calm during crisis, almost like a soothing prayer, despite the feeling of emergency that we all feel these days when engaging in political action or labor.', '2021-08-25 20:15:35.498+00', NULL, NULL, false, 'ways-of-power', 'Ways of Power', '2021-08-25 20:15:35.498+00', '092f85ed-dc53-454c-9ba2-8d1e8345a905', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('## Hello
+3. Think ahead, looking back on now. The right does this all the time in destructive ways by saying "soon they''ll have storm troopers confiscate your bibles", but we can do it in a different way like, "we can have nice things and this can be a turning point and gee won''t that be nice looking back." We can use this to give calm during crisis, almost like a soothing prayer, despite the feeling of emergency that we all feel these days when engaging in political action or labor.',
+		'2021-08-25 20:15:35.498+00',
+		null,
+		null,
+		false,
+		'ways-of-power',
+		'Ways of Power',
+		'2021-08-25 20:15:35.498+00',
+		'092f85ed-dc53-454c-9ba2-8d1e8345a905',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'## Hello
 #### Smooth
 
 **How are you**
 ![Samosa](https://img.buzzfeed.com/thumbnailer-prod-us-east-1/video-api/assets/139372.jpg?resize=1200:*)
 
 
-tythjyuj tr ', '2022-04-03 09:10:37.519617+00', NULL, 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/hyrax-197033.jpeg', false, 'feature-signal-documents', 'Missing Feature: Signal Document / Attachment Store', '2022-12-17 21:14:55.597283+00', '898eabe7-a24a-41af-97ec-94dd3383eb91', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', NULL),
-	('Let the funeral be like a dinner party\
+tythjyuj tr ',
+		'2022-04-03 09:10:37.519617+00',
+		null,
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/hyrax-197033.jpeg',
+		false,
+		'feature-signal-documents',
+		'Missing Feature: Signal Document / Attachment Store',
+		'2022-12-17 21:14:55.597283+00',
+		'898eabe7-a24a-41af-97ec-94dd3383eb91',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		null
+	),
+	(
+		'Let the funeral be like a dinner party\
 Aunties and uncles flitting to and fro\
 Offering you the same seat or the same sweets\
 While you strain to recall every name\
@@ -1303,8 +1980,20 @@ Chattering in circles around you, making remarks and such, and giving news of fa
 Where many who sat where you will sit, my dear, will give advice on how to feel\
 And say, Everything will turn out fine
 
-', '2023-08-06 06:48:08.010366+00', 'A poem written 6th August, 2023', '', true, 'let-the-funeral-poem', 'Let My Funeral Be Like a Party ', '2024-12-19 09:40:58.551578+00', '26e34232-0fc1-4283-a85b-5f4e17f1d7b7', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-08-06'),
-	('### Employr: Swipe right on resumes.
+',
+		'2023-08-06 06:48:08.010366+00',
+		'A poem written 6th August, 2023',
+		'',
+		true,
+		'let-the-funeral-poem',
+		'Let My Funeral Be Like a Party ',
+		'2024-12-19 09:40:58.551578+00',
+		'26e34232-0fc1-4283-a85b-5f4e17f1d7b7',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2023-08-06'
+	),
+	(
+		'### Employr: Swipe right on resumes.
 
 With Employr, job seekers and posters get a quick look at what the other has to offer, and match via the time-honored method of swiping right and left. If you both swipe right, you can chat and set up an interview!
 
@@ -1321,8 +2010,20 @@ Local small non-profit owner / my neighbor says:
 &gt; I would definitely use Employr to help for hiring. I run a small non-profit   that puts on dance classes for kids in the neighborhood and performs at festivals around Brooklyn. I post online, do a lot of word-of-mouth, and put up flyers when I need to hire for a position or a particular event. I would love to be able to set interests (like "dance, nonprofit, local") and set the range to "5 miles", and find good people committed to the community. Sounds amazing!
 
 Well, it''s not amazing _yet_, because it hasn''t been built. But I think it''s a cool idea at least.
-', '2015-04-29 00:00:00+00', 'Just a fictional/hypothetical app idea.', 'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/employr-1980ce.png', true, 'employr', 'Employr', '2022-12-18 14:38:29.742397+00', '4e1e29ed-4354-41af-9ef7-bbedda0a55b2', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2015-04-29'),
-	('Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has a few parts and some order and means something.
+',
+		'2015-04-29 00:00:00+00',
+		'Just a fictional/hypothetical app idea.',
+		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/employr-1980ce.png',
+		true,
+		'employr',
+		'Employr',
+		'2022-12-18 14:38:29.742397+00',
+		'4e1e29ed-4354-41af-9ef7-bbedda0a55b2',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2015-04-29'
+	),
+	(
+		'Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has a few parts and some order and means something.
 
 I reckon at some point in professional middle-manager world, I got caught up in a kind of "bullet-point writing style," which is professionally practical but not the way I want to live my entire life. And whenever I break out of these easy structures, there''s the fear of doing "art" or "theory" and comparing myself quite unfavorably to professional writers, artists, or theorists, who write these incredible things like it''s nothing.
 
@@ -1335,22 +2036,81 @@ I do have a journal for private thoughts, and I like it – but some things want
 
 In _just one day_ you can go from: too bashful to be heard singing or seen dancing, too shy to walk the way you want to walk and wear clothes that say a little more, too afraid to let your voice rise to another pitch and fall back down throughout our conversation – it''s exhausting and frankly boring. I''m growing too tired to keep on shrinking from that fear that something I''m doing might be creative, might be seen as taking effort, being a Big Thing but failing to match professional quality.
 
-So I''m going to practice this: just, writing something small, and letting it out. Maybe I will learn to love the fear. Maybe it will go away entirely, or fade to a more appropriate size. Or maybe I will succeed with other things first, like if I just end up singing and dancing more, and then all this anxiety about writing and being judged just ends up feeling kind of small.', '2023-05-15 19:26:44.848962+00', 'Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has...', '', true, 'writing-something-small', 'Writing Something Small', '2023-05-15 20:41:49.238388+00', '7857c35c-7551-4c49-8d4a-9cc610159776', 'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e', '2023-05-15');
-
+So I''m going to practice this: just, writing something small, and letting it out. Maybe I will learn to love the fear. Maybe it will go away entirely, or fade to a more appropriate size. Or maybe I will succeed with other things first, like if I just end up singing and dancing more, and then all this anxiety about writing and being judged just ends up feeling kind of small.',
+		'2023-05-15 19:26:44.848962+00',
+		'Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has...',
+		'',
+		true,
+		'writing-something-small',
+		'Writing Something Small',
+		'2023-05-15 20:41:49.238388+00',
+		'7857c35c-7551-4c49-8d4a-9cc610159776',
+		'ce73a8ab-9a4e-4ff6-a290-24b3c3c4c04e',
+		'2023-05-15'
+	);
 
 --
 -- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
-INSERT INTO "public"."projects" ("id", "title", "description", "url", "github", "tags", "sort_order", "published", "created_at") VALUES
-	('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', 'Sunlo', 'A social language-learning app where friends and family help you learn. Built with Tanstack Router, Supabase, and TailwindCSS. Think Anki + AskReddit + Wikipedia.', 'https://sunlo.app', 'https://github.com/mhsnook/sunlo', '{Tanstack Router,Supabase,React}', 1, true, '2026-03-08 00:00:00+00'),
-	('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', 'Scenetest', 'A local-first testing framework based on Playwright and Server Actions. Separate orchestration from assertions, and validate your mental model (not just your tests).', 'https://scenetest.msnook.xyz', 'https://github.com/scenetest/scenetest-js', '{Testing,Local-first}', 2, true, '2026-03-08 00:00:00+00'),
-	('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', 'Tailwind OkLCH', 'A Tailwind CSS color tool built around the OKLCH color space — composable utility classes for L, C, and H.', 'https://twok.msnook.xyz', 'https://github.com/mhsnook/tailwind-oklch', '{Tailwind,OKLCH,Color,Themes}', 3, true, '2026-03-08 00:00:00+00'),
-	('d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80', 'RSVP Reader', 'An RSVP (Rapid Serial Visual Presentation) speed reader, meant to help you read any PDF at 500+ WPM, and to identify the settings that work best for your learning and reading needs.', 'https://reader.msnook.xyz', 'https://github.com/mhsnook/rsvp-reader', '{Speed-reading,Accessibility,Dyslexia}', 4, true, '2026-03-08 00:00:00+00');
-
+insert into
+	"public"."projects" (
+		"id",
+		"title",
+		"description",
+		"url",
+		"github",
+		"tags",
+		"sort_order",
+		"published",
+		"created_at"
+	)
+values
+	(
+		'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d',
+		'Sunlo',
+		'A social language-learning app where friends and family help you learn. Built with Tanstack Router, Supabase, and TailwindCSS. Think Anki + AskReddit + Wikipedia.',
+		'https://sunlo.app',
+		'https://github.com/mhsnook/sunlo',
+		'{Tanstack Router,Supabase,React}',
+		1,
+		true,
+		'2026-03-08 00:00:00+00'
+	),
+	(
+		'b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e',
+		'Scenetest',
+		'A local-first testing framework based on Playwright and Server Actions. Separate orchestration from assertions, and validate your mental model (not just your tests).',
+		'https://scenetest.msnook.xyz',
+		'https://github.com/scenetest/scenetest-js',
+		'{Testing,Local-first}',
+		2,
+		true,
+		'2026-03-08 00:00:00+00'
+	),
+	(
+		'c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f',
+		'Tailwind OkLCH',
+		'A Tailwind CSS color tool built around the OKLCH color space — composable utility classes for L, C, and H.',
+		'https://twok.msnook.xyz',
+		'https://github.com/mhsnook/tailwind-oklch',
+		'{Tailwind,OKLCH,Color,Themes}',
+		3,
+		true,
+		'2026-03-08 00:00:00+00'
+	),
+	(
+		'd4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f80',
+		'RSVP Reader',
+		'An RSVP (Rapid Serial Visual Presentation) speed reader, meant to help you read any PDF at 500+ WPM, and to identify the settings that work best for your learning and reading needs.',
+		'https://reader.msnook.xyz',
+		'https://github.com/mhsnook/rsvp-reader',
+		'{Speed-reading,Accessibility,Dyslexia}',
+		4,
+		true,
+		'2026-03-08 00:00:00+00'
+	);
 
 --
 -- PostgreSQL database dump complete
 --
-
-RESET ALL;
+reset all;
