@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import SessionProvider from '@/components/session-provider'
 import appCss from '@/styles/app.css?url'
 
@@ -20,11 +22,16 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+	// Fresh QueryClient per request (useState lazy init) — avoids leaking
+	// cache across SSR requests if we ever hang anything off it.
+	const [queryClient] = useState(() => new QueryClient())
 	return (
 		<RootDocument>
-			<SessionProvider>
-				<Outlet />
-			</SessionProvider>
+			<QueryClientProvider client={queryClient}>
+				<SessionProvider>
+					<Outlet />
+				</SessionProvider>
+			</QueryClientProvider>
 		</RootDocument>
 	)
 }
