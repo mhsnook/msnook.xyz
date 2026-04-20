@@ -1,6 +1,4 @@
-'use client'
-
-import { Tables } from '@/types/supabase'
+import type { Tables } from '~shared/types/supabase'
 
 interface PostSidebarProps {
 	categories: string[]

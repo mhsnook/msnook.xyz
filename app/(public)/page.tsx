@@ -42,7 +42,10 @@ function GithubIcon({ className }: { className?: string }) {
 }
 
 export default async function Page() {
-	const [posts, projects] = await Promise.all([fetchPostList(), fetchProjects()])
+	const [posts, projects] = await Promise.all([
+		fetchPostList(),
+		fetchProjects(),
+	])
 
 	return (
 		<>
@@ -56,7 +59,10 @@ export default async function Page() {
 					<div className="mb-4 flex items-center justify-between">
 						<h2 className="h2">Projects</h2>
 						<IffLoggedIn>
-							<Link href="/projects/manage" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+							<Link
+								href="/projects/manage"
+								className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+							>
 								Manage projects &rarr;
 							</Link>
 						</IffLoggedIn>
@@ -149,7 +155,10 @@ export default async function Page() {
 						))}
 					</div>
 					<div className="mt-4">
-						<Link href="/projects" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+						<Link
+							href="/projects"
+							className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+						>
 							See all projects &rarr;
 						</Link>
 					</div>

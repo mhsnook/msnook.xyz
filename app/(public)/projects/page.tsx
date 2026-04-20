@@ -48,7 +48,10 @@ export default async function ProjectsPage() {
 			<main className="container py-10">
 				<div className="max-w-4xl mx-auto mb-4 flex justify-end">
 					<IffLoggedIn>
-						<Link href="/projects/manage" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+						<Link
+							href="/projects/manage"
+							className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+						>
 							Manage projects &rarr;
 						</Link>
 					</IffLoggedIn>
@@ -117,23 +120,23 @@ export default async function ProjectsPage() {
 										))}
 									</div>
 									<div className="flex items-center gap-3 ml-3 shrink-0">
-									{project.url?.startsWith('http') ? (
-										<a
-											href={project.url}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap"
-										>
-											Visit website &rarr;
-										</a>
-									) : project.url ? (
-										<Link
-											href={project.url}
-											className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap"
-										>
-											Try it out &rarr;
-										</Link>
-									) : null}
+										{project.url?.startsWith('http') ? (
+											<a
+												href={project.url}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap"
+											>
+												Visit website &rarr;
+											</a>
+										) : project.url ? (
+											<Link
+												href={project.url}
+												className="text-sm font-medium text-cyan-bright hover:underline whitespace-nowrap"
+											>
+												Try it out &rarr;
+											</Link>
+										) : null}
 									</div>
 								</div>
 							</div>

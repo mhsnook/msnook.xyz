@@ -31,7 +31,7 @@ const PostSidebar = ({ post }: { post: Tables<'posts'> }) => {
 					<p>
 						Published <DateSpan dateText={post.published_at} />
 					</p>
-					</div>
+				</div>
 			</div>
 			<IffLoggedIn>
 				<Link

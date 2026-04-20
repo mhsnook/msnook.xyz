@@ -5,7 +5,10 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import PostList from '@/components/post-list'
-import PostSidebar, { filterPostsByCategory, deriveCategories } from '@/components/post-sidebar'
+import PostSidebar, {
+	filterPostsByCategory,
+	deriveCategories,
+} from '@/components/post-sidebar'
 import Banner from '@/components/banner'
 import { buttonStyles, ErrorList } from '@/components/lib'
 import { fetchDraftPosts } from '@/lib/posts'
@@ -47,7 +50,11 @@ function DraftsContent() {
 					<PostList posts={filtered} isLoading={isLoading} />
 				</div>
 				<aside className="hidden sm:block w-36 shrink-0 pt-6 sticky top-6 self-start">
-					<PostSidebar categories={categories} selectedCategory={selectedCategory} onSelect={handleSelect} />
+					<PostSidebar
+						categories={categories}
+						selectedCategory={selectedCategory}
+						onSelect={handleSelect}
+					/>
 				</aside>
 			</div>
 		</>
@@ -65,7 +72,10 @@ export default function Page() {
 			<main className="container py-5">
 				<div className="flex flex-row justify-between items-center">
 					<h2 className="h2">Draft posts</h2>
-					<Link href="/posts/new" className={buttonStyles({ variant: 'outlines' })}>
+					<Link
+						href="/posts/new"
+						className={buttonStyles({ variant: 'outlines' })}
+					>
 						New post
 					</Link>
 				</div>
