@@ -6,11 +6,7 @@ interface PostSidebarProps {
 	onSelect: (category: string | null) => void
 }
 
-export default function PostSidebar({
-	categories,
-	selectedCategory,
-	onSelect,
-}: PostSidebarProps) {
+export default function PostSidebar({ categories, selectedCategory, onSelect }: PostSidebarProps) {
 	return (
 		<nav className="flex flex-col gap-1">
 			{categories.map((cat) => (
@@ -41,9 +37,10 @@ export default function PostSidebar({
 	)
 }
 
-export function filterPostsByCategory<
-	T extends Pick<Tables<'posts'>, 'category'>,
->(posts: T[], category: string | null): T[] {
+export function filterPostsByCategory<T extends Pick<Tables<'posts'>, 'category'>>(
+	posts: T[],
+	category: string | null,
+): T[] {
 	if (!category) return posts
 	return posts.filter((p) => p.category === category)
 }
@@ -51,7 +48,5 @@ export function filterPostsByCategory<
 export function deriveCategories<T extends Pick<Tables<'posts'>, 'category'>>(
 	posts: T[],
 ): string[] {
-	return [
-		...new Set(posts.map((p) => p.category).filter((c): c is string => !!c)),
-	].sort()
+	return [...new Set(posts.map((p) => p.category).filter((c): c is string => !!c))].sort()
 }

@@ -1,0 +1,8 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"semi": false,
+	"singleQuote": true,
+	"arrowParens": "always",
+	"ignorePatterns": ["node_modules", ".nitro", ".output", "dist", "src/routeTree.gen.ts"]
+}

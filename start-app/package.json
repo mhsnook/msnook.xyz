@@ -7,7 +7,10 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"start": "node .output/server/index.mjs",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint": "oxlint",
+		"format": "oxfmt",
+		"format:check": "oxfmt --check"
 	},
 	"dependencies": {
 		"@supabase/ssr": "^0.8.0",
@@ -25,6 +28,8 @@
 		"@types/react": "18.3.8",
 		"@types/react-dom": "^18.3.7",
 		"@vitejs/plugin-react": "^6.0.1",
+		"oxfmt": "^0.45.0",
+		"oxlint": "^1.60.0",
 		"tailwindcss": "4.1.8",
 		"typescript": "^5.8.3",
 		"vite": "^8.0.9",

@@ -14,10 +14,7 @@ export const Route = createFileRoute('/')({
 		category: typeof search.category === 'string' ? search.category : undefined,
 	}),
 	loader: async () => {
-		const [posts, projects] = await Promise.all([
-			fetchPostList(),
-			fetchProjects(),
-		])
+		const [posts, projects] = await Promise.all([fetchPostList(), fetchProjects()])
 		return { posts: posts ?? [], projects: projects ?? [] }
 	},
 	staleTime: 60_000,
@@ -70,10 +67,7 @@ function HomePage() {
 		<>
 			<Menu />
 			<main className="flex-1">
-				<Banner
-					title="em snook web site"
-					description="my personal space to jot things down"
-				/>
+				<Banner title="em snook web site" description="my personal space to jot things down" />
 				<div className="container py-5">
 					<section className="mb-10">
 						<div className="mb-4 flex items-center justify-between">
@@ -133,9 +127,7 @@ function HomePage() {
 													</IffLoggedIn>
 												</div>
 											</div>
-											<p className="text-gray-600 leading-relaxed mb-4">
-												{project.description}
-											</p>
+											<p className="text-gray-600 leading-relaxed mb-4">{project.description}</p>
 										</div>
 										<div className="flex items-center justify-between pt-2">
 											<div className="flex flex-wrap gap-1.5">
