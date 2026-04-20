@@ -39,9 +39,9 @@ fi
 # ignore file so the repo-root .prettierignore (which excludes start-app from
 # prettier) doesn't also exclude start-app from oxfmt.
 if echo "$FILE_PATH" | grep -qE '\.sql$'; then
-  npx prettier --write "$FILE_PATH" > /dev/null 2>&1
+  pnpm exec prettier --write "$FILE_PATH" > /dev/null 2>&1
 elif echo "$FILE_PATH" | grep -qE '\.(tsx?|jsx?|mjs|cjs|json|jsonc|css|md|html)$'; then
-  (cd "$(dirname "$FILE_PATH")" && npx oxfmt --ignore-path=/dev/null "$FILE_PATH" > /dev/null 2>&1)
+  (cd "$(dirname "$FILE_PATH")" && pnpm exec oxfmt --ignore-path=/dev/null "$FILE_PATH" > /dev/null 2>&1)
 fi
 
 exit 0
