@@ -142,12 +142,7 @@ const stars = [
 	{ top: '66%', left: '18%', size: 1.6, duration: '3.2s', delay: '-0.1s' },
 ]
 
-export default function Banner({
-	title,
-	description,
-	small,
-	medium,
-}: BannerProps) {
+export default function Banner({ title, description, small, medium }: BannerProps) {
 	return (
 		<header
 			className={`bg-gray-900 w-full ${
@@ -185,11 +180,7 @@ export default function Banner({
 								height: 'auto',
 							}}
 						/>
-						<img
-							src="/images/rocket.svg"
-							alt=""
-							className="absolute left-0 top-0 w-full h-full"
-						/>
+						<img src="/images/rocket.svg" alt="" className="absolute left-0 top-0 w-full h-full" />
 					</div>
 				)}
 				<div>

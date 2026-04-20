@@ -1,10 +1,5 @@
 import type { ReactNode } from 'react'
-import {
-	Outlet,
-	createRootRoute,
-	HeadContent,
-	Scripts,
-} from '@tanstack/react-router'
+import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import SessionProvider from '@/components/session-provider'
 import appCss from '@/styles/app.css?url'
 

@@ -1,9 +1,6 @@
 import type { Tables } from '~shared/types/supabase'
 import PostList from './post-list'
-import PostSidebar, {
-	filterPostsByCategory,
-	deriveCategories,
-} from './post-sidebar'
+import PostSidebar, { filterPostsByCategory, deriveCategories } from './post-sidebar'
 
 interface PostsSectionProps {
 	posts: Array<Tables<'posts'>>

@@ -37,7 +37,7 @@ function NavLink({
 export default function Menu() {
 	const [isOpen, setIsOpen] = useState(false)
 	const { session } = useSession()
-	const nickname = session?.user?.email?.split(/[\b\@\.]/)[0] || 'editor'
+	const nickname = session?.user?.email?.split(/[\b@.]/)[0] || 'editor'
 	const loggedInLinks: MenuLink[] = session
 		? [
 				['Drafts', '/posts/drafts'],
@@ -88,12 +88,7 @@ export default function Menu() {
 					viewBox="0 0 24 24"
 					stroke="currentColor"
 				>
-					<path
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						strokeWidth={2}
-						d="M4 8h16M4 16h16"
-					/>
+					<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
 				</svg>
 			</button>
 			{isOpen ? (

@@ -41,9 +41,7 @@ export default function SessionProvider({ children }: { children: ReactNode }) {
 		[session, isLoading, isAuthenticated],
 	)
 
-	return (
-		<SessionContext.Provider value={value}>{children}</SessionContext.Provider>
-	)
+	return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 }
 
 export const useSession = () => useContext(SessionContext)

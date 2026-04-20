@@ -27,21 +27,13 @@ function PostRow({
 						className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.25]"
 						style={{ filter: 'blur(18px)', transform: 'scale(1.15)' }}
 					/>
-					<img
-						src={image}
-						alt=""
-						className="absolute inset-0 w-full h-full object-contain"
-					/>
+					<img src={image} alt="" className="absolute inset-0 w-full h-full object-contain" />
 				</div>
 			)}
 			<p className="text-3xl sm:text-4xl font-display font-bold text-cyan-content group-hover:underline leading-tight mb-3">
 				{title}
 			</p>
-			{excerpt && (
-				<p className="text-base text-gray-600 leading-relaxed mb-4">
-					{excerpt}
-				</p>
-			)}
+			{excerpt && <p className="text-base text-gray-600 leading-relaxed mb-4">{excerpt}</p>}
 			<div className="flex items-center gap-3 mt-3">
 				<p className="text-sm text-gray-400 uppercase tracking-widest transition-colors duration-200 group-hover:text-gray-500">
 					{format(published_at ?? updated_at ?? new Date().toISOString())}

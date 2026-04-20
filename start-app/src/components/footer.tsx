@@ -7,16 +7,10 @@ export default function Footer() {
 				<Link to="/" className="text-cyan-content underline">
 					home
 				</Link>
-				<a
-					className="text-cyan-content underline"
-					href="https://twitter.com/mhsnook"
-				>
+				<a className="text-cyan-content underline" href="https://twitter.com/mhsnook">
 					twitter
 				</a>
-				<a
-					className="text-cyan-content underline"
-					href="https://github.com/mhsnook"
-				>
+				<a className="text-cyan-content underline" href="https://github.com/mhsnook">
 					github
 				</a>
 				<span>CC0 1.0</span>
