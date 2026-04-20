@@ -4,7 +4,10 @@ import { Suspense, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Tables } from '@/types/supabase'
 import PostList from './post-list'
-import PostSidebar, { filterPostsByCategory, deriveCategories } from './post-sidebar'
+import PostSidebar, {
+	filterPostsByCategory,
+	deriveCategories,
+} from './post-sidebar'
 
 interface PostsSectionProps {
 	posts: Array<Tables<'posts'>>
@@ -37,7 +40,11 @@ function PostsSectionInner({ posts }: PostsSectionProps) {
 				<PostList posts={filtered} />
 			</div>
 			<aside className="hidden sm:block w-36 shrink-0 pt-6 sticky top-6 self-start">
-				<PostSidebar categories={categories} selectedCategory={selectedCategory} onSelect={handleSelect} />
+				<PostSidebar
+					categories={categories}
+					selectedCategory={selectedCategory}
+					onSelect={handleSelect}
+				/>
 			</aside>
 		</div>
 	)

@@ -215,14 +215,24 @@ export function InputCategory({ register }) {
 			<Label>Category</Label>
 			<div className="flex flex-wrap gap-2 mt-2">
 				<label className="cursor-pointer">
-					<input type="radio" value="" {...register('category')} className="sr-only peer" />
+					<input
+						type="radio"
+						value=""
+						{...register('category')}
+						className="sr-only peer"
+					/>
 					<span className="peer-checked:bg-cyan-content peer-checked:text-white peer-checked:border-cyan-content inline-block px-4 py-2 rounded-full border border-stone-300 text-sm font-medium text-stone-500 hover:border-stone-400 transition-colors">
 						None
 					</span>
 				</label>
 				{CATEGORIES.map((cat) => (
 					<label key={cat} className="cursor-pointer">
-						<input type="radio" value={cat} {...register('category')} className="sr-only peer" />
+						<input
+							type="radio"
+							value={cat}
+							{...register('category')}
+							className="sr-only peer"
+						/>
 						<span className="peer-checked:bg-cyan-content peer-checked:text-white peer-checked:border-cyan-content inline-block px-4 py-2 rounded-full border border-stone-300 text-sm font-medium text-stone-500 hover:border-stone-400 transition-colors">
 							{cat}
 						</span>

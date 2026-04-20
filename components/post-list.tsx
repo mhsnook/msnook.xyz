@@ -26,7 +26,11 @@ const PostRow = ({
 					alt=""
 					fill
 					sizes="(min-width: 768px) 800px, 100vw"
-					style={{ objectFit: 'cover', filter: 'blur(18px)', transform: 'scale(1.15)' }}
+					style={{
+						objectFit: 'cover',
+						filter: 'blur(18px)',
+						transform: 'scale(1.15)',
+					}}
 					className="transition-transform duration-700 ease-out group-hover:scale-[1.25]"
 				/>
 				{/* Sharp contained image on top */}
@@ -43,9 +47,7 @@ const PostRow = ({
 			{title}
 		</p>
 		{excerpt && (
-			<p className="text-base text-gray-600 leading-relaxed mb-4">
-				{excerpt}
-			</p>
+			<p className="text-base text-gray-600 leading-relaxed mb-4">{excerpt}</p>
 		)}
 		<div className="flex items-center gap-3 mt-3">
 			<p className="text-sm text-gray-400 uppercase tracking-widest transition-colors duration-200 group-hover:text-gray-500">
