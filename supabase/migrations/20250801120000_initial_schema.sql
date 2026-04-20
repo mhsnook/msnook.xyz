@@ -52,8 +52,7 @@ create extension if not exists "uuid-ossp"
 with
 	schema "extensions";
 
-create
-or replace function "public"."handle_updated_at" () returns "trigger" language "plpgsql" as $$
+create or replace function "public"."handle_updated_at" () returns "trigger" language "plpgsql" as $$
 BEGIN
     NEW.updated_at = now();
     RETURN NEW;
@@ -68,33 +67,31 @@ set
 set
 	default_table_access_method = "heap";
 
-create table if not exists
-	"public"."media" (
-		"id" "uuid" default "extensions"."uuid_generate_v4" () not null,
-		"bucket" character varying,
-		"filename" character varying not null,
-		"url" character varying,
-		"alt_text" "text",
-		"height" integer,
-		"width" integer,
-		"file_size_kb" integer,
-		"file_modified_at" timestamp with time zone,
-		"created_at" timestamp with time zone default "now" (),
-		"updated_at" timestamp with time zone default "now" ()
-	);
+create table if not exists "public"."media" (
+	"id" "uuid" default "extensions"."uuid_generate_v4" () not null,
+	"bucket" character varying,
+	"filename" character varying not null,
+	"url" character varying,
+	"alt_text" "text",
+	"height" integer,
+	"width" integer,
+	"file_size_kb" integer,
+	"file_modified_at" timestamp with time zone,
+	"created_at" timestamp with time zone default "now" (),
+	"updated_at" timestamp with time zone default "now" ()
+);
 
 alter table "public"."media" owner to "postgres";
 
-create table if not exists
-	"public"."media_meta" (
-		"id" "uuid" default "gen_random_uuid" () not null,
-		"path" "text" not null,
-		"description" "text",
-		"tags" "text" [],
-		"center_box" "jsonb",
-		"created_at" timestamp with time zone default "now" () not null,
-		"updated_at" timestamp with time zone
-	);
+create table if not exists "public"."media_meta" (
+	"id" "uuid" default "gen_random_uuid" () not null,
+	"path" "text" not null,
+	"description" "text",
+	"tags" "text" [],
+	"center_box" "jsonb",
+	"created_at" timestamp with time zone default "now" () not null,
+	"updated_at" timestamp with time zone
+);
 
 alter table "public"."media_meta" owner to "postgres";
 
@@ -104,20 +101,19 @@ comment on column "public"."media_meta"."path" is 'The full path to the file in 
 
 comment on column "public"."media_meta"."center_box" is 'Relative coordinates for the focal point of the image: {x, y, width, height}.';
 
-create table if not exists
-	"public"."posts" (
-		"content" "text",
-		"created_at" timestamp with time zone default "now" (),
-		"excerpt" "text",
-		"image" character varying,
-		"published" boolean default false not null,
-		"slug" character varying default "extensions"."uuid_generate_v4" () not null,
-		"title" "text",
-		"updated_at" timestamp with time zone,
-		"id" "uuid" default "extensions"."uuid_generate_v4" () not null,
-		"author_id" "uuid" default "auth"."uid" () not null,
-		"published_at" "date"
-	);
+create table if not exists "public"."posts" (
+	"content" "text",
+	"created_at" timestamp with time zone default "now" (),
+	"excerpt" "text",
+	"image" character varying,
+	"published" boolean default false not null,
+	"slug" character varying default "extensions"."uuid_generate_v4" () not null,
+	"title" "text",
+	"updated_at" timestamp with time zone,
+	"id" "uuid" default "extensions"."uuid_generate_v4" () not null,
+	"author_id" "uuid" default "auth"."uid" () not null,
+	"published_at" "date"
+);
 
 alter table "public"."posts" owner to "postgres";
 
@@ -139,13 +135,11 @@ add constraint "posts_pkey1" primary key ("id");
 alter table only "public"."posts"
 add constraint "posts_slug_key" unique ("slug");
 
-create
-or replace trigger "handle_updated_at" before
+create or replace trigger "handle_updated_at" before
 update on "public"."posts" for each row
 execute function "extensions"."moddatetime" ('updated_at');
 
-create
-or replace trigger "on_media_meta_updated" before
+create or replace trigger "on_media_meta_updated" before
 update on "public"."media_meta" for each row
 execute function "public"."handle_updated_at" ();
 
