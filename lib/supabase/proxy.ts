@@ -37,16 +37,12 @@ export async function updateSession(request: NextRequest) {
 		data: { user },
 	} = await supabase.auth.getUser()
 
-	// Protected routes: private pages and todo API routes
+	// Protected routes: private pages
 	const isPrivate = request.nextUrl.pathname.match(
-		/^\/(todo|integrations|media|posts\/.+\/edit|posts\/drafts|posts\/new)/,
+		/^\/(integrations|media|posts\/.+\/edit|posts\/drafts|posts\/new)/,
 	)
-	const isProtectedApi = request.nextUrl.pathname.startsWith('/api/todo')
 
-	if (!user && (isPrivate || isProtectedApi)) {
-		if (isProtectedApi) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-		}
+	if (!user && isPrivate) {
 		const url = request.nextUrl.clone()
 		url.pathname = '/login'
 		url.searchParams.set('redirectedFrom', request.nextUrl.pathname)

@@ -1,25 +1,6 @@
-import { getApi } from '@/lib/todoist'
 import { createClient } from '@/lib/supabase/server'
 
 type CheckResult = { ok: boolean; detail?: string; error?: string }
-
-async function checkTodoist(): Promise<CheckResult> {
-	try {
-		const token = process.env.TODOIST_API_TOKEN
-		if (!token) return { ok: false, error: 'TODOIST_API_TOKEN is not set' }
-		const api = getApi()
-		const user = await api.getUser()
-		return {
-			ok: true,
-			detail: `Authenticated as "${user.fullName}"`,
-		}
-	} catch (e) {
-		return {
-			ok: false,
-			error: e instanceof Error ? e.message : 'Unknown error',
-		}
-	}
-}
 
 async function checkSupabase(): Promise<CheckResult> {
 	try {
@@ -43,10 +24,7 @@ async function checkSupabase(): Promise<CheckResult> {
 }
 
 export default async function IntegrationsPage() {
-	const [todoist, supabase] = await Promise.all([
-		checkTodoist(),
-		checkSupabase(),
-	])
+	const supabase = await checkSupabase()
 
 	return (
 		<main className="single-col">
@@ -56,11 +34,6 @@ export default async function IntegrationsPage() {
 					name="Supabase"
 					description="Server-side auth via publishable key"
 					result={supabase}
-				/>
-				<CheckCard
-					name="Todoist"
-					description="API token from TODOIST_API_TOKEN env var"
-					result={todoist}
 				/>
 			</div>
 		</main>
