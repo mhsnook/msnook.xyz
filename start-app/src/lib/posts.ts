@@ -10,3 +10,14 @@ export async function fetchPostList() {
 
 	return data
 }
+
+export async function fetchOnePost(slug: string) {
+	const { data } = await createClient()
+		.from('posts')
+		.select('*')
+		.eq('slug', slug)
+		.maybeSingle()
+		.throwOnError()
+
+	return data
+}
