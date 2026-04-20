@@ -6,7 +6,7 @@ const TITLE = 'xkcID: A Friendly, K-sortable Compact Identifier | msnook.xyz'
 const DESCRIPTION =
 	'An experiment in making a new kind of compact global identifier for more human-friendly identifiers to paste into groupchats and stash in databases'
 
-export const Route = createFileRoute('/xkcid')({
+export const Route = createFileRoute('/(projects)/xkcid')({
 	staleTime: 3_600_000,
 	head: () => ({
 		meta: [{ title: TITLE }, { name: 'description', content: DESCRIPTION }],

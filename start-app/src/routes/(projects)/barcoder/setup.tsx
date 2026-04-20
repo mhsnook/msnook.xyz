@@ -15,7 +15,7 @@ import {
 	parsePrice,
 } from '@/lib/barcoder'
 
-export const Route = createFileRoute('/barcoder/setup')({
+export const Route = createFileRoute('/(projects)/barcoder/setup')({
 	head: () => ({ meta: [{ title: 'Barcoder — Setup' }] }),
 	component: SetupPage,
 	ssr: false,

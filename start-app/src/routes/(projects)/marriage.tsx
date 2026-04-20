@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import Button from '@/components/ui/button'
 
-export const Route = createFileRoute('/marriage')({
+export const Route = createFileRoute('/(projects)/marriage')({
 	head: () => ({
 		meta: [{ title: 'Certificate of Marriage' }],
 	}),

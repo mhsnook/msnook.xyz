@@ -26,7 +26,7 @@ type BarcoderSearch = {
 	dec?: string
 }
 
-export const Route = createFileRoute('/barcoder/')({
+export const Route = createFileRoute('/(projects)/barcoder/')({
 	validateSearch: (search: Record<string, unknown>): BarcoderSearch => ({
 		sku: typeof search.sku === 'string' ? search.sku : undefined,
 		price: typeof search.price === 'string' ? search.price : undefined,

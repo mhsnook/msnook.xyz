@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import MortalityExplorer from '@/components/mortality-explorer'
 import { fetchMortalityData } from '@/lib/mortality'
 
-export const Route = createFileRoute('/mortality')({
+export const Route = createFileRoute('/(projects)/mortality')({
 	loader: () => fetchMortalityData(2019),
 	// Matches the Next page's `export const revalidate = 3600`.
 	staleTime: 3_600_000,

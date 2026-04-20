@@ -13,7 +13,7 @@ type CheckoutSearch = {
 	dec?: string
 }
 
-export const Route = createFileRoute('/barcoder/checkout')({
+export const Route = createFileRoute('/(projects)/barcoder/checkout')({
 	validateSearch: (search: Record<string, unknown>): CheckoutSearch => ({
 		items: typeof search.items === 'string' ? search.items : undefined,
 		cur: typeof search.cur === 'string' ? search.cur : undefined,
