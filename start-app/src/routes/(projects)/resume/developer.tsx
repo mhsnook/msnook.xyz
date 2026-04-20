@@ -9,7 +9,7 @@ import {
 } from '@/components/resume-developer/content-sections'
 import PrintMarkdown from '@/components/ui/print-markdown'
 
-export const Route = createFileRoute('/resume/developer')({
+export const Route = createFileRoute('/(projects)/resume/developer')({
 	head: () => ({
 		meta: [{ title: 'Em Snook, Developer Resume 2024' }],
 	}),
