@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { createServerSupabase } from '@/lib/supabase-server'
+import { checkTodoistFn } from '@/lib/todoist'
 import { requireAuth } from '@/lib/auth-guard'
 
 type CheckResult = { ok: boolean; detail?: string; error?: string }
@@ -27,13 +28,16 @@ const checkSupabaseFn = createServerFn({ method: 'GET' }).handler(
 
 export const Route = createFileRoute('/(private)/integrations')({
 	beforeLoad: ({ location }) => requireAuth(location.href),
-	loader: () => checkSupabaseFn(),
+	loader: async () => {
+		const [supabase, todoist] = await Promise.all([checkSupabaseFn(), checkTodoistFn()])
+		return { supabase, todoist }
+	},
 	head: () => ({ meta: [{ title: 'Integrations' }] }),
 	component: IntegrationsPage,
 })
 
 function IntegrationsPage() {
-	const supabase = Route.useLoaderData()
+	const { supabase, todoist } = Route.useLoaderData()
 	return (
 		<main className="single-col">
 			<h1 className="h2 mb-6">Integrations</h1>
@@ -42,6 +46,11 @@ function IntegrationsPage() {
 					name="Supabase"
 					description="Server-side auth via publishable key"
 					result={supabase}
+				/>
+				<CheckCard
+					name="Todoist"
+					description="API token from TODOIST_API_TOKEN env var"
+					result={todoist}
 				/>
 			</div>
 		</main>
