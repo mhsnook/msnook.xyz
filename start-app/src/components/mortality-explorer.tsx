@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import type { Cause, SuperRegion, Region, Rate, Baseline, ViewMode } from '~shared/types/mortality'
+import type { Cause, SuperRegion, Region, Rate, Baseline, ViewMode } from '@/types/mortality'
 
 type MortalityData = {
 	causes: Cause[]

@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import type { TablesInsert } from '~shared/types/supabase'
+import type { TablesInsert } from '@/types/supabase'
 import { createClient } from './supabase-client'
 import { createServerSupabase } from './supabase-server'
 

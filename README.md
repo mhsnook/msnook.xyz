@@ -1,62 +1,70 @@
-# Website Readme
+# msnook.xyz
 
-This is my website! The NextJS app, at least. The back end
-is Supabase so the client uses their supabase-js client library.
+My personal website. Now on [TanStack Start](https://tanstack.com/start)
+(previously Next.js — the migration history still lives in this repo).
 
-I you have access to the project on vercel you should `vercel link` and
-`vercel env pull`. Then you can `pnpm install` and `pnpm dev`. (NPM will
-also work but this repo uses the pnpm lock file so YMMV.)
+## Layout
 
-## Design patterns
+    start-app/           # the site — Vite + tanstackStart() + Tailwind v4 + oxc
+    supabase/            # migrations, seeds, local config (supabase CLI)
+    .claude/             # hooks (format-on-save) + rules
+    readme/              # plan files
+    package.json         # thin workspace root; delegates to start-app
 
-The visual design of the site is meant to be very simple, not loud,
-and without too many options. For instance, there are only two types of buttons
-"solid" and "outlines".
+## Getting started
 
-The only theme colors so far are Tailwind's cyan, red, and coolGray. The
-entire theme operates on these; red is used only for error text and
-never as a background. Cyan is only used as a background for "critical path"
-buttons like "Submit login" and "Save post".
+```sh
+pnpm install
+cp start-app/.env.example start-app/.env   # fill in Supabase + optional Todoist
+pnpm dev                                   # runs start-app on :5173
+```
 
-The main separation between form factors is at the `md` breakpoint at 768px,
-though other breakpoints are used for responsive typography and changes
-to the grid size, when needed. `sm`, `md`, and `lg` are available.
+Other useful root scripts (each delegates to start-app or the supabase CLI):
 
-The big visual banner is only used on index pages; post pages confine their
-feature image to within the `<PostArticle>` component, whose width is capped at
-`max-w-prose` (68ch), as are other elements like the login form.
+| script              | what                                                     |
+| ------------------- | -------------------------------------------------------- |
+| `pnpm build`        | `vite build` in start-app                                |
+| `pnpm start`        | serve the built output                                   |
+| `pnpm typecheck`    | `tsc --noEmit` in start-app                              |
+| `pnpm lint`         | `oxlint` in start-app                                    |
+| `pnpm format`       | `oxfmt` on start-app + `prettier` on `supabase/**/*.sql` |
+| `pnpm format:check` | CI-friendly check of the above                           |
+| `pnpm migrate`      | `supabase db diff -f new_migration`                      |
+| `pnpm types`        | regenerate `start-app/src/types/supabase.ts` from local  |
+| `pnpm seeds:apply`  | `supabase db reset` (reapplies migrations + seeds)       |
 
-This site mostly uses left-alignment within centered layout areas. When there
-are two items to place next to one another, default to justify-between so items
-are pushed to the edges of their respective containers.
+## Tooling
+
+- **Formatter:** [oxfmt](https://oxc.rs) for everything except SQL. Prettier
+  with `prettier-plugin-sql` handles SQL files only. Claude Code formats on
+  save via `.claude/hooks/format-on-save.sh`.
+- **Linter:** oxlint. No ESLint.
+- **Types:** TypeScript strict mode; `tsc --noEmit` in start-app.
+
+## Design patterns (visual)
+
+Simple and not loud. Two button variants — `solid` and `outlines`. Theme
+colors are cyan, red, and coolGray; red is only for error text, cyan only
+for "critical path" buttons like Submit login or Save post.
+
+Responsive breakpoints are `sm`, `md`, `lg` (768px is the primary split).
+Left-alignment inside centered layout areas; `justify-between` when there
+are two items in a row.
 
 ## Code patterns
 
-The site uses NextJS's built-ins wherever possible, and `react-query`
-to manage data fetching. Forms are handled by `react-hook-forms`, with
-`supabase-js` handling the fetchers and posts.
+- Route files live under `start-app/src/routes/`. TanStack Router's file
+  conventions: `(group)/` folders are pathless, `$param` is dynamic.
+- Auth-gated routes use `beforeLoad: ({ location }) => requireAuth(location.href)`
+  from `@/lib/auth-guard`. Loaders call `createServerFn`s that use
+  `createServerSupabase` so RLS sees the session cookie.
+- Mutations use `useMutation` from `@tanstack/react-query`; on success call
+  `router.invalidate()` to rerun loaders (replaces Next's `revalidatePath`).
+- Forms use `react-hook-form` + zod for validation.
+- `useSession()` from `@/components/session-provider` exposes the Supabase
+  session on the client.
 
-Components that need to know whether the user is logged in can use the hook
-`useSession` to see if the session is present and the basic details of
-the logged in user.
+## Deploy
 
-For pages requiring authentication, there is a single component
-`<LoginChallenge>` which checks the `/logged_in` API and either presents the
-login form as a modal, or dispatches the returned authenticated user object
-for the rest of the app.
-
-Similarly, there is an `<ErrorList>` component that goes at the bottom of each
-form or each page that might require one. It accepts either a single message
-or an array, and hides itself when empty. So for both LoginChallenge and
-ErrorList, you can simply drop the component wherever you want it and not worry
-about conditions; the components will figure out whether they're needed.
-
-For the sake of easy navigation, Component and Lib files are allowed to contain
-several functions or components, so e.g. we have `lib/auth.js` with all the
-functions related to user authentication, rather than something like
-`lib/login/checkLogin.js` and so on for individual functions. Still, the
-longest file is ~100 lines, and should probably stay that way.
-
-There is currently no global management of variables and metadata like the
-site's title and description or other metadata. Nor is there any global state
-or context management.
+Target is Cloudflare Workers. The `@cloudflare/vite-plugin` hookup and
+`wrangler.jsonc` are TODO (see the comment in `start-app/vite.config.ts`).

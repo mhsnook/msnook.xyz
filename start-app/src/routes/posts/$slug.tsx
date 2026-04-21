@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import type { Tables } from '~shared/types/supabase'
+import type { Tables } from '@/types/supabase'
 import Banner from '@/components/banner'
 import IffLoggedIn from '@/components/iff-logged-in'
 import { PostArticle } from '@/components/post'

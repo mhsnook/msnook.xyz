@@ -1,4 +1,4 @@
-import type { Tables } from '~shared/types/supabase'
+import type { Tables } from '@/types/supabase'
 
 interface PostSidebarProps {
 	categories: string[]

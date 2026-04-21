@@ -1,5 +1,5 @@
 import { createClient } from './supabase-client'
-import type { Cause, SuperRegion, Region, Rate, Baseline } from '~shared/types/mortality'
+import type { Cause, SuperRegion, Region, Rate, Baseline } from '@/types/mortality'
 
 // Supabase's typed client narrows table names by schema, and the generated
 // Database type doesn't include the `mortality` schema — so `.schema('mortality')`
