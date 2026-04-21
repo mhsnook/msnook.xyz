@@ -1,37 +1,41 @@
 # msnook.xyz
 
-My personal website. Now on [TanStack Start](https://tanstack.com/start)
-(previously Next.js — the migration history still lives in this repo).
+My personal website — a TanStack Start app backed by Supabase. Previously
+Next.js; the full migration lives in this repo's history.
 
 ## Layout
 
-    start-app/           # the site — Vite + tanstackStart() + Tailwind v4 + oxc
+    src/                 # the app — routes, components, lib, styles
+    public/              # static assets served as-is
     supabase/            # migrations, seeds, local config (supabase CLI)
     .claude/             # hooks (format-on-save) + rules
     readme/              # plan files
-    package.json         # thin workspace root; delegates to start-app
+    vite.config.ts
+    tsconfig.json
+    package.json
 
 ## Getting started
 
 ```sh
 pnpm install
-cp start-app/.env.example start-app/.env   # fill in Supabase + optional Todoist
-pnpm dev                                   # runs start-app on :5173
+cp .env.example .env   # fill in Supabase + optional Todoist
+pnpm dev               # vite dev on :5173
 ```
 
-Other useful root scripts (each delegates to start-app or the supabase CLI):
+## Scripts
 
-| script              | what                                                     |
-| ------------------- | -------------------------------------------------------- |
-| `pnpm build`        | `vite build` in start-app                                |
-| `pnpm start`        | serve the built output                                   |
-| `pnpm typecheck`    | `tsc --noEmit` in start-app                              |
-| `pnpm lint`         | `oxlint` in start-app                                    |
-| `pnpm format`       | `oxfmt` on start-app + `prettier` on `supabase/**/*.sql` |
-| `pnpm format:check` | CI-friendly check of the above                           |
-| `pnpm migrate`      | `supabase db diff -f new_migration`                      |
-| `pnpm types`        | regenerate `start-app/src/types/supabase.ts` from local  |
-| `pnpm seeds:apply`  | `supabase db reset` (reapplies migrations + seeds)       |
+| script              | what                                                   |
+| ------------------- | ------------------------------------------------------ |
+| `pnpm dev`          | `vite dev`                                             |
+| `pnpm build`        | `vite build`                                           |
+| `pnpm start`        | serve the built output (`.output/server/index.mjs`)    |
+| `pnpm typecheck`    | `tsc --noEmit`                                         |
+| `pnpm lint`         | `oxlint`                                               |
+| `pnpm format`       | `oxfmt` + `prettier --write 'supabase/**/*.sql'`       |
+| `pnpm format:check` | CI-friendly check of the above                         |
+| `pnpm migrate`      | `supabase db diff -f new_migration`                    |
+| `pnpm types`        | regenerate `src/types/supabase.ts` from local Supabase |
+| `pnpm seeds:apply`  | `supabase db reset` (reapplies migrations + seeds)     |
 
 ## Tooling
 
@@ -39,7 +43,7 @@ Other useful root scripts (each delegates to start-app or the supabase CLI):
   with `prettier-plugin-sql` handles SQL files only. Claude Code formats on
   save via `.claude/hooks/format-on-save.sh`.
 - **Linter:** oxlint. No ESLint.
-- **Types:** TypeScript strict mode; `tsc --noEmit` in start-app.
+- **Types:** TypeScript strict mode; `tsc --noEmit`.
 
 ## Design patterns (visual)
 
@@ -53,8 +57,8 @@ are two items in a row.
 
 ## Code patterns
 
-- Route files live under `start-app/src/routes/`. TanStack Router's file
-  conventions: `(group)/` folders are pathless, `$param` is dynamic.
+- Route files live under `src/routes/`. TanStack Router's file conventions:
+  `(group)/` folders are pathless, `$param` is dynamic.
 - Auth-gated routes use `beforeLoad: ({ location }) => requireAuth(location.href)`
   from `@/lib/auth-guard`. Loaders call `createServerFn`s that use
   `createServerSupabase` so RLS sees the session cookie.
@@ -67,4 +71,4 @@ are two items in a row.
 ## Deploy
 
 Target is Cloudflare Workers. The `@cloudflare/vite-plugin` hookup and
-`wrangler.jsonc` are TODO (see the comment in `start-app/vite.config.ts`).
+`wrangler.jsonc` are TODO (see the comment in `vite.config.ts`).

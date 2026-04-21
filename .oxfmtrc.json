@@ -4,5 +4,14 @@
 	"semi": false,
 	"singleQuote": true,
 	"arrowParens": "always",
-	"ignorePatterns": ["node_modules", ".nitro", ".output", "dist", "src/routeTree.gen.ts"]
+	"ignorePatterns": [
+		"node_modules",
+		".nitro",
+		".output",
+		"dist",
+		".claude",
+		"readme",
+		"supabase",
+		"src/routeTree.gen.ts"
+	]
 }
