@@ -41,6 +41,24 @@ export const fetchDraftPostsFn = createServerFn({ method: 'GET' }).handler(async
 	return data ?? []
 })
 
+/**
+ * Authed: same shape as fetchOnePost but runs server-side with the
+ * session cookie, so drafts (RLS-restricted) are fetchable in the
+ * editor. Pair with beforeLoad + requireAuth at the route layer.
+ */
+export const fetchOnePostFn = createServerFn({ method: 'GET' })
+	.inputValidator((slug: string) => slug)
+	.handler(async ({ data: slug }) => {
+		const supabase = createServerSupabase()
+		const { data } = await supabase
+			.from('posts')
+			.select('*')
+			.eq('slug', slug)
+			.maybeSingle()
+			.throwOnError()
+		return data
+	})
+
 export async function createOnePost(postData: TablesInsert<'posts'>) {
 	const { data } = await createClient().from('posts').insert([postData]).select().throwOnError()
 	return data

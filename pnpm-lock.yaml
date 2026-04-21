@@ -126,6 +126,9 @@ importers:
 
   start-app:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.0
+        version: 5.2.0(react-hook-form@7.61.1(react@18.3.1))
       '@supabase/ssr':
         specifier: ^0.8.0
         version: 0.8.0(@supabase/supabase-js@2.97.0)
@@ -174,6 +177,9 @@ importers:
       timeago.js:
         specifier: ^4.0.2
         version: 4.0.2
+      zod:
+        specifier: ^4.0.10
+        version: 4.0.10
     devDependencies:
       '@tailwindcss/typography':
         specifier: ^0.5.16
