@@ -1,0 +1,22 @@
+// Cloudflare Worker config for msnook.xyz.
+//
+// Deploy:      pnpm deploy
+// Local worker: pnpm preview   (Miniflare via vite + cloudflare plugin)
+//
+// Secrets are NOT checked in. To set TODOIST_API_TOKEN on the deployed worker:
+//   pnpm wrangler secret put TODOIST_API_TOKEN
+// For local worker dev, put secrets in .dev.vars (gitignored).
+//
+// VITE_SUPABASE_API_URL and VITE_SUPABASE_PUBLISHABLE_KEY are inlined by Vite
+// at BUILD time — they come from .env (local) or the deploy environment, not
+// from wrangler vars/secrets.
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "msnook-xyz",
+	"main": "@tanstack/react-start/server-entry",
+	"compatibility_date": "2026-04-21",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true,
+	},
+}
