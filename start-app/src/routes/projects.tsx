@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import Banner from '@/components/banner'
 import IffLoggedIn from '@/components/iff-logged-in'
 import { fetchProjects } from '@/lib/projects'
@@ -96,14 +96,14 @@ function ProjectsPage() {
 												</a>
 											)}
 											<IffLoggedIn>
-												{/* /projects/$id/edit still on Next */}
-												<a
-													href={`/projects/${project.id}/edit`}
+												<Link
+													to="/projects/$id/edit"
+													params={{ id: project.id }}
 													className="text-gray-400 hover:text-gray-600 transition-colors"
 													aria-label={`Edit ${project.title}`}
 												>
 													<EditIcon />
-												</a>
+												</Link>
 											</IffLoggedIn>
 										</div>
 									</div>

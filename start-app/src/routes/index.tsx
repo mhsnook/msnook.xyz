@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import Banner from '@/components/banner'
 import Menu from '@/components/menu'
 import Footer from '@/components/footer'
@@ -117,13 +117,14 @@ function HomePage() {
 														</a>
 													)}
 													<IffLoggedIn>
-														<a
-															href={`/projects/${project.id}/edit`}
+														<Link
+															to="/projects/$id/edit"
+															params={{ id: project.id }}
 															className="text-gray-400 hover:text-gray-600 transition-colors"
 															aria-label={`Edit ${project.title}`}
 														>
 															<EditIcon />
-														</a>
+														</Link>
 													</IffLoggedIn>
 												</div>
 											</div>
