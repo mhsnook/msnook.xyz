@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import type { Tables } from '~shared/types/supabase'
 import Banner from '@/components/banner'
@@ -36,13 +36,9 @@ function ManageProjectsPage() {
 			<main className="container py-5">
 				<div className="flex flex-row justify-between items-center mb-6">
 					<h2 className="h2">Projects</h2>
-					{/* /projects/new/edit still lives on the Next deploy */}
-					<a
-						href="/projects/new/edit"
-						className={buttonStyles({ variant: 'solid', size: 'small' })}
-					>
+					<Link to="/projects/new" className={buttonStyles({ variant: 'solid', size: 'small' })}>
 						New project
-					</a>
+					</Link>
 				</div>
 				<ErrorList summary="Can't toggle project" error={togglePublished.error?.message} />
 				{!projects.length ? (
@@ -88,16 +84,16 @@ function ManageProjectsPage() {
 									>
 										{project.published ? 'Unpublish' : 'Publish'}
 									</button>
-									{/* /projects/$id/edit still on Next */}
-									<a
-										href={`/projects/${project.id}/edit`}
+									<Link
+										to="/projects/$id/edit"
+										params={{ id: project.id }}
 										className={buttonStyles({
 											variant: 'outlines',
 											size: 'small',
 										})}
 									>
 										Edit
-									</a>
+									</Link>
 								</div>
 							</div>
 						))}
