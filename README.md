@@ -26,9 +26,10 @@ pnpm dev               # vite dev on :5173
 
 | script              | what                                                   |
 | ------------------- | ------------------------------------------------------ |
-| `pnpm dev`          | `vite dev`                                             |
+| `pnpm dev`          | `vite dev` (Miniflare via `@cloudflare/vite-plugin`)   |
 | `pnpm build`        | `vite build`                                           |
-| `pnpm start`        | serve the built output (`.output/server/index.mjs`)    |
+| `pnpm preview`      | `vite preview` — runs the built worker locally         |
+| `pnpm deploy`       | `vite build && wrangler deploy -c dist/server/...`     |
 | `pnpm typecheck`    | `tsc --noEmit`                                         |
 | `pnpm lint`         | `oxlint`                                               |
 | `pnpm format`       | `oxfmt` + `prettier --write 'supabase/**/*.sql'`       |
@@ -70,5 +71,18 @@ are two items in a row.
 
 ## Deploy
 
-Target is Cloudflare Workers. The `@cloudflare/vite-plugin` hookup and
-`wrangler.jsonc` are TODO (see the comment in `vite.config.ts`).
+Cloudflare Workers. `wrangler.jsonc` sets `main` to
+`@tanstack/react-start/server-entry` with `nodejs_compat`; the
+`cloudflare()` plugin is wired into `vite.config.ts` so `pnpm dev` runs
+the app under Miniflare (closer to prod than Node dev was).
+
+`VITE_SUPABASE_API_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` are inlined by
+Vite at build time — they come from `.env` locally and from the deploy
+environment in CI. `TODOIST_API_TOKEN` is a runtime server secret:
+
+```sh
+pnpm wrangler secret put TODOIST_API_TOKEN     # for the deployed worker
+echo 'TODOIST_API_TOKEN=...' >> .dev.vars      # for local worker dev
+```
+
+Then `pnpm deploy` builds and pushes the worker.

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { cloudflare } from '@cloudflare/vite-plugin'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -12,9 +13,10 @@ export default defineConfig({
 	ssr: { noExternal: ['shiki'] },
 	plugins: [
 		tailwindcss(),
-		// For Cloudflare deploys, add @cloudflare/vite-plugin's cloudflare()
-		// plugin BEFORE tanstackStart() and create a wrangler.jsonc. For now
-		// this config runs the Node dev server for local work.
+		// cloudflare() MUST come before tanstackStart(). It attaches Miniflare
+		// to vite dev so local runs behave like Workers, and at build time it
+		// emits a Worker-compatible server entry from the path in wrangler.jsonc.
+		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		tanstackStart(),
 		viteReact(),
 	],

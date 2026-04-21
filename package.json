@@ -7,7 +7,8 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"start": "node .output/server/index.mjs",
+		"preview": "vite preview",
+		"deploy": "vite build && wrangler deploy -c dist/server/wrangler.json",
 		"typecheck": "tsc --noEmit",
 		"lint": "oxlint",
 		"format": "oxfmt && prettier --write 'supabase/**/*.sql'",
@@ -42,6 +43,7 @@
 		"zod": "^4.0.10"
 	},
 	"devDependencies": {
+		"@cloudflare/vite-plugin": "^1.33.0",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.2.2",
 		"@tanstack/intent": "^0.0.29",
@@ -57,7 +59,8 @@
 		"supabase": "^2.34.3",
 		"tailwindcss": "4.1.8",
 		"typescript": "^5.8.3",
-		"vite": "^8.0.9"
+		"vite": "^8.0.9",
+		"wrangler": "^4.84.0"
 	},
 	"packageManager": "pnpm@10.14.0"
 }
