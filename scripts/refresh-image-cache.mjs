@@ -62,27 +62,35 @@ async function refreshOne(path) {
 
 console.log(DRY_RUN ? '(dry run — no changes will be made)\n' : `Target: ${CACHE_CONTROL}\n`)
 
-let ok = 0
+const target = `max-age=${CACHE_CONTROL}`
+let changed = 0
+let skipped = 0
 let failed = 0
 for await (const { path, entry } of walk()) {
 	const current = entry.metadata?.cacheControl ?? '(none)'
+	const upToDate = current === target
 	if (DRY_RUN) {
-		const willChange = current !== `max-age=${CACHE_CONTROL.split(',')[0].trim()}`
-		console.log(`[${willChange ? 'chg' : '   '}] ${path}  ${current} -> max-age=${CACHE_CONTROL}`)
-		if (willChange) ok++
+		console.log(`[${upToDate ? 'skip' : 'chg '}] ${path}  ${current} -> ${target}`)
+		if (!upToDate) changed++
+		else skipped++
+		continue
+	}
+	if (upToDate) {
+		skipped++
+		console.log(`[skip] ${path}  already ${target}`)
 		continue
 	}
 	try {
 		await refreshOne(path)
-		ok++
-		console.log(`[ok]  ${path}  was: ${current}`)
+		changed++
+		console.log(`[ok]   ${path}  was: ${current}`)
 	} catch (err) {
 		failed++
-		console.error(`[err] ${path}: ${err instanceof Error ? err.message : err}`)
+		console.error(`[err]  ${path}: ${err instanceof Error ? err.message : err}`)
 	}
 }
 console.log(
 	DRY_RUN
-		? `\nDry run: ${ok} would change.`
-		: `\nDone: ${ok} updated, ${failed} failed.`,
+		? `\nDry run: ${changed} would change, ${skipped} already up to date.`
+		: `\nDone: ${changed} updated, ${skipped} skipped, ${failed} failed.`,
 )
