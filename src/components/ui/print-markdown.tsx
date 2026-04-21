@@ -1,14 +1,22 @@
-import type { ImgHTMLAttributes } from 'react'
+import type { ComponentType, ImgHTMLAttributes } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import CodeBlock from './code-block'
 
+export type CodeComponent = ComponentType<{ language: string; children: string }>
+
 function LazyImage(props: ImgHTMLAttributes<HTMLImageElement>) {
 	return <img {...props} loading="lazy" decoding="async" alt={props.alt ?? ''} />
 }
 
-export default function PrintMarkdown({ markdown }: { markdown: string }) {
+export default function PrintMarkdown({
+	markdown,
+	codeComponent: Code = CodeBlock,
+}: {
+	markdown: string
+	codeComponent?: CodeComponent
+}) {
 	return (
 		<ReactMarkdown
 			remarkPlugins={[remarkGfm]}
@@ -21,7 +29,7 @@ export default function PrintMarkdown({ markdown }: { markdown: string }) {
 					const codeString = String(children).replace(/\n$/, '')
 
 					return match ? (
-						<CodeBlock language={match[1]}>{codeString}</CodeBlock>
+						<Code language={match[1]}>{codeString}</Code>
 					) : (
 						<code className={className} {...props}>
 							{children}

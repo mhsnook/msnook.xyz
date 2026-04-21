@@ -18,6 +18,7 @@ import {
 	InputCategory,
 } from '@/components/form-inputs'
 import { PostArticle } from '@/components/post'
+import CodeBlockLazy from '@/components/ui/code-block-lazy'
 import { createClient } from '@/lib/supabase-client'
 import { fetchOnePostFn } from '@/lib/posts'
 import { requireAuth } from '@/lib/auth-guard'
@@ -155,7 +156,11 @@ function EditorPanes({ initialData }: { initialData: Tables<'posts'> }) {
 			</div>
 			<div className="col-span-2 lg:col-span-3 flex flex-col py-2 min-h-0 overflow-hidden">
 				<div className="border rounded-lg p-6 pb-16 mx-1 lg:mx-6 overflow-y-auto shadow-lg flex-1 min-h-0">
-					<PostArticle post={thePost} isPending={updatePostMutation.isPending} />
+					<PostArticle
+						post={thePost}
+						isPending={updatePostMutation.isPending}
+						codeComponent={CodeBlockLazy}
+					/>
 				</div>
 			</div>
 		</>
