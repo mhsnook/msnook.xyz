@@ -2,17 +2,25 @@ import { format } from 'timeago.js'
 import type { Tables } from '@/types/supabase'
 
 function PostRow({
-	slug,
-	title,
-	image,
-	excerpt,
-	published,
-	published_at,
-	updated_at,
-	category,
-}: Tables<'posts'>) {
+	post: {
+		slug,
+		title,
+		image,
+		excerpt,
+		published,
+		published_at,
+		updated_at,
+		category,
+	},
+	eager,
+}: {
+	post: Tables<'posts'>
+	eager: boolean
+}) {
 	// Post detail pages still live in the Next.js deployment during migration.
 	const href = `/posts/${slug}${published ? '' : '/edit'}`
+	const loading = eager ? 'eager' : 'lazy'
+	const fetchPriority = eager ? 'high' : 'auto'
 	return (
 		<a
 			href={href}
@@ -24,10 +32,20 @@ function PostRow({
 					<img
 						src={image}
 						alt=""
+						loading={loading}
+						decoding="async"
+						fetchPriority={fetchPriority}
 						className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.25]"
 						style={{ filter: 'blur(18px)', transform: 'scale(1.15)' }}
 					/>
-					<img src={image} alt="" className="absolute inset-0 w-full h-full object-contain" />
+					<img
+						src={image}
+						alt=""
+						loading={loading}
+						decoding="async"
+						fetchPriority={fetchPriority}
+						className="absolute inset-0 w-full h-full object-contain"
+					/>
 				</div>
 			)}
 			<p className="text-3xl sm:text-4xl font-display font-bold text-cyan-content group-hover:underline leading-tight mb-3">
@@ -64,8 +82,8 @@ export default function PostList({ posts, isLoading }: PostListProps) {
 
 	return (
 		<div role="list">
-			{posts.map((post) => (
-				<PostRow key={`${post.id}-${post.slug}`} {...post} />
+			{posts.map((post, index) => (
+				<PostRow key={`${post.id}-${post.slug}`} post={post} eager={index === 0} />
 			))}
 		</div>
 	)
