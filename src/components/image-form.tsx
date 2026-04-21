@@ -12,21 +12,25 @@ interface ImageInputProps {
 
 export default function ImageForm({ confirmedURL, onUpload, setPath = () => {} }: ImageInputProps) {
 	const sendImage = useMutation({
-		mutationFn: async (event: ChangeEvent<HTMLInputElement>) => {
-			event.preventDefault()
-			if (!event.target.files || event.target.files.length === 0)
-				throw new Error("There's no file to submit")
-			const file: File = event.target.files[0]
+		mutationFn: async (file: File) => {
 			const filename = filenameFromFile(file)
 			const { data, error } = await createClient()
 				.storage.from('images')
-				.upload(filename, file, { cacheControl: '3600', upsert: true })
+				.upload(filename, file, { cacheControl: '2592000', upsert: true })
 			if (error) throw error
-			onUpload(imageUrlify(data.path))
-			setPath(data.path)
 			return data
 		},
+		onSuccess: (data) => {
+			onUpload(imageUrlify(data.path))
+			setPath(data.path)
+		},
 	})
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		sendImage.mutate(file)
+	}
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -45,7 +49,7 @@ export default function ImageForm({ confirmedURL, onUpload, setPath = () => {} }
 					id="imageUploadInput"
 					name="files[]"
 					accept="image/*"
-					onChange={(e) => sendImage.mutate(e)}
+					onChange={handleChange}
 					disabled={sendImage.isPending}
 				/>
 				<div

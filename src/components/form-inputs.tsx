@@ -158,7 +158,7 @@ export function InputContent({
 			const filename = filenameFromFile(file)
 			const { data, error } = await createClient()
 				.storage.from('images')
-				.upload(filename, file, { cacheControl: '3600', upsert: true })
+				.upload(filename, file, { cacheControl: '2592000', upsert: true })
 			if (error) throw error
 			return { path: data.path, name: file.name }
 		},
