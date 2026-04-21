@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import SessionProvider from '@/components/session-provider'
+import NotFoundPage from '@/components/not-found-page'
+import ErrorPage from '@/components/error-page'
 import appCss from '@/styles/app.css?url'
 
 export const Route = createRootRoute({
@@ -19,6 +21,11 @@ export const Route = createRootRoute({
 		links: [{ rel: 'stylesheet', href: appCss }],
 	}),
 	component: RootComponent,
+	// Any thrown notFound() that isn't caught by a closer route bubbles up
+	// to here. Matches Next's app/not-found.tsx.
+	notFoundComponent: NotFoundPage,
+	// Uncaught render / loader errors. Matches Next's app/error.tsx.
+	errorComponent: ErrorPage,
 })
 
 function RootComponent() {
