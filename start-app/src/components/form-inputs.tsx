@@ -23,6 +23,51 @@ type GetValues = UseFormGetValues<any>
 // both satisfy.
 type FormError = { message?: string } & Record<string, unknown>
 
+export function InputExcerpt({ register }: { register: Register }) {
+	return (
+		<div>
+			<Label htmlFor="excerpt">Post Excerpt</Label>
+			<textarea id="excerpt" rows={3} {...register('excerpt')} />
+			<span className="invisible">&nbsp;</span>
+		</div>
+	)
+}
+
+export function InputDatestamp({ register }: { register: Register }) {
+	return (
+		<div>
+			<Label htmlFor="postDatestamp">Post datestamp</Label>
+			<input id="postDatestamp" type="date" {...register('published_at')} />
+		</div>
+	)
+}
+
+// The Next version had a radio-set of CATEGORIES, but that const was
+// imported from post-sidebar where it never existed. Keeping it a plain
+// text input for now — category is free-form in the DB anyway.
+export function InputCategory({ register }: { register: Register }) {
+	return (
+		<div>
+			<Label htmlFor="postCategory">Category</Label>
+			<input
+				id="postCategory"
+				type="text"
+				{...register('category')}
+				placeholder="e.g. tech, personal, projects"
+			/>
+		</div>
+	)
+}
+
+export function InputPublish({ register }: { register: Register }) {
+	return (
+		<div className="flex items-baseline gap-2 mb-4">
+			<input id="postPublish" type="checkbox" {...register('published')} />
+			<Label htmlFor="postPublish">Publish post</Label>
+		</div>
+	)
+}
+
 export function InputTitle({ register, error }: { register: Register; error?: FormError }) {
 	return (
 		<div>
