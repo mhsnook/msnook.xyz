@@ -1,8 +1,7 @@
 import { useRef } from 'react'
 import type { UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
-import { createClient } from '@/lib/supabase-client'
-import { imageUrlify, filenameFromFile } from '@/lib/utils'
+import { useUploadImage } from '@/lib/use-upload-image'
+import { imageUrlify } from '@/lib/utils'
 import ImageForm from './image-form'
 import Label from '@/components/ui/label'
 import ErrorList from '@/components/ui/error-list'
@@ -153,16 +152,7 @@ export function InputContent({
 	const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 	const { ref: rhfRef, ...registerRest } = register('content')
 
-	const uploadImage = useMutation({
-		mutationFn: async (file: File) => {
-			const filename = filenameFromFile(file)
-			const { data, error } = await createClient()
-				.storage.from('images')
-				.upload(filename, file, { cacheControl: '2592000', upsert: true })
-			if (error) throw error
-			return { path: data.path, name: file.name }
-		},
-	})
+	const uploadImage = useUploadImage()
 
 	const insertImageAtCursor = (url: string, altText: string) => {
 		const textarea = textareaRef.current
@@ -195,13 +185,12 @@ export function InputContent({
 	const handleFiles = async (files: FileList) => {
 		for (const file of Array.from(files)) {
 			try {
-				const result = await uploadImage.mutateAsync(file)
-				const url = imageUrlify(result.path)
-				const alt = result.name
+				const { path } = await uploadImage.mutateAsync(file)
+				const alt = file.name
 					.replace(/\.[^.]+$/, '')
 					.replaceAll('-', ' ')
 					.replaceAll('_', ' ')
-				insertImageAtCursor(url, alt)
+				insertImageAtCursor(imageUrlify(path), alt)
 			} catch {
 				// error is tracked by the mutation
 			}

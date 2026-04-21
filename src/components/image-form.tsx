@@ -1,7 +1,6 @@
 import type { ChangeEvent } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { createClient } from '@/lib/supabase-client'
-import { imageUrlify, filenameFromFile } from '@/lib/utils'
+import { useUploadImage } from '@/lib/use-upload-image'
+import { imageUrlify } from '@/lib/utils'
 import ErrorList from '@/components/ui/error-list'
 
 interface ImageInputProps {
@@ -11,25 +10,17 @@ interface ImageInputProps {
 }
 
 export default function ImageForm({ confirmedURL, onUpload, setPath = () => {} }: ImageInputProps) {
-	const sendImage = useMutation({
-		mutationFn: async (file: File) => {
-			const filename = filenameFromFile(file)
-			const { data, error } = await createClient()
-				.storage.from('images')
-				.upload(filename, file, { cacheControl: '2592000', upsert: true })
-			if (error) throw error
-			return data
-		},
-		onSuccess: (data) => {
-			onUpload(imageUrlify(data.path))
-			setPath(data.path)
-		},
-	})
+	const sendImage = useUploadImage()
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (!file) return
-		sendImage.mutate(file)
+		sendImage.mutate(file, {
+			onSuccess: (data) => {
+				onUpload(imageUrlify(data.path))
+				setPath(data.path)
+			},
+		})
 	}
 
 	return (
