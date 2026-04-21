@@ -1,7 +1,6 @@
 import type { ChangeEvent } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { createClient } from '@/lib/supabase-client'
-import { imageUrlify, filenameFromFile } from '@/lib/utils'
+import { useUploadImage } from '@/lib/use-upload-image'
+import { imageUrlify } from '@/lib/utils'
 import ErrorList from '@/components/ui/error-list'
 
 interface ImageInputProps {
@@ -11,22 +10,18 @@ interface ImageInputProps {
 }
 
 export default function ImageForm({ confirmedURL, onUpload, setPath = () => {} }: ImageInputProps) {
-	const sendImage = useMutation({
-		mutationFn: async (event: ChangeEvent<HTMLInputElement>) => {
-			event.preventDefault()
-			if (!event.target.files || event.target.files.length === 0)
-				throw new Error("There's no file to submit")
-			const file: File = event.target.files[0]
-			const filename = filenameFromFile(file)
-			const { data, error } = await createClient()
-				.storage.from('images')
-				.upload(filename, file, { cacheControl: '3600', upsert: true })
-			if (error) throw error
-			onUpload(imageUrlify(data.path))
-			setPath(data.path)
-			return data
-		},
-	})
+	const sendImage = useUploadImage()
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		sendImage.mutate(file, {
+			onSuccess: (data) => {
+				onUpload(imageUrlify(data.path))
+				setPath(data.path)
+			},
+		})
+	}
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -45,7 +40,7 @@ export default function ImageForm({ confirmedURL, onUpload, setPath = () => {} }
 					id="imageUploadInput"
 					name="files[]"
 					accept="image/*"
-					onChange={(e) => sendImage.mutate(e)}
+					onChange={handleChange}
 					disabled={sendImage.isPending}
 				/>
 				<div
