@@ -180,7 +180,12 @@ export default function Banner({ title, description, small, medium }: BannerProp
 								height: 'auto',
 							}}
 						/>
-						<img src="/images/rocket.svg" alt="" className="absolute left-0 top-0 w-full h-full" />
+						<img
+							src="/images/rocket.svg"
+							alt=""
+							className="absolute left-0 top-0 w-full h-full"
+							fetchPriority="high"
+						/>
 					</div>
 				)}
 				<div>
