@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import type { Tables } from '@/types/supabase'
-import PrintMarkdown from '@/components/ui/print-markdown'
+import PrintMarkdown, { type CodeComponent } from '@/components/ui/print-markdown'
 
 function PostLoading() {
 	return (
@@ -22,9 +22,10 @@ function PostLoading() {
 interface PostArticleProps {
 	post: Partial<Tables<'posts'>>
 	isPending?: boolean
+	codeComponent?: CodeComponent
 }
 
-export function PostArticle({ post, isPending = false }: PostArticleProps) {
+export function PostArticle({ post, isPending = false, codeComponent }: PostArticleProps) {
 	return (
 		<article className="md:col-span-3 lg:col-span-4 flex flex-col gap-4 md:max-w-prose md:mx-auto">
 			{isPending ? (
@@ -55,7 +56,7 @@ export function PostArticle({ post, isPending = false }: PostArticleProps) {
 						</div>
 					)}
 					<div className="prose lg:prose-lg prose-cyan">
-						<PrintMarkdown markdown={post.content ?? ''} />
+						<PrintMarkdown markdown={post.content ?? ''} codeComponent={codeComponent} />
 					</div>
 				</>
 			)}
