@@ -8,7 +8,7 @@ import { buttonStyles } from '@/components/ui/button-styles'
 import { cn } from '@/lib/utils'
 import { fetchOnePost } from '@/lib/posts'
 
-export const Route = createFileRoute('/posts/$slug')({
+export const Route = createFileRoute('/(public)/posts/$slug')({
 	loader: async ({ params }) => {
 		const post = await fetchOnePost(params.slug)
 		if (!post) throw notFound()
