@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
-import type { TablesInsert } from '~shared/types/supabase'
+import type { TablesInsert } from '@/types/supabase'
 import Button from '@/components/ui/button'
 import { buttonStyles } from '@/components/ui/button-styles'
 import ErrorList from '@/components/ui/error-list'

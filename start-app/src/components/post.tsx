@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import type { Tables } from '~shared/types/supabase'
+import type { Tables } from '@/types/supabase'
 import PrintMarkdown from '@/components/ui/print-markdown'
 
 function PostLoading() {

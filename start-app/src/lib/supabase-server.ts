@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { getCookies, setCookie } from '@tanstack/react-start/server'
-import type { Database } from '~shared/types/supabase'
+import type { Database } from '@/types/supabase'
 
 /**
  * Server-side Supabase client with cookie-backed sessions.

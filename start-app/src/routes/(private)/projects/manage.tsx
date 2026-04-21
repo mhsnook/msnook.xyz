@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import type { Tables } from '~shared/types/supabase'
+import type { Tables } from '@/types/supabase'
 import Banner from '@/components/banner'
 import { buttonStyles } from '@/components/ui/button-styles'
 import ErrorList from '@/components/ui/error-list'

@@ -1,6 +1,5 @@
-.next
-.claude
+# Prettier at the root is only for SQL files (supabase migrations + seeds).
+# Everything else goes through oxfmt (see .claude/hooks/format-on-save.sh).
 node_modules
 pnpm-lock.yaml
-# start-app/ uses oxfmt (oxc toolchain), not prettier
 start-app

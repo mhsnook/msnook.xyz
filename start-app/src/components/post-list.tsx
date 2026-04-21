@@ -1,5 +1,5 @@
 import { format } from 'timeago.js'
-import type { Tables } from '~shared/types/supabase'
+import type { Tables } from '@/types/supabase'
 
 function PostRow({
 	slug,
