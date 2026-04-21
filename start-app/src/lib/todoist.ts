@@ -1,3 +1,69 @@
+/**
+ * Todoist integration exposed as TanStack Start server fns.
+ *
+ * All fns run on the server (the API token never reaches the browser).
+ * Call them from anywhere — a route loader, a component with
+ * useMutation, another server fn — with full type inference.
+ *
+ * =========================================================
+ * Usage pattern 1: fetching data in a route loader
+ * =========================================================
+ *
+ *   import { createFileRoute } from '@tanstack/react-router'
+ *   import {
+ *     ensureTodoistSetupFn,
+ *     listTodoistTasksFn,
+ *   } from '@/lib/todoist'
+ *   import { requireAuth } from '@/lib/auth-guard'
+ *
+ *   export const Route = createFileRoute('/(private)/whatever')({
+ *     beforeLoad: ({ location }) => requireAuth(location.href),
+ *     loader: async () => {
+ *       const { projectId } = await ensureTodoistSetupFn()
+ *       const tasks = await listTodoistTasksFn({ data: { projectId } })
+ *       return { projectId, tasks }
+ *     },
+ *     component: Whatever,
+ *   })
+ *
+ * =========================================================
+ * Usage pattern 2: mutating from a component with react-query
+ * =========================================================
+ *
+ *   import { useMutation } from '@tanstack/react-query'
+ *   import { useRouter } from '@tanstack/react-router'
+ *   import { addTodoistTaskFn, closeTodoistTaskFn } from '@/lib/todoist'
+ *
+ *   function AddTaskButton({ projectId }: { projectId: string }) {
+ *     const router = useRouter()
+ *     const addTask = useMutation({
+ *       mutationFn: (content: string) =>
+ *         addTodoistTaskFn({ data: { content, projectId } }),
+ *       onSuccess: () => router.invalidate(),
+ *     })
+ *     return (
+ *       <button
+ *         onClick={() => addTask.mutate('Buy milk')}
+ *         disabled={addTask.isPending}
+ *       >
+ *         Add task
+ *       </button>
+ *     )
+ *   }
+ *
+ *   // close / delete follow the same shape with a string id:
+ *   //   closeTodoistTaskFn({ data: taskId })
+ *   //   deleteTodoistTaskFn({ data: taskId })
+ *
+ * =========================================================
+ * Auth
+ * =========================================================
+ *
+ * Every fn awaits getServerUser() and throws 'Unauthorized' for
+ * callers without a site session. Protected-route beforeLoads are NOT
+ * enough on their own — server fns are reachable by anyone with the
+ * RPC URL, so the gate lives here too.
+ */
 import { createServerFn } from '@tanstack/react-start'
 import { TodoistApi, type Task } from '@doist/todoist-api-typescript'
 import { getServerUser } from './auth-guard'
