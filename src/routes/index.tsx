@@ -1,18 +1,14 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import Banner from '@/components/banner'
 import Menu from '@/components/menu'
 import Footer from '@/components/footer'
 import IffLoggedIn from '@/components/iff-logged-in'
-import PostsSection from '@/components/posts-section'
+import PostList from '@/components/post-list'
+import PostSidebar, { deriveCategories, latestPerCategory } from '@/components/post-sidebar'
 import { fetchPostList } from '@/lib/posts'
 import { fetchProjects } from '@/lib/projects'
 
-type IndexSearch = { category?: string }
-
 export const Route = createFileRoute('/')({
-	validateSearch: (search: Record<string, unknown>): IndexSearch => ({
-		category: typeof search.category === 'string' ? search.category : undefined,
-	}),
 	loader: async () => {
 		const [posts, projects] = await Promise.all([fetchPostList(), fetchProjects()])
 		return { posts: posts ?? [], projects: projects ?? [] }
@@ -59,9 +55,8 @@ function GithubIcon({ className }: { className?: string }) {
 
 function HomePage() {
 	const { posts, projects } = Route.useLoaderData()
-	const { category } = Route.useSearch()
-	const navigate = useNavigate({ from: Route.fullPath })
-	const selectedCategory = category ?? null
+	const featuredPosts = latestPerCategory(posts)
+	const categories = deriveCategories(posts)
 
 	return (
 		<>
@@ -187,17 +182,22 @@ function HomePage() {
 								</a>
 							</IffLoggedIn>
 						</div>
-						<PostsSection
-							posts={posts}
-							selectedCategory={selectedCategory}
-							onSelectCategory={(cat) =>
-								navigate({
-									search: cat ? { category: cat } : {},
-									replace: true,
-									resetScroll: false,
-								})
-							}
-						/>
+						<div className="flex gap-10">
+							<div className="flex-1 min-w-0">
+								<PostList posts={featuredPosts} />
+								<div className="mt-4">
+									<Link
+										to="/posts"
+										className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+									>
+										See all posts &rarr;
+									</Link>
+								</div>
+							</div>
+							<aside className="hidden sm:block w-36 shrink-0 pt-6 sticky top-6 self-start">
+								<PostSidebar categories={categories} linkTo="/posts" />
+							</aside>
+						</div>
 					</section>
 				</div>
 			</main>
