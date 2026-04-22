@@ -5,14 +5,9 @@ import PostSidebar, { filterPostsByCategory, deriveCategories } from './post-sid
 interface PostsSectionProps {
 	posts: Array<Tables<'posts'>>
 	selectedCategory: string | null
-	onSelectCategory: (category: string | null) => void
 }
 
-export default function PostsSection({
-	posts,
-	selectedCategory,
-	onSelectCategory,
-}: PostsSectionProps) {
+export default function PostsSection({ posts, selectedCategory }: PostsSectionProps) {
 	const categories = deriveCategories(posts)
 	const filtered = filterPostsByCategory(posts, selectedCategory)
 
@@ -24,8 +19,9 @@ export default function PostsSection({
 			<aside className="hidden sm:block w-36 shrink-0 pt-6 sticky top-6 self-start">
 				<PostSidebar
 					categories={categories}
+					linkTo="/posts"
 					selectedCategory={selectedCategory}
-					onSelect={onSelectCategory}
+					replace
 				/>
 			</aside>
 		</div>

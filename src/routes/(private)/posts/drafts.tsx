@@ -1,5 +1,4 @@
-import { useCallback } from 'react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import Banner from '@/components/banner'
 import PostList from '@/components/post-list'
 import PostSidebar, { filterPostsByCategory, deriveCategories } from '@/components/post-sidebar'
@@ -23,18 +22,6 @@ function DraftsPage() {
 	const posts = Route.useLoaderData()
 	const { category } = Route.useSearch()
 	const selectedCategory = category ?? null
-	const navigate = useNavigate({ from: Route.fullPath })
-
-	const handleSelect = useCallback(
-		(cat: string | null) => {
-			navigate({
-				search: cat ? { category: cat } : {},
-				replace: true,
-				resetScroll: false,
-			})
-		},
-		[navigate],
-	)
 
 	const categories = deriveCategories(posts)
 	const filtered = filterPostsByCategory(posts, selectedCategory)
@@ -61,8 +48,9 @@ function DraftsPage() {
 					<aside className="hidden sm:block w-36 shrink-0 pt-6 sticky top-6 self-start">
 						<PostSidebar
 							categories={categories}
+							linkTo="/posts/drafts"
 							selectedCategory={selectedCategory}
-							onSelect={handleSelect}
+							replace
 						/>
 					</aside>
 				</div>
