@@ -69,12 +69,12 @@ function ResumePage() {
 					<div className="w-100">
 						<H2>My career path</H2>
 						<p>
-							I&rsquo;ve spent 15+ years managing tech for campaigners &ndash; from elections, to
-							advocacy, to facilitating collaborations across five continents, building the core
-							tech that powers campaigning organisations. Now I&rsquo;m looking to get back to my
-							roots: organising, outreach, putting my skills and experience to work in tech
-							management, product, and digital campaigning &ndash; to directly support the
-							campaigners and activists working to change the world.
+							I&rsquo;ve spent 15+ years managing tech for campaigners &ndash; from advocacy to
+							elections, facilitating collaborations across teams and continents, building big
+							things with and for small teams. For the last few years I&rsquo;ve been acting more as
+							a direct contributor, either as a product manager and consultant, or as a lead
+							engineer. I enjoy this role, and I&rsquo;d like to keep doing it, hopefully with a
+							standing team I can learn from and contribute to.
 						</p>
 					</div>
 				</section>

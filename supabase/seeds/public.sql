@@ -104,6 +104,7 @@ values
 --
 insert into
 	"public"."posts" (
+		"category",
 		"content",
 		"created_at",
 		"excerpt",
@@ -118,6 +119,7 @@ insert into
 	)
 values
 	(
+		'Politics',
 		'**I suppose the point** of this post is to speak on a commonly accepted contradiction, say, about people who think with their head or their heart, people who are analytical and those who are empathic.
 
 Recently we''ve recently had Discourse about this thing, _Long Termism_, which you might say relies on numbers to say ~ "If we want to bring the most benefit to the most humans, we should ______" and then proceed to fill in the blank with something that sounds a lot like eugenics or ecofascism draped in the smug magnanimity that only Silicon Valley can really muster.
@@ -160,6 +162,7 @@ So this is why I''m writing. I think questions like these two – which in some 
 		null
 	),
 	(
+		'Tech',
 		'Last year I decided to stop freelancing and focus on building my long-time side project into something more, perhaps a business, but at the very least, a more complete version of itself. It''s called Sunlo; it''s a social language learning app, and [you''re welcome to try it out if you like](https://sunlo.app).
 
 At the time it was a NextJS app with Supabase for the back-end and Tauri compiling to native apps for Android and iOS. But I was running into problems: most notably, NextJS''s server-first approach doesn''t include client-side routing, so if I want people to be able to create a flash card and then ',
@@ -175,6 +178,7 @@ At the time it was a NextJS app with Supabase for the back-end and Tauri compili
 		null
 	),
 	(
+		'Personal',
 		'My ADHD makes more sense to me when I think of it as an addiction response. My biggest medical concern is that someday I''ll develop diabetes, which I''ll get because I''m addicted to sugar. I spend my life in a constant low-gravity tug with my somewhat casual but still very real relationship with a caffeine addiction. I have rendered it with some sort of bourgeois craft consciousness but it is just an addiction I made friends with.
 
 So I sit at my desk and I turn on my machine and I open up work. Staring at the blank page, or the code un-edited, somewhere deep in my brain a metronome clicks over,
@@ -201,6 +205,7 @@ So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have 
 		null
 	),
 	(
+		'Other',
 		'&lt;iframe src="https://urgewald.org/weltspartag" frameBorder="0" style="min-height: 95vh; width: 100%;" /&gt;',
 		'2021-10-13 16:18:53.985097+00',
 		null,
@@ -214,6 +219,7 @@ So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have 
 		null
 	),
 	(
+		'',
 		'content',
 		'2024-05-04 14:35:22.625448+00',
 		null,
@@ -227,6 +233,7 @@ So I''ll say "I won''t have a smoke till after second coffee" or "I won''t have 
 		null
 	),
 	(
+		'Tech',
 		'I had a manager once who said, "When in doubt, write it three times. Then you''ll know." Know what, exactly? They didn''t say. But time and again this has proven true for me, and the most recent is no exception, when I started by giving myself "2 days" to try writing my app in SvelteKit, and kicked off a 3-month process that taught me more about the web and the underlying technologies that power the web than I could ever have asked for.
 
 ## June 2024: Svelte
@@ -284,6 +291,7 @@ Before I do this I have one more experiment to try -- switching NextJS to full S
 	),
 	(
 		'',
+		'',
 		'2021-10-30 14:07:18.483097+00',
 		null,
 		null,
@@ -296,6 +304,7 @@ Before I do this I have one more experiment to try -- switching NextJS to full S
 		null
 	),
 	(
+		'Tech',
 		'In April 2021, while much of the world was starting to see a light at the end of the COVID-19 tunnel, India was in the middle of a health crisis of nearly unimaginable proportions. During the last week in April, the country averaged over 300,000 cases per day, and that number is likely a massive under-count.
 
 There were shortages of just about everything – especially O2 beds in hospitals – and many wage labourers losing most or all of their income. For family health reasons, my household was on near-complete isolation, but you couldn''t avoid reality. My timeline was flooded with requests, friends retweeting leads for supplies; some tech companies stopped their work to build directory apps to help supply meet demand; municipal government hotlines were flooded with calls asking for the right place to go to get the help people desperately needed; heroic efforts from volunteers and self-organising collectives to respond to the pleas for help and call every hospital in town on behalf of patients with more limited time and resources.
@@ -466,6 +475,7 @@ I learned so much from this project – not only about making websites but about
 		'2021-08-18'
 	),
 	(
+		'Idea',
 		'My feature idea: conditional formatting rules in Google Docs -- not spreadsheets, text documents. Useful for highlighting names of colleagues who are owning certain tasks in a project document, or for highlighting tags like "critical" or "completed".
 
 Right now it''s surprisingly difficult to tell the application, "find every line that starts with ''DONE'' and format that line as strikethrough", or "Find every time my boss''s name is mentioned and highlight it with bright colors." -- I can turn it into "==!!== NAME ==!!==" with Find & Replace, but I can\''t set its font size or background color and I can''t enforce consistency of that rule throughout the document, which is a problem if other people are editing it and shouldn''t be troubled to follow my crazy formatting whims.
@@ -483,6 +493,7 @@ Right now it''s surprisingly difficult to tell the application, "find every line
 		'2015-05-05'
 	),
 	(
+		'Idea',
 		'Long ago I "managed a team" and I wanted to keep managing teams, and bigger ones with more people and bigger budgets. But the anarchist in me hated this vision of success, and I left for more of an IC/freelancer approach. Recently I had the opportunity to work with a team who was without a direct manager for some time, and I was there to help maintain some leadership continuity, but didn''t have nearly the time to provide line management to a team of this size on my limited hours. But in that scarcity of time, I was forced to say, okay, I can''t be your boss or your manager; I don''t have the time to wield that kind of power well, so I''m just going to _suggest_ a bunch of things and _describe_ a bunch of things. It worked kind of beautifully in some ways I''d like to write about.
 
 First I should say, I went into this job being very explicit, that I was there as a "coach and analyst". Ultimately, everything the team members do is up to them; they''re responsible for the outcome. But as an technical or product analyst, one of the first things I''m going to do is look for the diagram of the system, read the documentation, or (as is often the case) make my own diagram. Or I''m going to ask to see the roadmap, and I''ll look over it and ask people if their section is up-to-date; if some past project should be marked as done, or overdue; etc.
@@ -509,6 +520,7 @@ It was great! I feel like the mood lifted a bit and people had a better sense of
 		null
 	),
 	(
+		'Idea',
 		'A radical socialist libertarian pacifist futurist party, dedicated to the peaceful exploration of space in the name of all humankind.
 
 So far The Space Party mostly exists as:
@@ -529,6 +541,7 @@ So far The Space Party mostly exists as:
 		'2014-05-25'
 	),
 	(
+		'Tech',
 		'In March of 2020 I decided it was time to rebuild my personal website using some new things I had learned.
 
 I have had a personal website since I finally got a real footing in website building with Jekyll and Foundation, using Markdown pushed to my GitHub repo for posts. My work is more Product than Code, but there''s a fair amount in the realm of the actual coding, _building things_ that I can do, and it brings me a lot of joy and makes me more effective in my professional and activist life. And it''s fun. I love learning and I love the idea that I can conceive of a thing and _then build it_ and not be held back by all the little parts of the "full stack" that I can''t do up to my own standards of excellence.
@@ -641,6 +654,7 @@ For the networks of activist groups I''ve spent most of my career working with, 
 		'2021-07-02'
 	),
 	(
+		'Creative',
 		'Go on, I dare you
 I could hurt you
 
@@ -674,6 +688,7 @@ Go on then, I dare you
 		null
 	),
 	(
+		'Creative',
 		'',
 		'2021-10-31 18:39:47.783+00',
 		null,
@@ -687,6 +702,7 @@ Go on then, I dare you
 		null
 	),
 	(
+		'Idea',
 		'App idea: CanvassStarter. Pick the neighborhoods your progressive organization wants to canvass; enter a question or two, and a bid for price per door.
 
 Three or four organizations all want to canvass in the same place? Great – now we can all afford to do it! Not all their target voters are the same? fine by us! We''ll use different scripts for those voters, and the increased target density will still make the canvasses cheaper for all involved. This leverages not just economy of scale, but economy of density.
@@ -706,6 +722,7 @@ We''d want to partner up with proven canvass-managing organizations, and there''
 		'2015-05-24'
 	),
 	(
+		'Creative',
 		'_roof shingles
 not mine
 but Someone''s
@@ -750,6 +767,7 @@ brothers and sisters We forgot_',
 		'2015-09-17'
 	),
 	(
+		'Politics',
 		'This frustration has been bubbling up for a while, and it''s almost difficult to write about because there are so so many examples of Democrats, Liberals and Leftists getting this wrong. And not just a little wrong but Wrong with a capital "W" and a great deal of certainty. But I guess this is somewhere to begin, so I''ll jump right in.
 
 When the right does things that seem hypocritical, lefties and liberals love to point out the hypocrisy. Love it. Just absolutely in love with the hypocrisy attack.
@@ -775,6 +793,7 @@ This is silly for a number of reasons, but I''ll lead with two: 1) it doesn''t p
 		null
 	),
 	(
+		'Politics',
 		'It is making my stomach turn to have to say this, but:
 
 &gt; I absolutely cannot support the idea of using the terrorist watch list as our way of regulating access to guns.
@@ -804,6 +823,7 @@ This seems to be the Democratic way of doing things – validate the bad worldvi
 		'2016-06-16'
 	),
 	(
+		'Tech',
 		'Today I finally got around to trying out a new technique I heard about a couple
 weeks ago -- and wow, I wish I had known about this earlier. By placing a simple
 link on your website, you can give your mobile and tablet visitors the ability to instantly share your page with friends using the popular WhatsApp messaging service.
@@ -839,6 +859,7 @@ For something so easy to deploy, it''s worth a test, right?
 		'2015-06-05'
 	),
 	(
+		'',
 		'content',
 		'2024-05-07 18:26:15.993654+00',
 		null,
@@ -852,6 +873,7 @@ For something so easy to deploy, it''s worth a test, right?
 		null
 	),
 	(
+		'',
 		'I was procrastinating the other day, and went Googling for a better ID. I''ve been using UUIDv4 for years, but I was reading about how their randomness can cause the database to do a bunch of extra work rebalancing your index trees when you''re doing a lot of inserts all over the tree.
 
 And to be honest, I kind of hate how they look: `11bf5b37-e0b8-42e0-8dcf-dc8c4aefc000`. ("Help, they''re plugging me into the matrix!" vibes. Strings like this are how I imagine I might express my desires after my consciousness is uploaded to the cloud.)
@@ -1012,6 +1034,7 @@ And, again, if you really need precision, use a datetime field; don''t ask the I
 		null
 	),
 	(
+		'',
 		'a',
 		'2021-10-29 21:39:46.667268+00',
 		null,
@@ -1025,6 +1048,7 @@ And, again, if you really need precision, use a datetime field; don''t ask the I
 		null
 	),
 	(
+		'',
 		'I''m learning to breathe backwards. Why? I don''t know, but it feels important.
 
 When you think of "a breath", a single complete unit of breathingness of a person, how do you think of it? You might say it''s "an inhale and an exhale," or you breath in and then you breath out. If you''ve ever tried a technique like _box breathing_, you''ll have learned it the same way "inhale 4 seconds, hold 4, exhale 4, hold 4, repeat."
@@ -1060,6 +1084,7 @@ At this point in the post, I don''t know if you''re with me, but in any case, ev
 		null
 	),
 	(
+		'',
 		'Many eons ago, in a land near the crossroads of civilisation, a child was born. Divine messengers spoke of their coming and called them a great builder, a leader and humble servant of the people, a light of justice for all to see. When the child was born the emperor sent agents to kill the child, but the angels protected them and they were disappeared into the hills to live with the people there.
 
 The child grew strong and learned fast. They wanted for nothing and never cried. They were never sick and never fell. In time the angels came and told the child, "You are the child of god and your life is without limit. Make your life whatever you wish, and show the people of this land that they may do the same. No one can harm you and you will accomplish anything you set your will to."
@@ -1127,6 +1152,7 @@ As the child of god grew older, their power dwindled. They aged like anyone woul
 		'2022-01-17'
 	),
 	(
+		'',
 		'This is a repost of Pramila Jayapal''s statement on the Black Lives Matter protest at Bernie Sanders''s campaign event yesterday in Seattle. [You can read, like or share the original here](https://www.facebook.com/pramila.jayapal/posts/10153194606313621).
 
 &gt; Many people have been emailing and asking me for how I am thinking about what happened yesterday at the event on social security and medicare, when some protestors identifying as Black Lives Matter got up on stage to challenge Bernie Sanders on race and racism, and ended up shutting down the event so Bernie could not speak. I''m struggling but in the spirit of community, here''s what comes to mind. First, I want to give a huge shout out to the amazing leaders who worked for months and months to organize the event: Robby Stern and PSARA, Social Security Works Washington, Washington CAN, Burke Stansbury, and so many more. This was a huge event to put together, and their determination is what ultimately got Senator Bernie Sanders to Seattle in the first place. The rally was also packed--maybe around 5,000 people--and people stood in the hot sun for a couple of hours, engaging actively and cheering on the incredibly wide range of speakers the coalition had put together. I was proud to be the speaker just before Bernie was supposed to speak. Watching what unfolded made me heartbroken. I have so many somewhat jumbled thoughts--here are just a few.
@@ -1153,6 +1179,7 @@ As the child of god grew older, their power dwindled. They aged like anyone woul
 		'2015-08-09'
 	),
 	(
+		'',
 		'Before Obamacare, lack of health insurance killed 44,000 Americans per year.
 
 I know some people feel personally aggrieved by the Affordable Care Act; they feel that their situation, or that of their loved ones, got worse because of Obamacare. They have a right to be hurt and upset about that. And it is impossible for me to look any one of them in the eye and say, "The struggle your family went through was necessary to save those other people," however much I wish I could make them believe it.
@@ -1177,6 +1204,7 @@ If we treated health as an integral part of security and allocated resources to 
 		'2017-01-05'
 	),
 	(
+		'',
 		'I''ve been slowly noodling, more and more on the "they/them" singular pronoun, grappling with my thoughts a bit, and I feel like I''ve reached a point of being able to say "okay, I''m comfortable here, I can see how things develop" -- and they are developing!
 
 Mostly English is not a super gendered language, but gender still shows up a lot, and a big part of this comes from our gendered pronouns; "she/he" "her/him" "hers/his" "herself/himself". We also apply gender to lots of job or role category nouns, like "actor/actress"), and use "woman/man" and "girl/boy" in parts of other words, like chairwoman and boyfriend.
@@ -1217,6 +1245,7 @@ And Swedish (a germanic language mostly) has developed an excellent pronoun, "he
 		null
 	),
 	(
+		'',
 		'what is it to fly\
 do you need air under beating wings\
 or can you feel it in your chest\
@@ -1244,6 +1273,7 @@ for a chance to live
 	),
 	(
 		'',
+		'',
 		'2021-10-30 09:59:47.254+00',
 		null,
 		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
@@ -1257,6 +1287,7 @@ for a chance to live
 	),
 	(
 		'',
+		'',
 		'2022-01-23 08:03:40.877365+00',
 		null,
 		'',
@@ -1269,6 +1300,7 @@ for a chance to live
 		null
 	),
 	(
+		'',
 		'Mm one of my friends said I do this thing
 
 I remember my dad doing this thing w the Encyclopedia at dinner
@@ -1290,6 +1322,7 @@ Caveats and obligations and changing of times but it''s a good thing to carry on
 		null
 	),
 	(
+		'',
 		'**Update 2020:** This is how the old version of the site was built. The new one is Rails 6 + React.
 
 ----
@@ -1351,6 +1384,7 @@ This is definitely my favorite stack to build a website on, so far. As I build o
 		'2014-05-26'
 	),
 	(
+		'',
 		' If your beloved friend is a bird
  And she sings
  not for you but for all of creation
@@ -1375,6 +1409,7 @@ _29th Jan 2023_',
 		'2023-01-31'
 	),
 	(
+		'',
 		'Want to go exploring?',
 		'2015-07-30 00:00:00+00',
 		null,
@@ -1388,6 +1423,7 @@ _29th Jan 2023_',
 		'2015-07-30'
 	),
 	(
+		'',
 		'The Blue Dawn is a volunteer collective that connects Bahujan people with
 cast-aware mental health therapists, and sometimes with supporters who will
 sponsor sessions directly. I recently built them a WordPress site using
@@ -1447,6 +1483,7 @@ Left to do:
 		'2019-06-08'
 	),
 	(
+		'',
 		'Snoogle™ is a search engine that indexes all the hypothetical stuff you''ve ever hypothetical invented and tells you (and your annoying friend who won''t believe you) whether you totally came up with that thing first that someone else just brought to market.
 
 Snoogle searches your chat/Facebook/Twitter/email history and notifies you when it detects "inventions" you mention in conversation or in public places. If the invention was only discussed in private, Snoogle prompts you to share your idea in public with a nice official-looking "copyright" symbol so no one can scoop you. Then whenever you''re trying to convince people you came up with something first, you''ll have sources.
@@ -1469,6 +1506,7 @@ Comment below and I''ll let you know when it''s ready for beta testing.
 		'2015-05-06'
 	),
 	(
+		'',
 		'**Update from 2020:** This is a post from the old website, copied over from the archives, but no longer entirely accurate!
 
 ---
@@ -1494,6 +1532,7 @@ It''s with that in mind that I''ve set up my site, with this sidebar on the left
 		'2014-05-23'
 	),
 	(
+		'',
 		'I loved how the new Star Wars defied old tropes, weaved new themes about the Jedi and the Force, and had important character arcs that weren''t the sort of typical (white dude, with a couple tokens) cast that most movies present to us. My problem was that I just didn''t think it was a very good movie in terms of telling a well-constructed story that moved us along, made sense, and created character interactions and character development that track to the developments in the plot.
 
 When you look back at the movie, you find that major chunks of the action could have been cut out entirely without affecting the plotline, which kind of cheapened whatever character development happened during those parts. Much like my issue with _Rogue One_, a lot of the drama was about uncertainty between protagonists – which can be great if done well, and if it heightens the tension as you lead up to some climactic moment – but seemed too often to lead to some kind of anticlimax. When two opposing forces bring us to edge-of-your-seat suspense and the real fear about what might happen if something goes wrong, that''s drama! When two opposing forces just kind of cancel each other out and negate whatever has been happening for the last few minutes (or last hour), that''s not good filmmaking.
@@ -1528,6 +1567,7 @@ All in all, I finished the the movie pretty bored. I''m happy that we have some 
 	),
 	(
 		'',
+		'',
 		'2021-10-30 10:13:45.276+00',
 		null,
 		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
@@ -1540,6 +1580,7 @@ All in all, I finished the the movie pretty bored. I''m happy that we have some 
 		null
 	),
 	(
+		'',
 		'I never felt at home with my assigned gender. I grew up as a boy and at some point I grew into a man, but there were a lot of things that just didn''t feel good about it.
 
 Last year, while everything around me seemed to be falling apart, something about my gender just clicked. I sort of "tried on" the notion that I might be non-binary and... it fit.
@@ -1578,6 +1619,7 @@ Well at some point in mid-2020 I think a lot of people realized that a lot of th
 		null
 	),
 	(
+		'',
 		'
 It was National Coming Out Day yesterday, so I''m coming out... again. And here''s why.
 
@@ -1612,6 +1654,7 @@ So here I am. Happy National Coming Out Day everyone, I''m bi.
 		'2018-10-12'
 	),
 	(
+		'',
 		'It''s an app, like Google Reader morphs into the morning news hour on the Radio.
 Take RSS feeds, your Medium follows, and any podcasts you like. Run text-to-speech on the
 stories (or on platforms like Medium where
@@ -1635,6 +1678,7 @@ I would call it... Radiyr.
 	),
 	(
 		'',
+		'',
 		'2023-05-15 08:30:27.299411+00',
 		null,
 		'',
@@ -1647,6 +1691,7 @@ I would call it... Radiyr.
 		null
 	),
 	(
+		'',
 		'***Note: This is a semi-technical post, best suited for techies or tech managers, about the web architecture behind this website, or, "How I got my site to be zero-maintenance, super fast and infinitely scalable"***
 
 In early 2020 I rebuilt my old Jekyll site as a Rails + React, which [I wrote about previously, here](https://michaelsnook.com/posts/under-the-hood-2).
@@ -1853,6 +1898,7 @@ But I am happy for now; no plans for another rewrite any time soon. What I''m lo
 	),
 	(
 		'',
+		'',
 		'2022-01-23 09:59:59.978651+00',
 		null,
 		'',
@@ -1865,6 +1911,7 @@ But I am happy for now; no plans for another rewrite any time soon. What I''m lo
 		null
 	),
 	(
+		'',
 		'**This is just a test post.**
 
 Each time the markdown re-renders, the image below will change. but the markdown renderer is pretty smart so it only re-renders what it needs to.
@@ -1889,6 +1936,7 @@ some cod
 	),
 	(
 		'',
+		'',
 		'2021-10-30 10:16:28.163+00',
 		null,
 		'https://hmpueymmlhhphzvebjku.supabase.co/storage/v1/object/public/images/image-from-supabase-example-18f41a.jpg',
@@ -1901,6 +1949,7 @@ some cod
 		null
 	),
 	(
+		'',
 		'When you''re working on a project, especially with a team, it''s great to have good process in place, followed routinely and without too much interference. So I''m here to make a (limited) case for some ways to use "No process", suggesting an order of preference that goes:
 
 1. Good process
@@ -1922,6 +1971,7 @@ This is only an easy claim to make because of the big giant "*" – where "No Pr
 		null
 	),
 	(
+		'',
 		'1. Identify actual enemies, and make them good ones. [here is a great example.](https://twitter.com/WaywardWinifred/status/1430555879993184262) Erik Prince is an objectively terrible person and this question is supremely relevant to what kinds of people we are and what kind of countrywide sense of identity we want to have. And for all the traction of hating on Elon Musk, you''d think we could make this guy radioactive outside of just political circles, eh?
 2. Imbalance coalitions, e.g. if you can make Erik Prince radioactive, can you then force out blackwater? And if you hammer on that, does it become a strained relationship for Members of Congress? We typically think of Reps being "beholden" to interests like the military industrial complex, but imagine they have weak spots, that they can be separated, and take your shot.
 3. Think ahead, looking back on now. The right does this all the time in destructive ways by saying "soon they''ll have storm troopers confiscate your bibles", but we can do it in a different way like, "we can have nice things and this can be a turning point and gee won''t that be nice looking back." We can use this to give calm during crisis, almost like a soothing prayer, despite the feeling of emergency that we all feel these days when engaging in political action or labor.',
@@ -1937,6 +1987,7 @@ This is only an easy claim to make because of the big giant "*" – where "No Pr
 		null
 	),
 	(
+		'',
 		'## Hello
 #### Smooth
 
@@ -1957,6 +2008,7 @@ tythjyuj tr ',
 		null
 	),
 	(
+		'',
 		'Let the funeral be like a dinner party\
 Aunties and uncles flitting to and fro\
 Offering you the same seat or the same sweets\
@@ -1993,6 +2045,7 @@ And say, Everything will turn out fine
 		'2023-08-06'
 	),
 	(
+		'',
 		'### Employr: Swipe right on resumes.
 
 With Employr, job seekers and posters get a quick look at what the other has to offer, and match via the time-honored method of swiping right and left. If you both swipe right, you can chat and set up an interview!
@@ -2023,6 +2076,7 @@ Well, it''s not amazing _yet_, because it hasn''t been built. But I think it''s 
 		'2015-04-29'
 	),
 	(
+		'',
 		'Writing something small can be hard. I don''t mean a tweet or a text but a Thing™ of some kind, something that''s not a huge piece with a thesis for each section and a table of contents, but still has a few parts and some order and means something.
 
 I reckon at some point in professional middle-manager world, I got caught up in a kind of "bullet-point writing style," which is professionally practical but not the way I want to live my entire life. And whenever I break out of these easy structures, there''s the fear of doing "art" or "theory" and comparing myself quite unfavorably to professional writers, artists, or theorists, who write these incredible things like it''s nothing.
@@ -2060,6 +2114,7 @@ insert into
 		"url",
 		"github",
 		"tags",
+		"image",
 		"sort_order",
 		"published",
 		"created_at"
@@ -2072,6 +2127,7 @@ values
 		'https://sunlo.app',
 		'https://github.com/mhsnook/sunlo',
 		'{Tanstack Router,Supabase,React}',
+		'http://127.0.0.1:54321/storage/v1/object/public/images/thumbs/sunlo.png',
 		1,
 		true,
 		'2026-03-08 00:00:00+00'
@@ -2083,6 +2139,7 @@ values
 		'https://scenetest.msnook.xyz',
 		'https://github.com/scenetest/scenetest-js',
 		'{Testing,Local-first}',
+		'http://127.0.0.1:54321/storage/v1/object/public/images/thumbs/scenetest.png',
 		2,
 		true,
 		'2026-03-08 00:00:00+00'
@@ -2094,6 +2151,7 @@ values
 		'https://twok.msnook.xyz',
 		'https://github.com/mhsnook/tailwind-oklch',
 		'{Tailwind,OKLCH,Color,Themes}',
+		'http://127.0.0.1:54321/storage/v1/object/public/images/thumbs/twok.png',
 		3,
 		true,
 		'2026-03-08 00:00:00+00'
@@ -2105,6 +2163,7 @@ values
 		'https://reader.msnook.xyz',
 		'https://github.com/mhsnook/rsvp-reader',
 		'{Speed-reading,Accessibility,Dyslexia}',
+		'http://127.0.0.1:54321/storage/v1/object/public/images/thumbs/rsvp.png',
 		4,
 		true,
 		'2026-03-08 00:00:00+00'
