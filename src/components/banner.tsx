@@ -184,7 +184,8 @@ export default function Banner({ title, description, small, medium }: BannerProp
 							src="/images/rocket.svg"
 							alt=""
 							className="absolute left-0 top-0 w-full h-full"
-							fetchPriority="high"
+							// @ts-expect-error - fetchpriority (lowercase) is the correct HTML attr; camelCase fetchPriority triggers an SSR warning in Wrangler
+							fetchpriority="high"
 						/>
 					</div>
 				)}

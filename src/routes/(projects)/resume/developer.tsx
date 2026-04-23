@@ -18,30 +18,20 @@ export const Route = createFileRoute('/(projects)/resume/developer')({
 
 // 1050 by 1485. p1 is currently some 642 words, needs to be ~640
 
-const intro = `Hello, 👋 I&rsquo;m Em, a former
-organiser, data analyst, tech director, then facilitator,
-turned product manager, data engineer and full stack developer.
+const intro = `I&rsquo;m Em &ndash; a former organiser, data analyst, and tech director
+turned product manager, data engineer, and full-stack developer.
 
-In 2020 I decided to leave management to focus on my own work
-as an individual contributor, honing my craft at Product Management,
-Data Engineering, and Full-stack Web Development.
-I love it, but as a freelancer and solo developer,
-I miss being _part of a team_ &ndash; if you want to stay in flow,
-nothing beats good teamwork.
+In 2020 I left management to focus on my craft as an individual contributor.
+I love the work, but as a freelancer and solo developer I miss being
+_part of a team_ &ndash; if you want to stay in flow, nothing beats good teamwork.
 
-So I'm looking for full-time employment, membership in a coop, or partnership in an
-agency &ndash; to keep learning, keep shipping, keep going.
+I&rsquo;m most comfortable with full-stack JS frameworks like NextJS or React Router,
+and with databases, so I prefer to keep the API layer simple.
+I&rsquo;m flexible and practical regardless of the tools we use.
 
-I'm most comfortable with full-stack JS frameworks like NextJS or
-React Router, and with databases, so naturally I prefer to keep the API layer nice and simple.
-But I consider myself flexible and practical with solutions, no matter what tools we decide to use for the job.
-
-Mostly I care about working on a team that fosters productivity,
-growth and accountability.
-I want to learn new things, be excellent to my colleagues,
-ship quality product every cycle &ndash;
-and then close the computer and enjoy my weekend. If this sounds like
-your workplace, please reach out!
+I&rsquo;m looking for full-time employment, a coop membership, or an agency partnership
+&ndash; to keep learning, keep shipping, and close the laptop on Friday.
+If that sounds like your team, please reach out.
 
 &nbsp;&nbsp;&ndash;_M_`
 
@@ -96,6 +86,7 @@ const projects = [
 function DeveloperResume() {
 	return (
 		<>
+			<style>{`@media print { @page { size: 1050px 1485px; margin: 0; } }`}</style>
 			<Wrapper>
 				<LeftContainer>
 					<PictureSection link="https://msnook.xyz/resume/developer" />
@@ -127,7 +118,7 @@ function DeveloperResume() {
 				</RightContainer>
 			</Wrapper>
 			<Wrapper>
-				<div className="col-span-4 md:px-10 py-12 mt-2 text-md">
+				<div className="col-span-4 md:px-10 py-12 mt-2 text-md [print-color-adjust:exact] [-webkit-print-color-adjust:exact]">
 					<h2 className="text-2xl font-bold font-display my-2 mb-4">Previous Employment</h2>
 					<div className="md:columns-2 space-y-8 gap-8">
 						<div className="space-y-6">
@@ -248,10 +239,7 @@ function DeveloperResume() {
 
 function Alert({ children }: { children: ReactNode }) {
 	return (
-		<div
-			style={{ WebkitPrintColorAdjust: 'exact' }}
-			className="text-cyan-content rounded-sm border-2 border-cyan/70 bg-cyan-soft/40 py-3 px-4 text-sm"
-		>
+		<div className="[print-color-adjust:exact] [-webkit-print-color-adjust:exact] text-cyan-content rounded-sm border-2 border-cyan/70 bg-cyan-soft/40 py-3 px-4 text-sm">
 			{children}
 		</div>
 	)

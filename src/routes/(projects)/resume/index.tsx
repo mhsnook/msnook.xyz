@@ -31,8 +31,9 @@ const technical_skills = [
 
 function ResumePage() {
 	return (
-		<div className="bg-gray-300 md:p-10 font-display">
-			<div className="md:shadow-[rgba(0,_0,_0,_0.3)_0px_0px_15px_5px] md:rounded-sm bg-white p-2 py-6 md:p-12 mx-auto max-w-[1100px]">
+		<div className="bg-gray-300 md:p-10 font-display [print-color-adjust:exact] [-webkit-print-color-adjust:exact]">
+			<style>{`@media print { @page { size: A4 portrait; margin: 15mm; } }`}</style>
+			<div className="md:shadow-[rgba(0,_0,_0,_0.3)_0px_0px_15px_5px] print:shadow-none md:rounded-sm bg-white p-2 py-6 md:p-12 mx-auto max-w-[1100px]">
 				<header className="flex mb-4">
 					<div id="header-left" className="grow">
 						<h1 className="text-cyan-content text-4xl lg:text-6xl font-bold mb-6">Michael Snook</h1>
@@ -68,12 +69,12 @@ function ResumePage() {
 					<div className="w-100">
 						<H2>My career path</H2>
 						<p>
-							I&rsquo;ve spent the last 10 years managing tech for campaigners – from elections, to
-							advocacy, to facilitating collaborations across five continents, building the core
-							tech that powers a campaigning organisation. Now I&rsquo;m looking to get back to my
-							roots: organising, outreach, putting my skills and experience to work on a job in tech
-							management, product, and digital campaigning solutions to directly support the
-							campaigners and activists working to change the world.
+							I&rsquo;ve spent 15+ years managing tech for campaigners &ndash; from advocacy to
+							elections, facilitating collaborations across teams and continents, building big
+							things with and for small teams. For the last few years I&rsquo;ve been acting more as
+							a direct contributor, either as a product manager and consultant, or as a lead
+							engineer. I enjoy this role, and I&rsquo;d like to keep doing it, hopefully with a
+							standing team I can learn from and contribute to.
 						</p>
 					</div>
 				</section>

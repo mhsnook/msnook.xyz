@@ -7,8 +7,8 @@ export function SkillsDeveloper() {
 				<li>Postgres, BigQuery, Dataform, SQL</li>
 				<li>TailwindCSS, Bulma, Bootstrap</li>
 				<li>Prisma ORM, Django ORM, ActiveRecord, Supabase</li>
-				<li>Writing SQL, thinking in data, joins, windows</li>
-				<li>Experience with Svelte, SolidJS, Django/DRF, Rails, and some WordPress</li>
+				<li>Data modeling, joins, window functions</li>
+				<li>Svelte, SolidJS, Django/DRF, Rails, WordPress</li>
 			</ul>
 		</div>
 	)
@@ -19,20 +19,12 @@ export function SkillsProductManager() {
 		<div className="py-1 mb-1">
 			<h2 className="font-bold text-lg">PM Skills</h2>
 			<ul className="list-disc ml-4 marker:text-lilac-content">
-				<li>Defining a Product</li>
-				<li>Roadmapping for a team</li>
-				<li>Planning for MVP and subsequent milestones</li>
-				<li>
-					<em>&ldquo;I don&apos;t think we need that for the MVP&rdquo;</em>
-				</li>
-				<li>Technical PM including architecture and service research</li>
-				<li>Understanding technical needs, hiring consultation</li>
-				<li>Supporting engineers e.g. by handling little things so you can focus on big things</li>
-				<li>
-					Communication,
-					<br /> ㅤㅤcommunication, <br />
-					ㅤㅤㅤㅤcommunication
-				</li>
+				<li>Defining and scoping a product</li>
+				<li>Roadmapping and milestone planning</li>
+				<li>Architecture research and hiring consultation</li>
+				<li>Technical PM: bridging eng and stakeholders</li>
+				<li>Keeping scope tight for the MVP</li>
+				<li>Communication across teams and time zones</li>
 			</ul>
 		</div>
 	)
