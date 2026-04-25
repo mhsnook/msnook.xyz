@@ -168,7 +168,7 @@ export default function Banner({ title, description, small, medium }: BannerProp
 				{small ? null : (
 					<div className="relative shrink-0 w-[240px] sm:w-[280px] md:w-[320px] lg:w-[440px] aspect-[1.775]">
 						<img
-							src="/images/my-face-288.png"
+							src="/images/my-face-132.webp"
 							alt="A cartoon face of the author, Michael"
 							className="absolute object-cover rounded-2xl"
 							width={120}
