@@ -12,7 +12,15 @@ const FACE_STYLE = {
 	top: `${16 + 91 - 19}px`,
 }
 
-function Tile({ label, bg, style }: { label: string; bg?: string; style?: React.CSSProperties }) {
+function Tile({
+	label,
+	bg,
+	style,
+}: {
+	label: string
+	bg?: string
+	style?: React.CSSProperties
+}) {
 	return (
 		<div className="flex flex-col items-center gap-2">
 			<div
@@ -20,7 +28,7 @@ function Tile({ label, bg, style }: { label: string; bg?: string; style?: React.
 				style={{ width: 232, height: 232, ...style }}
 			>
 				<img
-					src="/images/my-face-288.png"
+					src="/images/my-face-132.webp"
 					alt="Face"
 					className="absolute object-cover"
 					style={FACE_STYLE}
@@ -49,7 +57,8 @@ function RocketDemo() {
 				<Tile
 					label="Checkerboard"
 					style={{
-						backgroundImage: 'repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%)',
+						backgroundImage:
+							'repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%)',
 						backgroundSize: '20px 20px',
 					}}
 				/>
