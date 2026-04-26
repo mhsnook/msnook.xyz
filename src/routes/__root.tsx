@@ -18,7 +18,16 @@ export const Route = createRootRoute({
 			{ property: 'og:image', content: '/images/my-face-288.png' },
 			{ name: 'author', content: 'Em Snook' },
 		],
-		links: [{ rel: 'stylesheet', href: appCss }],
+		links: [
+			{
+				rel: 'preload',
+				href: '/fonts/exo2-v26-latin.woff2',
+				as: 'font',
+				type: 'font/woff2',
+				crossOrigin: 'anonymous',
+			},
+			{ rel: 'stylesheet', href: appCss },
+		],
 	}),
 	component: RootComponent,
 	// Any thrown notFound() that isn't caught by a closer route bubbles up
