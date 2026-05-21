@@ -23,5 +23,5 @@ export function JobHeader({
 }
 
 function PWithIcon({ children }: { children: ReactNode }) {
-	return <p className="text-sm flex flex-row place-items-center gap-2">{children}</p>
+	return <p className="text-sm flex flex-row place-items-center gap-2 mt-1">{children}</p>
 }
