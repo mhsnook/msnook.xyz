@@ -458,6 +458,21 @@ export type Database = {
 	}
 	public: {
 		Tables: {
+			category_visibility: {
+				Row: {
+					category: string
+					public: boolean
+				}
+				Insert: {
+					category: string
+					public?: boolean
+				}
+				Update: {
+					category?: string
+					public?: boolean
+				}
+				Relationships: []
+			}
 			media: {
 				Row: {
 					alt_text: string | null
