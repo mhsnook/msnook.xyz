@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Envelope, LinkIcon, Phone, Calendar } from '@/components/icons'
-import Socials from '@/components/socials'
+import { Socials } from '@/components/socials'
 
 export const Route = createFileRoute('/(projects)/resume/')({
 	head: () => ({

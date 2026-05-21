@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import Socials from '@/components/socials'
+import { Socials, SparseSocials } from '@/components/socials'
 
 export function Wrapper({ children }: { children: ReactNode }) {
 	return (
@@ -11,12 +11,12 @@ export function Wrapper({ children }: { children: ReactNode }) {
 	)
 }
 
-export function LeftContainer({ children }: { children: ReactNode }) {
+export function LeftContainer({ children, sparse }: { children: ReactNode; sparse?: boolean }) {
 	return (
 		<div className="md:col-span-1 bg-lilac-soft/50 print:bg-lilac-soft [print-color-adjust:exact] [-webkit-print-color-adjust:exact] h-full pt-10 md:pt-16 pb-6 md:pb-10 px-6 flex flex-col gap-4 md:gap-10 font-display lg:rounded">
 			{children}
 			<div className="flex-end flex flex-row justify-around text-lilac">
-				<Socials />
+				{sparse ? <SparseSocials /> : <Socials />}
 			</div>
 		</div>
 	)
