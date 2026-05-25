@@ -1,0 +1,37 @@
+name: e2e
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  scenetest:
+    runs-on: ubuntu-latest
+    env:
+      # Stub envs so the dev server can boot; Supabase calls aren't exercised
+      # by the smoke scene at /colors. Replace with real secrets when scenes
+      # start hitting authenticated routes.
+      VITE_SUPABASE_API_URL: http://localhost:54321
+      VITE_SUPABASE_PUBLISHABLE_KEY: stub
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - name: Start dev server
+        run: pnpm dev &
+
+      - name: Wait for dev server
+        run: npx --yes wait-on http://localhost:5173 -t 60000
+
+      - run: pnpm test:e2e

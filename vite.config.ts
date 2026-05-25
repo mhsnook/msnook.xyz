@@ -3,6 +3,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { cloudflare } from '@cloudflare/vite-plugin'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import scenetest from '@scenetest/vite-plugin'
 
 export default defineConfig({
 	// Vite 8 resolves tsconfig `paths` natively — no vite-tsconfig-paths plugin.
@@ -19,5 +20,6 @@ export default defineConfig({
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		tanstackStart(),
 		viteReact(),
+		scenetest(),
 	],
 })

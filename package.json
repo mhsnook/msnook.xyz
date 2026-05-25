@@ -19,6 +19,7 @@
 		"seeds:auth": "supabase db dump --data-only --schema auth --local > ./supabase/seeds/auth.sql",
 		"seeds:public": "supabase db dump --data-only --schema public --local > ./supabase/seeds/public.sql",
 		"seeds:apply": "supabase db reset",
+		"test:e2e": "scenetest --no-panel",
 		"prepare": "husky install || true"
 	},
 	"dependencies": {
@@ -44,6 +45,9 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.33.0",
+		"@scenetest/checks-react": "^0.9.2",
+		"@scenetest/scenes": "^0.9.2",
+		"@scenetest/vite-plugin": "^0.9.2",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.2.2",
 		"@tanstack/intent": "^0.0.29",
