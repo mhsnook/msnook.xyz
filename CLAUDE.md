@@ -2,6 +2,15 @@
 
 See `.claude/rules/` for additional rules.
 
+## ⚠️ Scenetest e2e is READ-ONLY against production Supabase
+
+CI runs scenes against the **real production Supabase project** using
+the publishable (anon) key. Scenes MUST NOT mutate data — no logins,
+no form submissions that write, no destructive clicks. See
+`.claude/rules/scenetest.md` for the full rules. If you need write
+coverage, boot a local Supabase in a separate workflow job; do not
+relax the read-only job.
+
 <!-- intent-skills:start -->
 
 # Skill mappings - when working in these areas, load the linked skill file into context.

@@ -1,5 +1,34 @@
 name: e2e
 
+# ─────────────────────────────────────────────────────────────────────────────
+# ⚠️  READ-ONLY E2E — DO NOT ADD WRITE SCENES OR THE SERVICE-ROLE KEY  ⚠️
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# This workflow runs scenetest against the PRODUCTION Supabase project, using
+# only the publishable (anon) key. That choice keeps CI light — no Docker, no
+# local Supabase boot — but it means every scene hits real production data.
+#
+# RULES (mirrored in .claude/rules/scenetest.md):
+#
+#   1. Scenes are READ-ONLY. No logins. No form submissions that write. No
+#      "create / update / delete / save / submit" buttons. Only openTo, see,
+#      scrollTo, and other reads.
+#
+#   2. NEVER add SUPABASE_SERVICE_ROLE_KEY (or any service-role / secret key)
+#      to this workflow's env. The two vars below are the entire surface area.
+#
+#   3. NEVER pass a service-role key into the dev server here. Production RLS
+#      is the backstop against accidental writes — do not weaken it for tests.
+#
+#   4. If you need to test writes (auth, mutations, anything past RLS), DO NOT
+#      modify this job — add a separate job that boots a local Supabase
+#      (`supabase start`) the way mhsnook/sunlo does. Keep this job read-only.
+#
+# Secrets required on the repo:
+#   - VITE_SUPABASE_API_URL          (e.g. https://hmpueymmlhhphzvebjku.supabase.co)
+#   - VITE_SUPABASE_PUBLISHABLE_KEY  (publishable / anon key — safe to expose)
+# ─────────────────────────────────────────────────────────────────────────────
+
 on:
   pull_request:
   push:
@@ -8,12 +37,11 @@ on:
 jobs:
   scenetest:
     runs-on: ubuntu-latest
+    # READ-ONLY against production Supabase. See banner above before editing.
     env:
-      # Stub envs so the dev server can boot; Supabase calls aren't exercised
-      # by the smoke scene at /colors. Replace with real secrets when scenes
-      # start hitting authenticated routes.
-      VITE_SUPABASE_API_URL: http://localhost:54321
-      VITE_SUPABASE_PUBLISHABLE_KEY: stub
+      VITE_SUPABASE_API_URL: ${{ secrets.VITE_SUPABASE_API_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      # Intentionally no SUPABASE_SERVICE_ROLE_KEY. Do not add one here.
     steps:
       - uses: actions/checkout@v4
 
@@ -34,4 +62,5 @@ jobs:
       - name: Wait for dev server
         run: npx --yes wait-on http://localhost:5173 -t 60000
 
-      - run: pnpm test:e2e
+      - name: Run scenetest (READ-ONLY scenes only)
+        run: pnpm test:e2e
