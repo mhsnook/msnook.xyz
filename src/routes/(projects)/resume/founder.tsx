@@ -19,10 +19,22 @@ const focusAreas = [
 	'Onboarding & team systems',
 ]
 
+const teamLeader = [
+	'Sprint planning & stand-ups',
+	'Backlog grooming & prioritization',
+	'Daily unblocking and pairing',
+	'Retrospectives & process iteration',
+	'Code review & mentoring',
+	'Triage, on-call, incident response',
+]
+
 const technical = [
-	'React, TypeScript, Node',
-	'Postgres & SQL data modeling',
-	'Cloud & serverless deployment',
+	'TypeScript, React, React Native',
+	'Node & edge runtimes (Cloudflare Workers)',
+	'Postgres, BigQuery, SQL data modeling',
+	'LLM integration & AI tooling',
+	'CI/CD, Docker, Git workflows',
+	'Observability & monitoring',
 ]
 
 const experience = [
@@ -66,6 +78,7 @@ function FounderResume() {
 				<LeftContainer sparse>
 					<PictureSection />
 					<SkillList title="Focus Areas" items={focusAreas} />
+					<SkillList title="Team Leader" items={teamLeader} />
 					<SkillList title="Technical Fluency" items={technical} />
 				</LeftContainer>
 
