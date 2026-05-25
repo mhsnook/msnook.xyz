@@ -39,6 +39,15 @@ const technical = [
 
 const experience = [
 	{
+		title: 'Product Manager',
+		org: 'VoteAmerica',
+		time: 'Jul 2020 – Dec 2020',
+		points: [
+			'Led product for a six-engineer team at a nonpartisan voter-turnout nonprofit, defining scope and process to ship on a fixed deadline.',
+			'Coordinated engineering, data, and stakeholders around a single, well-scoped roadmap.',
+		],
+	},
+	{
 		title: 'Director of Technology',
 		org: 'The Online Progressive Engagement Network',
 		time: 'Sep 2014 – Jun 2020',
@@ -57,15 +66,6 @@ const experience = [
 			'Joined as the first employee and built the technology department from the ground up.',
 			'Defined roles, hired, and managed a six-person team of engineers, designers, and analysts as the organization scaled from 5 to 35 staff.',
 			'Selected the core software stack and established the team’s engineering and release processes.',
-		],
-	},
-	{
-		title: 'Product Manager',
-		org: 'VoteAmerica',
-		time: 'Jul 2020 – Dec 2020',
-		points: [
-			'Led product for a six-engineer team at a nonpartisan voter-turnout nonprofit, defining scope and process to ship on a fixed deadline.',
-			'Coordinated engineering, data, and stakeholders around a single, well-scoped roadmap.',
 		],
 	},
 ]
@@ -133,6 +133,13 @@ function FounderResume() {
 							, a social language-learning app exploring how friends and family can support a
 							learner. It keeps me close to the craft of building education products end to end
 							&mdash; from data model to classroom-ready UX.
+						</p>
+					</section>
+
+					<section className="space-y-1">
+						<h2 className="text-2xl font-bold font-display">Education</h2>
+						<p className="text-gray-700">
+							University of Virginia &mdash; Bachelor of Arts, Class of 2009.
 						</p>
 					</section>
 				</RightContainer>
