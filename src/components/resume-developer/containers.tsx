@@ -13,7 +13,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
 
 export function LeftContainer({ children, sparse }: { children: ReactNode; sparse?: boolean }) {
 	return (
-		<div className="md:col-span-1 bg-lilac-soft/50 print:bg-lilac-soft [print-color-adjust:exact] [-webkit-print-color-adjust:exact] h-full pt-10 md:pt-16 pb-6 md:pb-10 px-6 flex flex-col gap-4 md:gap-10 font-display lg:rounded">
+		<div className="md:col-span-1 print:col-span-1 bg-lilac-soft/50 print:bg-lilac-soft [print-color-adjust:exact] [-webkit-print-color-adjust:exact] h-full pt-10 md:pt-16 print:pt-16 pb-6 md:pb-10 print:pb-10 px-6 flex flex-col gap-4 md:gap-10 print:gap-10 font-display lg:rounded">
 			{children}
 			<div className="flex-end flex flex-row justify-around text-lilac">
 				{sparse ? <SparseSocials /> : <Socials />}
@@ -24,7 +24,7 @@ export function LeftContainer({ children, sparse }: { children: ReactNode; spars
 
 export function RightContainer({ children }: { children: ReactNode }) {
 	return (
-		<div className="md:col-span-3 py-4 md:px-16 flex flex-col">
+		<div className="md:col-span-3 print:col-span-3 py-4 md:px-16 print:px-16 flex flex-col">
 			<div className="space-y-4">{children}</div>
 		</div>
 	)

@@ -146,7 +146,7 @@ function FounderResume() {
 function Page({ children }: { children: ReactNode }) {
 	return (
 		<div className="bg-gray-300 print:bg-transparent md:py-10 px-1 print:p-0 [print-color-adjust:exact] [-webkit-print-color-adjust:exact]">
-			<div className="grid grid-cols-1 md:grid-cols-4 md:shadow-[rgba(0,_0,_0,_0.3)_0px_0px_15px_5px] print:shadow-none md:rounded-sm bg-white p-2 mx-auto min-[1060px]:w-[1050px] min-[1060px]:h-[1485px]">
+			<div className="grid grid-cols-1 md:grid-cols-4 print:grid-cols-4 md:shadow-[rgba(0,_0,_0,_0.3)_0px_0px_15px_5px] print:shadow-none md:rounded-sm bg-white p-2 mx-auto min-[1060px]:w-[1050px] min-[1060px]:h-[1485px] print:w-[1050px] print:h-[1485px]">
 				{children}
 			</div>
 		</div>
