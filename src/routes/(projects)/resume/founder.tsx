@@ -43,16 +43,16 @@ const experience = [
 		org: 'VoteAmerica',
 		time: 'Jul 2020 – Dec 2020',
 		points: [
-			'Led product for a six-engineer team at a nonpartisan voter-turnout nonprofit, defining scope and process to ship on a fixed deadline.',
-			'Coordinated engineering, data, and stakeholders around a single, well-scoped roadmap.',
+			'Led product for a six-engineer team at a nonpartisan voter-information group, defining scope and process to ship on a fixed deadline.',
+			'Coordinated with leadership, data, and partners to provide support and direction to our engineering team.',
 		],
 	},
 	{
 		title: 'Director of Technology',
-		org: 'The Online Progressive Engagement Network',
+		org: 'The OPEN Network',
 		time: 'Sep 2014 – Jun 2020',
 		points: [
-			'Consulted across an international network of roughly 20 nonprofits in 20 countries, advising technology directors on hiring, team structure, roadmaps, and budgets.',
+			'Consulted across a network of roughly 20 partners all over the world, advising technology directors on hiring, team structure, roadmaps, and budgeting.',
 			'Ran architecture reviews and technical due diligence to guide build-versus-buy and vendor decisions.',
 			'Designed and facilitated an annual technology summit — about 50 staff convening to share practice and plan collaborations.',
 			'Staffed and shipped shared software products used by organizations across the network.',
@@ -60,11 +60,11 @@ const experience = [
 	},
 	{
 		title: 'Chief Information Officer',
-		org: 'Progressive Change Campaign Committee',
+		org: 'PCCC',
 		time: 'Jan 2009 – Aug 2014',
 		points: [
-			'Joined as the first employee and built the technology department from the ground up.',
-			'Defined roles, hired, and managed a six-person team of engineers, designers, and analysts as the organization scaled from 5 to 35 staff.',
+			'Joined as the first employee, managing data, targeting, and media production.',
+			'Took over the tech operation to scale it out: defined roles, hired, and managed a six-person team as the organization scaled from 5 to 35 staff.',
 			'Selected the core software stack and established the team’s engineering and release processes.',
 		],
 	},
@@ -94,11 +94,12 @@ function FounderResume() {
 
 					<div className="prose space-y-2 text-gray-700">
 						<p>
-							For 15+ years I&rsquo;ve built and staffed the technology behind mission-driven
-							organizations &mdash; joining early, hiring the first engineers, and establishing the
-							processes that let small teams ship reliably. Much of that has been as a consultant,
-							advising technology leaders at nonprofits across more than 20 countries on hiring,
-							roadmapping, budgeting, and team structure.
+							For 15+ years I&rsquo;ve been working at the intersection of technology, human
+							information systems, and organizational development &mdash; joining early, hiring the
+							first engineers, and establishing the processes that let small teams ship reliably.
+							Much of that has been as a consultant, advising technology leaders with small to
+							medium sized clients in more than 20 countries on hiring, roadmapping, budgeting, and
+							team structure.
 						</p>
 						<p>
 							I&rsquo;m now focused on educational software, and I want to bring this operations and
