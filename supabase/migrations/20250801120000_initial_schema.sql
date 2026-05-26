@@ -135,12 +135,12 @@ add constraint "posts_pkey1" primary key ("id");
 alter table only "public"."posts"
 add constraint "posts_slug_key" unique ("slug");
 
-create or replace trigger "handle_updated_at" before
-update on "public"."posts" for each row
+create or replace trigger "handle_updated_at"
+before update on "public"."posts" for each row
 execute function "extensions"."moddatetime" ('updated_at');
 
-create or replace trigger "on_media_meta_updated" before
-update on "public"."media_meta" for each row
+create or replace trigger "on_media_meta_updated"
+before update on "public"."media_meta" for each row
 execute function "public"."handle_updated_at" ();
 
 alter table only "public"."posts"
