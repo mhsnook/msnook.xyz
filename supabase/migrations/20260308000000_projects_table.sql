@@ -17,8 +17,8 @@ alter table "public"."projects" owner to "postgres";
 alter table only "public"."projects"
 add constraint "projects_pkey" primary key ("id");
 
-create or replace trigger "handle_projects_updated_at"
-before update on "public"."projects" for each row
+create or replace trigger "handle_projects_updated_at" before
+update on "public"."projects" for each row
 execute function "extensions"."moddatetime" ('updated_at');
 
 -- Public read access (no auth required)
