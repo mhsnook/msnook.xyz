@@ -110,6 +110,34 @@ function FounderResume() {
 					</div>
 
 					<section className="space-y-3">
+						<h2 className="text-2xl font-bold font-display">Education Software</h2>
+						<p className="text-gray-700">
+							I designed and built{' '}
+							<a className="link" href="https://sunlo.app">
+								Sunlo (https://sunlo.app)
+							</a>
+							, a social language-learning app exploring how friends and family can support a
+							learner. It keeps me close to the craft of building education products end to end
+							&mdash; from data model to classroom-ready UX.
+						</p>
+						<p className="text-gray-700">
+							I also built a{' '}
+							<a className="link" href="https://reader.msnook.xyz/">
+								dyslexia-friendly reader (https://reader.msnook.xyz/)
+							</a>
+							, a focused reading tool that applies typography and layout research to make long-form
+							text easier to read for people with dyslexia.
+						</p>
+					</section>
+
+					<section className="space-y-1">
+						<h2 className="text-2xl font-bold font-display">Education</h2>
+						<p className="text-gray-700">
+							University of Virginia &mdash; Bachelor of Arts, Class of 2009.
+						</p>
+					</section>
+
+					<section className="space-y-3">
 						<h2 className="text-2xl font-bold font-display">Selected Experience</h2>
 						{experience.map((job) => (
 							<div key={job.org}>
@@ -121,26 +149,6 @@ function FounderResume() {
 								</ul>
 							</div>
 						))}
-					</section>
-
-					<section className="space-y-1">
-						<h2 className="text-2xl font-bold font-display">Education Software</h2>
-						<p className="text-gray-700">
-							I designed and built{' '}
-							<a className="link" href="https://sunlo.app">
-								Sunlo (https://sunlo.app)
-							</a>
-							, a social language-learning app exploring how friends and family can support a
-							learner. It keeps me close to the craft of building education products end to end
-							&mdash; from data model to classroom-ready UX.
-						</p>
-					</section>
-
-					<section className="space-y-1">
-						<h2 className="text-2xl font-bold font-display">Education</h2>
-						<p className="text-gray-700">
-							University of Virginia &mdash; Bachelor of Arts, Class of 2009.
-						</p>
 					</section>
 				</RightContainer>
 			</Page>
