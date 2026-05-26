@@ -84,7 +84,7 @@ function FounderResume() {
 
 				<RightContainer>
 					<header>
-						<h2 className="text-3xl font-bold text-cyan-content font-display mt-6">
+						<h2 className="text-3xl font-bold text-cyan-content font-display mt-4">
 							Technology Operations &amp; Hiring
 						</h2>
 						<p className="text-lg text-lilac-content font-display">
@@ -92,15 +92,13 @@ function FounderResume() {
 						</p>
 					</header>
 
-					<div className="prose space-y-3 text-gray-700">
+					<div className="prose space-y-2 text-gray-700">
 						<p>
 							For 15+ years I&rsquo;ve built and staffed the technology behind mission-driven
 							organizations &mdash; joining early, hiring the first engineers, and establishing the
-							processes that let small teams ship reliably.
-						</p>
-						<p>
-							Much of that work has been as a consultant, advising technology leaders at nonprofits
-							across more than 20 countries on hiring, roadmapping, budgeting, and team structure.
+							processes that let small teams ship reliably. Much of that has been as a consultant,
+							advising technology leaders at nonprofits across more than 20 countries on hiring,
+							roadmapping, budgeting, and team structure.
 						</p>
 						<p>
 							I&rsquo;m now focused on educational software, and I want to bring this operations and
@@ -109,25 +107,22 @@ function FounderResume() {
 						</p>
 					</div>
 
-					<section className="space-y-3">
+					<section className="space-y-2">
 						<h2 className="text-2xl font-bold font-display">Education Software</h2>
-						<p className="text-gray-700">
-							I designed and built{' '}
-							<a className="link" href="https://sunlo.app">
-								Sunlo (https://sunlo.app)
-							</a>
-							, a social language-learning app exploring how friends and family can support a
-							learner. It keeps me close to the craft of building education products end to end
-							&mdash; from data model to classroom-ready UX.
-						</p>
-						<p className="text-gray-700">
-							I also built a{' '}
-							<a className="link" href="https://reader.msnook.xyz/">
-								dyslexia-friendly reader (https://reader.msnook.xyz/)
-							</a>
-							, a focused reading tool that applies typography and layout research to make long-form
-							text easier to read for people with dyslexia.
-						</p>
+						<div className="grid grid-cols-2 gap-3">
+							<ProjectCard
+								title="Sunlo"
+								href="https://sunlo.app"
+								domain="sunlo.app"
+								description="A social language-learning app exploring how friends and family can support a learner — built end to end, from data model to classroom-ready UX."
+							/>
+							<ProjectCard
+								title="Dyslexia Reader"
+								href="https://reader.msnook.xyz/"
+								domain="reader.msnook.xyz"
+								description="A focused reading tool that applies typography and layout research to make long-form text easier to read for people with dyslexia."
+							/>
+						</div>
 					</section>
 
 					<section className="space-y-1">
@@ -137,12 +132,12 @@ function FounderResume() {
 						</p>
 					</section>
 
-					<section className="space-y-3">
+					<section className="space-y-2">
 						<h2 className="text-2xl font-bold font-display">Selected Experience</h2>
 						{experience.map((job) => (
 							<div key={job.org}>
 								<JobHeader title={job.title} subtitle={job.org} timeframe={job.time} />
-								<ul className="list-disc ml-5 mt-4 space-y-2 marker:text-lilac-content">
+								<ul className="list-disc ml-5 mt-2 space-y-1 marker:text-lilac-content">
 									{job.points.map((point, i) => (
 										<li key={i}>{point}</li>
 									))}
@@ -194,6 +189,31 @@ function PictureSection() {
 				</a>
 			</div>
 		</div>
+	)
+}
+
+function ProjectCard({
+	title,
+	href,
+	domain,
+	description,
+}: {
+	title: string
+	href: string
+	domain: string
+	description: string
+}) {
+	return (
+		<a
+			href={href}
+			className="border rounded-lg p-3 hover:shadow-md transition-shadow block bg-white"
+		>
+			<div className="flex items-baseline justify-between gap-2 mb-1">
+				<h3 className="text-lg font-display font-bold text-cyan-content leading-tight">{title}</h3>
+				<span className="text-xs text-cyan-bright whitespace-nowrap">{domain}</span>
+			</div>
+			<p className="text-sm text-gray-700 leading-snug">{description}</p>
+		</a>
 	)
 }
 
