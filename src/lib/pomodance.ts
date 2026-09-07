@@ -1,5 +1,4 @@
 export type Phase = 'work' | 'break'
-export type Disposition = 'finished' | 'continue'
 
 export type Settings = {
 	workVideo: string
@@ -8,18 +7,22 @@ export type Settings = {
 	breakMinutes: number
 }
 
-export type LogEntry = {
-	at: string
+export type Pomo = {
+	id: string
+	/** work-day key (yyyy-mm-dd) the pomo is filed under; days roll over at 4am */
+	day: string
+	start: string
+	end: string | null
 	intention: string
-	text: string
-	disposition: Disposition
+	note: string
+	confirmed: boolean
 }
 
-export type Log = Record<string, LogEntry[]>
-
 const SETTINGS_KEY = 'pomodance:settings'
-const LOG_KEY = 'pomodance:log'
+const POMOS_KEY = 'pomodance:pomos'
 const INTENTION_KEY = 'pomodance:intention'
+const DAY_KEY = 'pomodance:day'
+const LEDGER_KEY = 'pomodance:ledger-hidden'
 
 export const DEFAULT_SETTINGS: Settings = {
 	workVideo: 'jfKfPfyJRdk',
@@ -28,42 +31,76 @@ export const DEFAULT_SETTINGS: Settings = {
 	breakMinutes: 5,
 }
 
+/** Pomos shorter than this are discarded rather than filed. */
+export const MIN_POMO_MS = 60_000
+const DAY_ROLLOVER_HOURS = 4
+/** Past this gap since the last pomo, a new day starts without asking. */
+const LATE_NIGHT_GAP_MS = 3 * 3_600_000
+
 function read<T>(key: string, fallback: T): T {
 	if (typeof localStorage === 'undefined') return fallback
 	try {
 		const raw = localStorage.getItem(key)
-		return raw ? { ...fallback, ...JSON.parse(raw) } : fallback
+		return raw ? (JSON.parse(raw) as T) : fallback
 	} catch {
 		return fallback
 	}
 }
 
+function write(key: string, value: unknown) {
+	localStorage.setItem(key, JSON.stringify(value))
+}
+
 export function loadSettings(): Settings {
-	return read(SETTINGS_KEY, DEFAULT_SETTINGS)
+	return { ...DEFAULT_SETTINGS, ...read<Partial<Settings>>(SETTINGS_KEY, {}) }
+}
+export const saveSettings = (settings: Settings) => write(SETTINGS_KEY, settings)
+
+/** Any pomo left open by a closed tab gets ended at the earlier of now or its full length. */
+export function loadPomos(workMinutes: number): Pomo[] {
+	const now = Date.now()
+	return read<Pomo[]>(POMOS_KEY, []).map((p) =>
+		p.end === null ?
+			{ ...p, end: new Date(Math.min(now, Date.parse(p.start) + workMinutes * 60_000)).toISOString() }
+		:	p,
+	)
+}
+export const savePomos = (pomos: Pomo[]) => write(POMOS_KEY, pomos)
+
+export const loadIntention = () => read<string>(INTENTION_KEY, '')
+export const saveIntention = (v: string) => write(INTENTION_KEY, v)
+
+export const loadDay = () => read<string | null>(DAY_KEY, null)
+export const saveDay = (day: string) => write(DAY_KEY, day)
+
+export const loadLedgerHidden = () => read<boolean>(LEDGER_KEY, false)
+export const saveLedgerHidden = (v: boolean) => write(LEDGER_KEY, v)
+
+export function workDayOf(date: Date): string {
+	const shifted = new Date(date.getTime() - DAY_ROLLOVER_HOURS * 3_600_000)
+	const y = shifted.getFullYear()
+	const m = String(shifted.getMonth() + 1).padStart(2, '0')
+	const d = String(shifted.getDate()).padStart(2, '0')
+	return `${y}-${m}-${d}`
 }
 
-export function saveSettings(settings: Settings) {
-	localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+export function dayLabel(day: string) {
+	return new Date(`${day}T12:00:00`).toLocaleDateString([], {
+		weekday: 'long',
+		month: 'short',
+		day: 'numeric',
+	})
 }
 
-export function loadLog(): Log {
-	return read<Log>(LOG_KEY, {})
-}
-
-export function appendLog(log: Log, entry: LogEntry): Log {
-	const day = entry.at.slice(0, 10)
-	const next = { ...log, [day]: [...(log[day] ?? []), entry] }
-	localStorage.setItem(LOG_KEY, JSON.stringify(next))
-	return next
-}
-
-export function loadIntention(): string {
-	if (typeof localStorage === 'undefined') return ''
-	return localStorage.getItem(INTENTION_KEY) ?? ''
-}
-
-export function saveIntention(intention: string) {
-	localStorage.setItem(INTENTION_KEY, intention)
+/**
+ * Whether starting a pomo now sits on the far side of 4am from the day the
+ * user was working on, close enough to the last pomo that it's plausibly the
+ * same late-night session and worth asking about.
+ */
+export function straddlesRollover(currentDay: string | null, pomos: Pomo[], now: number) {
+	if (!currentDay || currentDay === workDayOf(new Date(now))) return false
+	const last = pomos.filter((p) => p.day === currentDay).at(-1)
+	return !!last && now - Date.parse(last.end ?? last.start) < LATE_NIGHT_GAP_MS
 }
 
 /** Accepts a bare video id or any of the usual youtube URL shapes. */
