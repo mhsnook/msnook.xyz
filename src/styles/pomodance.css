@@ -1,0 +1,122 @@
+.pomo {
+	--pomo-bg: #0b1f2a;
+	--pomo-fg: #e6f4f8;
+	--pomo-accent: #359fcc;
+	background: var(--pomo-bg);
+	color: var(--pomo-fg);
+	transition: background 800ms ease;
+}
+
+.pomo.is-break {
+	--pomo-fg: #fff;
+	--pomo-accent: #ffe14d;
+	background: #7b2cbf;
+	position: relative;
+	isolation: isolate;
+}
+
+/* the gradient lives on a pseudo-element so hue-rotate never tints the video or emoji */
+.pomo.is-break::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	background: linear-gradient(120deg, #ff2d95, #ff9f1c, #2ec4b6, #7b2cbf, #ff2d95);
+	background-size: 400% 400%;
+	animation:
+		pomo-gradient 4s linear infinite,
+		pomo-hue 3s linear infinite;
+}
+
+.pomo.is-break .pomo-clock {
+	animation: pomo-wobble 0.6s ease-in-out infinite alternate;
+	text-shadow:
+		4px 4px 0 #7b2cbf,
+		-4px -4px 0 #2ec4b6;
+}
+
+.pomo.is-break .pomo-video-main {
+	animation: pomo-tilt 1.2s ease-in-out infinite alternate;
+}
+
+.pomo-dancers {
+	font-size: clamp(2rem, 8vw, 5rem);
+	display: flex;
+	justify-content: center;
+	gap: 0.5em;
+	pointer-events: none;
+}
+
+.pomo-dancers span {
+	display: inline-block;
+	animation: pomo-bounce 0.5s ease-in-out infinite alternate;
+}
+
+.pomo-dancers span:nth-child(2n) {
+	animation-delay: -0.25s;
+	animation-name: pomo-spin-bounce;
+}
+
+.pomo-dancers span:nth-child(3n) {
+	animation-duration: 0.35s;
+}
+
+@keyframes pomo-gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	100% {
+		background-position: 400% 50%;
+	}
+}
+
+@keyframes pomo-hue {
+	to {
+		filter: hue-rotate(360deg);
+	}
+}
+
+@keyframes pomo-wobble {
+	from {
+		transform: rotate(-4deg) scale(1);
+	}
+	to {
+		transform: rotate(4deg) scale(1.08);
+	}
+}
+
+@keyframes pomo-tilt {
+	from {
+		transform: rotate(-1.5deg) translateY(-4px);
+	}
+	to {
+		transform: rotate(1.5deg) translateY(4px);
+	}
+}
+
+@keyframes pomo-bounce {
+	from {
+		transform: translateY(0);
+	}
+	to {
+		transform: translateY(-0.6em);
+	}
+}
+
+@keyframes pomo-spin-bounce {
+	from {
+		transform: translateY(0) rotate(-20deg);
+	}
+	to {
+		transform: translateY(-0.6em) rotate(20deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pomo.is-break::before,
+	.pomo.is-break .pomo-clock,
+	.pomo.is-break .pomo-video-main,
+	.pomo-dancers span {
+		animation: none;
+	}
+}
