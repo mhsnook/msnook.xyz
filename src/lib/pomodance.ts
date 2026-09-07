@@ -50,12 +50,11 @@ export function loadLog(): Log {
 	return read<Log>(LOG_KEY, {})
 }
 
-export function appendLog(entry: LogEntry): Log {
-	const log = loadLog()
+export function appendLog(log: Log, entry: LogEntry): Log {
 	const day = entry.at.slice(0, 10)
-	log[day] = [...(log[day] ?? []), entry]
-	localStorage.setItem(LOG_KEY, JSON.stringify(log))
-	return log
+	const next = { ...log, [day]: [...(log[day] ?? []), entry] }
+	localStorage.setItem(LOG_KEY, JSON.stringify(next))
+	return next
 }
 
 export function loadIntention(): string {
@@ -84,8 +83,12 @@ export function parseVideoId(input: string): string {
 	return ''
 }
 
-export function formatClock(ms: number) {
-	const total = Math.max(0, Math.ceil(ms / 1000))
+export function msFor(settings: Settings, phase: Phase) {
+	return (phase === 'work' ? settings.workMinutes : settings.breakMinutes) * 60_000
+}
+
+export function formatClock(seconds: number) {
+	const total = Math.max(0, seconds)
 	const m = Math.floor(total / 60)
 	const s = total % 60
 	return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
@@ -132,7 +135,6 @@ export const sounds = {
 export type YTPlayer = {
 	playVideo(): void
 	pauseVideo(): void
-	getPlayerState(): number
 	destroy(): void
 }
 
@@ -148,7 +150,7 @@ type YTNamespace = {
 			}
 		},
 	) => YTPlayer
-	PlayerState: { PLAYING: number; PAUSED: number; ENDED: number }
+	PlayerState: { PLAYING: number; PAUSED: number }
 }
 
 declare global {
